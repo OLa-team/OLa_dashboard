@@ -1,0 +1,1159 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+}
+
+/* ---------------------------------------------------- */
+/* Width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px white;
+  /* border-radius: 5px; */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lightgray;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: black;
+}
+
+.loading {
+  width: 100%;
+  height: 100vh;
+  background-color: #f1f1f1;
+  z-index: 99999999;
+  position: absolute;
+  opacity: 0.75;
+}
+
+.loader {
+  position: absolute;
+  left: 45%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  border-width: 10px !important;
+}
+
+/* ---------------------------------------------------- */
+/* Login page */
+.bg {
+  background: url("../src/assets/bg.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
+
+.login,
+.register {
+  padding: 60px 100px;
+}
+
+.topBar,
+.topBarRegister {
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  width: 93%;
+  align-items: center;
+}
+
+.leftTopBar,
+.leftTopBarRegister {
+  width: 10%;
+  font-size: 30px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.leftTopBar img,
+.leftTopBarRegister img {
+  width: 30px;
+  height: 30px;
+}
+
+.leftTopBar h3 {
+  color: #ec2029;
+}
+
+.rightTopBar {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.toSignUp {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.rightTopBar .toSignUp:hover {
+  text-decoration: underline;
+}
+
+.loginContent {
+  display: flex;
+  width: 93%;
+  /* height: 700px; */
+  /* background-color: red; */
+  margin: auto;
+  justify-content: space-between;
+  margin-top: 100px;
+  color: #ec2029;
+  padding: 0 40px;
+  align-items: center;
+}
+
+.loginPart {
+  flex-basis: 45%;
+}
+
+.loginPart p:nth-child(1) {
+  font-size: 60px;
+}
+
+.loginPart h1 {
+  font-size: 75px;
+}
+
+.loginPart p:nth-child(4) {
+  font-size: 20px;
+  color: #ec2029;
+}
+
+.loginPart input {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 17px;
+  width: 450px;
+  height: 30px;
+  background-color: rgb(244, 244, 244);
+}
+
+.loginPart button {
+  display: block;
+  margin-top: 15px;
+  padding: 10px 27px;
+  border-radius: 12px;
+  font-size: 17px;
+  border: none;
+  color: white;
+  background-color: #ec2029;
+  letter-spacing: 1.1px;
+  cursor: pointer;
+}
+
+.logoPart {
+  flex-basis: 45%;
+  text-align: center;
+}
+
+.logoPart img {
+  width: 520px;
+  height: 366px;
+  object-fit: contain;
+}
+
+.logoPart h2 {
+  color: white;
+  letter-spacing: 1.2px;
+  margin-top: 20px;
+}
+
+/* ---------------------------------------------------- */
+/* Register */
+.bgRegister {
+  background-image: url("../src/assets/bgRegister.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
+
+.register {
+  /* background-color: #feeaeb; */
+  height: 100vh;
+}
+
+.registerPart {
+  width: 35%;
+  margin: auto;
+  text-align: center;
+}
+
+.registerPart .top img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+.registerPart .top h2 {
+  font-size: 35px;
+}
+
+.input {
+  display: flex;
+  padding: 20px 10px;
+  background-color: rgb(243, 243, 243);
+  border-radius: 30px;
+  align-items: center;
+  margin: 35px 0;
+  box-shadow: 5px 10px 18px #888888;
+}
+
+.input i {
+  margin: 0px 15px 0px 10px;
+  font-size: 20px;
+}
+
+.input input {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  width: 100%;
+  outline: none;
+}
+
+.createAccount {
+  width: 100%;
+  background-color: #ec2029 !important;
+  color: white;
+  border: none;
+  margin: auto !important;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 17px 10px;
+  border-radius: 25px;
+  margin-bottom: 20px !important;
+  margin-top: 20px !important;
+}
+
+.toSignIn {
+  color: black;
+  text-decoration: none;
+}
+
+.toSignIn:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------- */
+/* Home */
+/* Sidebar */
+.bgHome {
+  background-image: url("../src/assets/bg2.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  width: 15%;
+  height: 100vh;
+  background-color: #ec2029;
+  /* border-top-right-radius: 20px; */
+  border-bottom-right-radius: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.sidebar img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  width: 125px;
+  height: 95px;
+}
+
+.listItems {
+  width: 100%;
+  text-align: center;
+  background-color: transparent;
+}
+
+.item {
+  padding-left: 40px;
+  padding-bottom: 15px !important;
+  padding-top: 15px !important;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: white;
+  font-size: 25px;
+  cursor: pointer;
+  /* background-color: white; */
+}
+
+.item p {
+  margin-left: 15px;
+}
+
+.item.active {
+  background-color: #f3f4f7 !important;
+  color: #ec2029;
+}
+
+/* ---------------------------------------------------- */
+/* Right Side */
+.rightSide {
+  width: 85%;
+}
+
+/* ---------------------------------------------------- */
+/* Header */
+.header {
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  /* box-shadow: 5px 10px 8px #888888; */
+}
+
+.headerDetails {
+  width: 95%;
+  height: 100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftDetail {
+  width: 450px;
+  align-items: center;
+  display: flex;
+}
+
+.leftDetail h2 {
+  margin-left: 15px;
+}
+
+.menu-icon {
+  font-size: 30px;
+}
+
+.rightDetail {
+  width: fit-content;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-icon {
+  font-size: 40px;
+  margin-right: 10px;
+}
+
+.userDetail {
+  text-align: center;
+  font-size: 18px;
+}
+
+/* ---------------------------------------------------- */
+/* Section */
+.section {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding-top: 30px;
+}
+
+/* ---------------------------------------------------- */
+/* Patient Registration */
+.patientRegistration {
+  width: 500px;
+  height: 500px;
+  background-color: white;
+  margin: auto;
+  margin-top: 20px !important;
+  text-align: center;
+  padding: 25px 0px;
+  border-radius: 20px;
+  box-shadow: 5px 10px 8px #888888;
+}
+
+.patientRegistration h2 {
+  font-size: 30px;
+}
+
+.patientRegistrationForm {
+  width: 85%;
+  margin: auto;
+  margin-top: 50px;
+  text-align: start;
+}
+
+.register-inputField {
+  margin-bottom: 40px;
+}
+
+.register-inputField label {
+  display: block;
+  font-size: 22px;
+  font-weight: bolder;
+}
+
+.register-inputField input {
+  width: 98%;
+  padding: 7px 7px 7px 0px;
+  border: none;
+  border-bottom: 1px solid rgb(155, 154, 154);
+  font-size: 17px;
+  outline: none;
+}
+
+.patientRegistrationForm button {
+  width: 100%;
+  padding: 10px 3px;
+  background-color: #ec2029;
+  border-radius: 15px;
+  color: white;
+  border: none;
+  outline: none;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------- */
+/* Search Patient */
+.searchPatient {
+  height: 75%;
+  background-color: white;
+  padding: 20px 0px;
+  margin: 0px 15px;
+  border-radius: 20px;
+  opacity: 0.7;
+  box-shadow: 5px 10px 8px #888888;
+}
+
+.bar {
+  width: 95%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.searchBar {
+  width: 250px;
+  height: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+  background-color: transparent;
+  padding: 3px 20px;
+  border-radius: 15px;
+  border: 0.5px solid #000;
+}
+
+.searchBar input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background-color: transparent;
+}
+
+.searchBar .searchIcon {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.bar button {
+  font-size: 18px;
+  border: 1px solid #ec2029;
+  padding: 7px 15px;
+  border-radius: 15px;
+  color: #ec2029;
+  cursor: pointer;
+  background-color: white;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.bar button:hover {
+  color: white;
+  background-color: #ec2029;
+}
+
+/* ---------------------------------------------------- */
+/* Patient */
+.patient {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  border-radius: 20px;
+}
+
+.upper-part {
+  width: 100%;
+  height: 33%;
+  border-radius: 20px;
+  background-color: white;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.9;
+  box-shadow: 5px 10px 8px #888888;
+}
+
+.patientDetails {
+  width: fit-content;
+  height: fit-content;
+  margin-left: 55px;
+}
+
+.detail {
+  display: flex;
+  font-size: 125%;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.detail h3 {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail p {
+  text-align: left;
+  margin-left: 20px;
+}
+
+.deletePatient {
+  margin-right: 50px;
+}
+
+.backToPatientList {
+  padding: 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  border: 2px solid black;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.backToPatientList h4 {
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.backToPatientList:hover {
+  background-color: #000;
+  color: white;
+}
+
+.deletePatientButton {
+  padding: 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  border: 2px solid #ec2029;
+  color: #ec2029;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deletePatientButton h4 {
+  margin-left: 10px;
+}
+
+.deletePatientButton:hover {
+  background-color: #ec2029;
+  color: white;
+}
+
+.lower-part {
+  width: 100%;
+  height: 65%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.gridContainer {
+  height: 100%;
+}
+
+.patientModule {
+  background-color: white;
+  height: 100%;
+  text-align: center;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 5px 10px 8px #888888;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.iconModule {
+  font-size: 300%;
+  margin-bottom: 15px;
+}
+
+.patientModule:hover {
+  transform: scale(1.05);
+  color: #ec2029;
+}
+
+/* ---------------------------------------------------- */
+/* Patient Profile */
+.patientProfile {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  opacity: 0.85;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 5px 10px 8px #888888;
+  position: relative;
+}
+
+.patientProfileForm {
+  width: 100%;
+  margin-top: 35px;
+}
+
+.patientInfo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 17px;
+}
+
+.patientInfo h3 {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 22px;
+}
+
+.patientInfo p {
+  margin-left: 20px;
+  font-size: 20px;
+}
+
+.patientInfo input {
+  width: 70%;
+  margin-left: 20px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  background-color: #f1f1f1;
+  font-size: 18px;
+}
+
+.gender {
+  margin-left: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  font-size: 18px;
+  align-items: center;
+}
+
+.gender div input {
+  width: 16px;
+  height: 16px;
+  accent-color: red;
+  cursor: pointer;
+  margin-left: 10px !important;
+}
+
+.saveAndCancelButton {
+  /* float: right; */
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+}
+
+.saveAndCancelButton button {
+  padding: 7px 15px;
+  border-radius: 15px;
+  margin-right: 15px;
+  margin-top: 0px;
+  outline: none;
+  border: none;
+  font-size: 17px;
+  color: black;
+  cursor: pointer;
+  width: 90px;
+}
+
+.saveAndCancelButton button:hover {
+  color: white;
+}
+
+.saveProfile {
+  background-color: lightgreen;
+}
+
+.cancelProfile {
+  background-color: #ec2029;
+}
+
+/* ---------------------------------------------------- */
+/* Medical Condition */
+.medicalCondition {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  opacity: 0.85;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 5px 10px 8px #888888;
+  position: relative;
+}
+
+.medicalConditionForm {
+  width: 100%;
+  margin-top: 0px;
+}
+
+.checkbox-yesOrNo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkbox-yesOrNo h3 {
+  width: 350px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 22px;
+}
+
+.yesOrNo-choice {
+  margin-left: 40px;
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  font-size: 20px;
+  align-items: center;
+}
+
+.yesOrNo-choice div input {
+  width: 18px;
+  height: 18px;
+  accent-color: red;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.lastUpdatedBox {
+  padding: 7px 16px;
+  padding-top: 10px !important;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #000;
+}
+
+.lastUpdatedBox div {
+  display: flex;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.lastUpdatedBox div h4 {
+  margin-right: 10px;
+}
+
+/* ---------------------------------------------------------- */
+
+/* Allergy */
+.allergy {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  opacity: 0.85;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 5px 10px 8px #888888;
+  position: relative;
+}
+
+.allergyForm {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.allergy-choice {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.allergy-choice input {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+  accent-color: red;
+  cursor: pointer;
+}
+
+.allergyExample {
+  margin-top: 15px;
+  margin-left: 45px;
+  font-size: 20px;
+}
+
+.allergyExample div {
+  width: 100%;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.allergyExample div label {
+  width: 120px;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 15px;
+}
+
+.allergyExample div input {
+  padding: 7px 15px;
+  width: 90%;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+  border: none;
+  outline: none;
+  font-size: 18px;
+}
+
+/* ------------------------------------------------ */
+
+/* Health Goal */
+.healthGoal {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  opacity: 0.85;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 5px 10px 8px #888888;
+  position: relative;
+}
+
+.healthGoalForm {
+  margin-top: 30px;
+  height: 62%;
+}
+
+.addHealthGoal input {
+  width: 90%;
+  margin-right: 20px;
+  padding: 10px 15px;
+  font-size: 17px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background-color: #f1f1f1;
+}
+
+.addHealthGoal button {
+  padding: 7px 20px;
+  font-size: 15px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background-color: lightgreen;
+  color: white;
+  cursor: pointer;
+}
+
+.healthGoalList {
+  margin-top: 30px;
+  height: 80%;
+  overflow-y: scroll;
+}
+
+.healthGoalList div {
+  margin-bottom: 10px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.healthGoalList div input {
+  margin-right: 15px;
+  margin-left: 5px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: lightgreen;
+}
+
+.eachGoal {
+  position: relative;
+}
+
+.eachGoal .deleteGoalIcon {
+  position: absolute;
+  right: 15px;
+  font-size: 30px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.eachGoal svg:hover {
+  transform: scale(1.2);
+  color: #ec2029;
+}
+
+.agreeToHealthGoal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 30px;
+  font-size: 20px;
+}
+
+.agreeToHealthGoal input {
+  margin-right: 15px;
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: red;
+}
+
+.dropdown {
+  width: 90%;
+  user-select: none;
+  position: relative;
+}
+.dropdown .dropdown-btn {
+  padding: 12px 20px;
+  background: #fff;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+  border: 1px solid rgb(184, 184, 184);
+  border-radius: 15px;
+  font-size: 18px;
+}
+
+.dropdown .dropdown-content {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 5px 10px 8px #888888;
+  font-weight: 500;
+  color: #333;
+  width: 98.5%;
+}
+.dropdown .dropdown-content .dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dropdown .dropdown-content .dropdown-item:hover {
+  background: #f4f4f4;
+  transform: scale(1.03);
+}
+
+/* ------------------------------------------------ */
+
+/* Risk Scoring */
+.riskScoring {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  background-color: transparent;
+  position: relative;
+}
+
+.backArrow {
+  font-weight: bold;
+  position: absolute;
+  font-size: 30px;
+  left: 120px;
+  top: 85px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backArrow:hover {
+  transform: scale(1.2);
+}
+
+.riskScoringTools {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 50px;
+  height: 80%;
+}
+
+.risk-tool {
+  width: 300px;
+  padding: 30px 20px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 5px 10px 8px #888888;
+  position: relative;
+  text-align: center;
+  height: 90%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.risk-tool:hover {
+  transform: scale(1.05);
+}
+
+.tool-name {
+  text-align: center;
+  margin-bottom: 20%;
+  font-size: 20px;
+}
+
+.result-risk {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20% !important;
+  font-size: 130%;
+  width: 99%;
+  height: 100px;
+  margin: auto;
+}
+
+.result-risk svg {
+  width: 15%;
+  font-size: 18px;
+}
+
+.result-risk h4 {
+  margin-left: 15px;
+  text-align: left;
+}
+
+.assess {
+  width: fit-content;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 140%;
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.assess p {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.assess svg {
+  margin-left: 10px;
+}
+
+/* ------------------------------------------------ */
+
+/* Risk Scoring */
+.strokeRisk,
+.bleedingRisk,
+.warfarinQuality {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  opacity: 0.85;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 5px 10px 8px #888888;
+  position: relative;
+}
+
+.strokeRiskForm {
+  padding-top: 15px;
+}
+
+.risk-result {
+  font-size: 19px;
+  padding-top: 40px;
+}
+
+.bleedingRisk .risk-result {
+  padding-top: 30px !important;
+}
+
+.warfarinQuality .warfarinQualityForm {
+  padding-top: 25px !important;
+}
+
+.warfarinQuality .checkbox-yesOrNo {
+  margin-bottom: 15px;
+}
+
+.warfarinQuality .risk-result {
+  padding-top: 30px !important;
+}
+
+.warfarinQuality .checkbox-yesOrNo h3 {
+  width: 450px;
+}
+
+.medicalHistory {
+  position: relative;
+}
+
+.infoCircle {
+  position: absolute;
+  top: 5px;
+  left: 335px;
+  font-size: 20px;
+  color: #ec2029;
+}

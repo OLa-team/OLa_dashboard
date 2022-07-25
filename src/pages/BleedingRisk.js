@@ -1,0 +1,261 @@
+import React, { useEffect, useState } from "react";
+import Checkbox from "../components/Checkbox";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useAuthState,
+  usePageDispatch,
+  usePatientDispatch,
+  usePatientState,
+} from "../context";
+import { setCurrentPatient, updateBleedingRisk } from "../service";
+import { getCurrentDate, getCurrentTime } from "../utils";
+
+function BleedingRisk() {
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const pageDispatch = usePageDispatch();
+  const userState = useAuthState();
+  const patientState = usePatientState();
+  const patientDispatch = usePatientDispatch();
+  const patientId = params.patientId;
+
+  const [hypertension, setHypertension] = useState(
+    patientState.bleedingRisk.hypertension
+      ? patientState.bleedingRisk.hypertension
+      : false
+  );
+  const [renal, setRenal] = useState(
+    patientState.bleedingRisk.renal ? patientState.bleedingRisk.renal : false
+  );
+  const [liver, setLiver] = useState(
+    patientState.bleedingRisk.liver ? patientState.bleedingRisk.liver : false
+  );
+  const [stroke, setStroke] = useState(
+    patientState.bleedingRisk.stroke ? patientState.bleedingRisk.stroke : false
+  );
+  const [bleeding, setBleeding] = useState(
+    patientState.bleedingRisk.bleeding
+      ? patientState.bleedingRisk.bleeding
+      : false
+  );
+  const [inr, setInr] = useState(
+    patientState.bleedingRisk.inr ? patientState.bleedingRisk.inr : false
+  );
+  const [age65, setAge65] = useState(
+    patientState.bleedingRisk.age65 ? patientState.bleedingRisk.age65 : false
+  );
+  const [drugs, setDrugs] = useState(
+    patientState.bleedingRisk.drugs ? patientState.bleedingRisk.drugs : false
+  );
+  const [alcohol, setAlcohol] = useState(
+    patientState.bleedingRisk.alcohol
+      ? patientState.bleedingRisk.alcohol
+      : false
+  );
+  const [score, setScore] = useState(
+    patientState.bleedingRisk.score ? patientState.bleedingRisk.score : 0
+  );
+  const [result, setResult] = useState(
+    patientState.bleedingRisk.result ? patientState.bleedingRisk.result : ""
+  );
+  const [colorMsg, setColorMsg] = useState(
+    patientState.bleedingRisk.colorMsg ? patientState.bleedingRisk.colorMsg : ""
+  );
+
+  let testResult = [
+    hypertension,
+    renal,
+    liver,
+    stroke,
+    bleeding,
+    inr,
+    age65,
+    drugs,
+    alcohol,
+  ];
+
+  useEffect(() => {
+    let currentScore = 0;
+    for (let i = 0; i < testResult.length; i++) {
+      if (testResult[i] === true) currentScore += 1;
+    }
+    setScore(currentScore);
+
+    if (currentScore <= 1) {
+      setResult(
+        "Low risk for major bleeding and should consider anticoagulation"
+      );
+      setColorMsg("#45f248");
+    } else if (currentScore === 2) {
+      setResult("Moderate risk and should consider anticoagualation");
+      setColorMsg("#ff9f00");
+    } else {
+      setResult(
+        "High risk for major bleeding and should consider alternatives to anticoagulation"
+      );
+      setColorMsg("#ec2029");
+    }
+  }, [testResult]);
+
+  const dateTimeUpdated = patientState.bleedingRisk.dateTimeUpdated
+    ? patientState.bleedingRisk.dateTimeUpdated.split("-")
+    : "";
+
+  let bleedingRiskData = {
+    nameUpdated: userState.userDetails.username,
+    dateTimeUpdated: getCurrentDate() + "-" + getCurrentTime(),
+    hypertension: hypertension,
+    renal: renal,
+    liver: liver,
+    stroke: stroke,
+    bleeding: bleeding,
+    inr: inr,
+    age65: age65,
+    drugs: drugs,
+    alcohol: alcohol,
+    score: score,
+    result: result,
+    colorMsg: colorMsg,
+  };
+
+  async function handleSubmitBleedingRiskTest(e) {
+    e.preventDefault();
+
+    if (window.confirm("Are you sure you want to continue?")) {
+      await updateBleedingRisk(bleedingRiskData, patientId);
+      await setCurrentPatient(patientDispatch, patientId);
+      pageDispatch({
+        type: "SET_CURRENT_PAGE",
+        payload: "Risk Scoring",
+      });
+      alert("Update patient's bleeding risk successfully.");
+      navigate(`/dashboard/patient/${params.patientId}/riskScoring`);
+    } else {
+      return;
+    }
+  }
+
+  return (
+    <div className="bleedingRisk">
+      <div style={{ padding: "50px 90px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h1>HAS-BLED test</h1>
+          <div className="lastUpdatedBox">
+            <div>
+              <h4>
+                <span>Last updated by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.bleedingRisk.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last updated on</span>
+                <span>:</span>
+              </h4>
+              <p>
+                {dateTimeUpdated[0]} {dateTimeUpdated[1]}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <form
+          className="bleedingRiskForm"
+          onSubmit={(e) => handleSubmitBleedingRiskTest(e)}
+        >
+          <Checkbox
+            name="Hypertension"
+            checkedYes={hypertension ? true : false}
+            onChangeYes={(e) => setHypertension((prev) => (prev = true))}
+            checkedNo={!hypertension ? true : false}
+            onChangeNo={(e) => setHypertension((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Abnormal renal function"
+            checkedYes={renal ? true : false}
+            onChangeYes={(e) => setRenal((prev) => (prev = true))}
+            checkedNo={!renal ? true : false}
+            onChangeNo={(e) => setRenal((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Abnormal liver function"
+            checkedYes={liver ? true : false}
+            onChangeYes={(e) => setLiver((prev) => (prev = true))}
+            checkedNo={!liver ? true : false}
+            onChangeNo={(e) => setLiver((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Stroke"
+            checkedYes={stroke ? true : false}
+            onChangeYes={(e) => setStroke((prev) => (prev = true))}
+            checkedNo={!stroke ? true : false}
+            onChangeNo={(e) => setStroke((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Bleeding tendency"
+            checkedYes={bleeding ? true : false}
+            onChangeYes={(e) => setBleeding((prev) => (prev = true))}
+            checkedNo={!bleeding ? true : false}
+            onChangeNo={(e) => setBleeding((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Labile INR"
+            checkedYes={inr ? true : false}
+            onChangeYes={(e) => setInr((prev) => (prev = true))}
+            checkedNo={!inr ? true : false}
+            onChangeNo={(e) => setInr((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Age > 65 years old"
+            checkedYes={age65 ? true : false}
+            onChangeYes={(e) => setAge65((prev) => (prev = true))}
+            checkedNo={!age65 ? true : false}
+            onChangeNo={(e) => setAge65((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Drugs (eg. aspirin, NSAIDs)"
+            checkedYes={drugs ? true : false}
+            onChangeYes={(e) => setDrugs((prev) => (prev = true))}
+            checkedNo={!drugs ? true : false}
+            onChangeNo={(e) => setDrugs((prev) => (prev = false))}
+          />
+          <Checkbox
+            name="Alcohol use"
+            checkedYes={alcohol ? true : false}
+            onChangeYes={(e) => setAlcohol((prev) => (prev = true))}
+            checkedNo={!alcohol ? true : false}
+            onChangeNo={(e) => setAlcohol((prev) => (prev = false))}
+          />
+
+          <div className="risk-result">
+            <h4>Score: {score} points</h4>
+            <p style={{ color: `${colorMsg}` }}>{result}</p>
+          </div>
+
+          <div className="saveAndCancelButton ">
+            <button className="saveProfile" type="submit">
+              Save
+            </button>
+            <button
+              type="button"
+              className="cancelProfile"
+              onClick={() => {
+                navigate(`/dashboard/patient/${params.patientId}/riskScoring`);
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "Patient Details",
+                });
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default BleedingRisk;
