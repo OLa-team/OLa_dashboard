@@ -21,6 +21,7 @@ function PatientRegistration() {
     name: patientName,
     icNo: icNo,
     phoneNo: phoneNo,
+    patientId: patientId,
   };
 
   function submitPatientRegistration(e) {

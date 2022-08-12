@@ -15,14 +15,18 @@ import RiskScoring from "./RiskScoring";
 import StrokeRisk from "./StrokeRisk";
 import BleedingRisk from "./BleedingRisk";
 import WarfarinQuality from "./WarfarinQuality";
-import Loading from "./Loading";
+import Loader from "../components/Loader";
+import Medication from "./Medication";
+import BloodThinner from "./BloodThinner";
+import BTTable from "./BTTable";
+import BTGraph from "./BTGraph";
+import Profile from "./Profile";
 
 function Home() {
   // Global state
   const userState = useAuthState();
   const pageState = usePageState();
   const { loading } = usePatientState();
-  console.log("Loading", loading);
 
   return (
     <div className="bgHome">
@@ -56,6 +60,7 @@ function Home() {
               path="/patientRegistration"
               element={<PatientRegistration />}
             />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/patient/:patientId" element={<Patient />} />
             <Route
               path="/patient/:patientId/patientProfile"
@@ -86,10 +91,26 @@ function Home() {
               path="/patient/:patientId/riskScoring/warfarinQuality"
               element={<WarfarinQuality />}
             />
+            <Route
+              path="/patient/:patientId/medication"
+              element={<Medication />}
+            />
+            <Route
+              path="/patient/:patientId/bloodThinner"
+              element={<BloodThinner />}
+            />
+            <Route
+              path="/patient/:patientId/bloodThinner/table"
+              element={<BTTable />}
+            />
+            <Route
+              path="/patient/:patientId/bloodThinner/graph"
+              element={<BTGraph />}
+            />
           </Routes>
         </div>
       </div>
-      <Loading loading={loading} />
+      <Loader loading={loading} />
     </div>
   );
 }

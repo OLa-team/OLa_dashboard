@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 import Table from "../components/Table";
 import { usePatientDispatch, usePatientState } from "../context";
 import {
   deleteAllSelectedPatients,
   fetchPatientList,
   filterPatientList,
+  setCurrentPatient,
 } from "../service";
 
 function SearchPatient() {
@@ -18,6 +20,17 @@ function SearchPatient() {
 
   // Dispatch
   const dispatch = usePatientDispatch();
+
+  const navigate = useNavigate();
+  console.log("list", patientState.patientList);
+
+  const style = { height: "90%", width: "95%", margin: "auto" };
+
+  const gridStyle = {
+    minHeight: "600",
+    fontSize: "20px",
+    fontWeight: "bold",
+  };
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "No.", width: 50 },
@@ -47,12 +60,35 @@ function SearchPatient() {
     },
   ];
 
+  function setSelectedPatientList(ids, data) {
+    const selectedIDs = new Set(ids);
+    const selectedRowData = data.filter((row) => selectedIDs.has(row.id));
+    console.log(selectedRowData);
+
+    dispatch({
+      type: "SELECT_AND_SET_SELECTED_PATIENT_LIST_TO_DELETE",
+      payload: selectedRowData,
+    });
+  }
+
   async function getPatientList() {
-    try {
-      let response = await fetchPatientList(dispatch);
-      if (response.length < 0) return;
-    } catch (error) {
-      console.log("Patient list error: ", error);
+    await fetchPatientList(dispatch);
+  }
+
+  async function selectPatient(row) {
+    await setCurrentPatient(dispatch, row.row.patientId);
+    navigate(`/dashboard/patient/${row.row.patientId}`);
+  }
+
+  function deletePatient() {
+    if (patientState.selectedPatientList.length === 0) {
+      alert("Please select patient before deleting.");
+      return;
+    }
+    if (window.confirm("Are you sure you want to delete the patient(s)?")) {
+      deleteAllSelectedPatients(dispatch, patientState.selectedPatientList);
+    } else {
+      return;
     }
   }
 
@@ -63,8 +99,6 @@ function SearchPatient() {
   useEffect(() => {
     filterPatientList(dispatch, patientState.patientList, searchResult);
   }, [searchResult]);
-
-  console.log("selected list", patientState.selectedPatientList[0]);
 
   return (
     <div className="searchPatient">
@@ -77,35 +111,21 @@ function SearchPatient() {
           />
           <BiSearch className="searchIcon" />
         </div>
-        <button
-          onClick={() => {
-            if (patientState.selectedPatientList.length === 0) {
-              alert("Please select patient before deleting.");
-              return;
-            }
-            if (
-              window.confirm("Are you sure you want to delete the patient(s)?")
-            ) {
-              deleteAllSelectedPatients(
-                dispatch,
-                patientState.selectedPatientList
-              );
-            } else {
-              return;
-            }
-          }}
-        >
-          Delete
-        </button>
+        <button onClick={deletePatient}>Delete</button>
       </div>
 
       <Table
+        style={style}
         data={
           searchResult === ""
             ? patientState.patientList
             : patientState.tempPatientList
         }
         columns={columns}
+        clickRowFunction={selectPatient}
+        selectFunction={setSelectedPatientList}
+        toolbar={true}
+        gridStyle={gridStyle}
         // deletePatient={(data) => setSelectedPatients(data)}
       />
     </div>

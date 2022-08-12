@@ -23,11 +23,7 @@ function HealthGoal() {
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
 
-  let defaultGoals = [
-    "I will take my medicine as prescribed by the doctor",
-    "I will exercise for 30 mins twice a week.",
-    "I will reduce taking high calory food/fast food/fried food with high fat content intake.",
-  ];
+  let defaultGoals = Object.values(patientState.defaultHealthGoal);
 
   const [newHealthGoal, setNewHealthGoal] = useState("");
   const [healthGoalList, setHealthGoalList] = useState(
@@ -54,22 +50,19 @@ function HealthGoal() {
   function handledDeleteGoal(e) {
     console.log(e.target.getAttribute("name"));
     let deleteGoal = e.target.getAttribute("name");
-    console.log(deleteGoal);
 
     setHealthGoalList((healthGoalList) =>
       healthGoalList.filter((goal) => goal !== deleteGoal)
     );
   }
-  console.log(healthGoalList);
-  console.log(agreeToGoal);
 
   const dateTimeUpdated = patientState.healthGoal.dateTimeUpdated
-    ? patientState.healthGoal.dateTimeUpdated.split("-")
+    ? patientState.healthGoal.dateTimeUpdated
     : "";
 
   let healthGoalData = {
     nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: getCurrentDate() + "-" + getCurrentTime(),
+    dateTimeUpdated: new Date().getTime(),
     healthGoalList: healthGoalList,
     agreeToGoal: agreeToGoal,
   };
@@ -80,12 +73,7 @@ function HealthGoal() {
     if (window.confirm("Are you sure you want to continue?")) {
       await updateHealthGoal(healthGoalData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
-      pageDispatch({
-        type: "SET_CURRENT_PAGE",
-        payload: "Risk Scoring",
-      });
       alert("Update patient's health goal successfully.");
-      navigate(`/dashboard/patient/${params.patientId}`);
     } else {
       return;
     }
@@ -110,7 +98,8 @@ function HealthGoal() {
                 <span>:</span>
               </h4>
               <p>
-                {dateTimeUpdated[0]} {dateTimeUpdated[1]}
+                {getCurrentDate(dateTimeUpdated)}{" "}
+                {getCurrentTime(dateTimeUpdated)}
               </p>
             </div>
           </div>
@@ -140,6 +129,7 @@ function HealthGoal() {
               return (
                 <div>
                   <TiTick
+                    key={goal}
                     style={{
                       color: "lightgreen",
                       marginRight: "10px",
@@ -196,7 +186,7 @@ function HealthGoal() {
                 });
               }}
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>

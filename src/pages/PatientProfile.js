@@ -135,11 +135,6 @@ function PatientProfile() {
       await updatePatientProfile(newData);
       await setCurrentPatient(patientDispatch, newData.patientId);
       alert("Update patient's profile successfully.");
-      pageDispatch({
-        type: "SET_CURRENT_PAGE",
-        payload: "Patient Details",
-      });
-      navigate(`/dashboard/patient/${params.patientId}`);
     } else {
       return;
     }
@@ -292,7 +287,7 @@ function PatientProfile() {
                 });
               }}
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>

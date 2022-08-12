@@ -79,11 +79,11 @@ function Sidebar() {
             reset();
             setAc1((prev) => !prev);
             localStorage.setItem("currentPageNumber", JSON.stringify(1));
-            navigate("/dashboard");
             pageDispatch({
               type: "SET_CURRENT_PAGE",
               payload: "Patient List",
             });
+            navigate("/dashboard");
           }}
           className="item-wrapper"
         >
@@ -95,11 +95,11 @@ function Sidebar() {
             reset();
             setAc2((prev) => !prev);
             localStorage.setItem("currentPageNumber", JSON.stringify(2));
-            navigate("/dashboard/patientRegistration");
             pageDispatch({
               type: "SET_CURRENT_PAGE",
               payload: "Patient Registration",
             });
+            navigate("/dashboard/patientRegistration");
           }}
         >
           <SidebarItem
@@ -135,6 +135,7 @@ function Sidebar() {
               type: "SET_CURRENT_PAGE",
               payload: "Profile",
             });
+            navigate("/dashboard/profile");
           }}
         >
           <SidebarItem Icon={<BsPersonFill />} section="Profile" active={ac4} />

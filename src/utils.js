@@ -1,13 +1,13 @@
-function getCurrentDate() {
-  var today = new Date();
+function getCurrentDate(date) {
+  var today = new Date(date);
   var currentDate =
     today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
 
   return currentDate;
 }
 
-function getCurrentTime() {
-  var today = new Date();
+function getCurrentTime(date) {
+  var today = new Date(date);
 
   var hour = today.getHours() > 12 ? today.getHours() - 12 : today.getHours();
   var amOrPm = today.getHours() >= 12 ? "pm" : "am";

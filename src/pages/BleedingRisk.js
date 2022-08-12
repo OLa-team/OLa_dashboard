@@ -63,6 +63,10 @@ function BleedingRisk() {
     patientState.bleedingRisk.colorMsg ? patientState.bleedingRisk.colorMsg : ""
   );
 
+  let resultMessages = patientState.bleedingRiskResultMessage
+    ? patientState.bleedingRiskResultMessage
+    : [];
+
   let testResult = [
     hypertension,
     renal,
@@ -83,28 +87,24 @@ function BleedingRisk() {
     setScore(currentScore);
 
     if (currentScore <= 1) {
-      setResult(
-        "Low risk for major bleeding and should consider anticoagulation"
-      );
+      setResult(resultMessages.msg1);
       setColorMsg("#45f248");
     } else if (currentScore === 2) {
-      setResult("Moderate risk and should consider anticoagualation");
+      setResult(resultMessages.msg2);
       setColorMsg("#ff9f00");
     } else {
-      setResult(
-        "High risk for major bleeding and should consider alternatives to anticoagulation"
-      );
+      setResult(resultMessages.msg3);
       setColorMsg("#ec2029");
     }
   }, [testResult]);
 
   const dateTimeUpdated = patientState.bleedingRisk.dateTimeUpdated
-    ? patientState.bleedingRisk.dateTimeUpdated.split("-")
+    ? patientState.bleedingRisk.dateTimeUpdated
     : "";
 
   let bleedingRiskData = {
     nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: getCurrentDate() + "-" + getCurrentTime(),
+    dateTimeUpdated: new Date().getTime(),
     hypertension: hypertension,
     renal: renal,
     liver: liver,
@@ -155,7 +155,8 @@ function BleedingRisk() {
                 <span>:</span>
               </h4>
               <p>
-                {dateTimeUpdated[0]} {dateTimeUpdated[1]}
+                {getCurrentDate(dateTimeUpdated)}{" "}
+                {getCurrentTime(dateTimeUpdated)}
               </p>
             </div>
           </div>

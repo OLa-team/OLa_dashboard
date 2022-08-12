@@ -58,6 +58,10 @@ function StrokeRisk() {
     patientState.strokeRisk.colorMsg ? patientState.strokeRisk.colorMsg : ""
   );
 
+  let resultMessages = patientState.strokeRiskResultMessage
+    ? patientState.strokeRiskResultMessage
+    : [];
+
   let testResult = [
     heartFailure,
     hypertension,
@@ -81,28 +85,24 @@ function StrokeRisk() {
     setScore(currentScore);
 
     if (currentScore === 0) {
-      setResult("Low risk and may not require anticoagulation");
+      setResult(resultMessages.msg1);
       setColorMsg("#45f248");
     } else if (currentScore === 1) {
-      setResult(
-        "Low-moderate risk and should consider antiplatelet or anticoagualation"
-      );
+      setResult(resultMessages.msg2);
       setColorMsg("#ff9f00");
     } else {
-      setResult(
-        "Moderate-high risk and should otherwise be an anticoagulation candidate"
-      );
+      setResult(resultMessages.msg3);
       setColorMsg("#ec2029");
     }
   }, [testResult]);
 
   const dateTimeUpdated = patientState.strokeRisk.dateTimeUpdated
-    ? patientState.strokeRisk.dateTimeUpdated.split("-")
+    ? patientState.strokeRisk.dateTimeUpdated
     : "";
 
   let strokeRiskData = {
     nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: getCurrentDate() + "-" + getCurrentTime(),
+    dateTimeUpdated: new Date().getTime(),
     heartFailure: heartFailure,
     hypertension: hypertension,
     age75: age75,
@@ -154,7 +154,8 @@ function StrokeRisk() {
                 <span>:</span>
               </h4>
               <p>
-                {dateTimeUpdated[0]} {dateTimeUpdated[1]}
+                {getCurrentDate(dateTimeUpdated)}{" "}
+                {getCurrentTime(dateTimeUpdated)}
               </p>
             </div>
           </div>

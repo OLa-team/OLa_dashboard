@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase";
+import { v4 as uuid } from "uuid";
 
 const patientCollectionRef = collection(firestore, "patient");
 
@@ -18,6 +19,7 @@ export async function createPatientAccount(newPatientData, patientId) {
       name: newPatientData.name,
       icNo: newPatientData.icNo,
       phoneNo: "+6" + newPatientData.phoneNo,
+      patientId: newPatientData.patientId,
       birthDate: "",
       age: 0,
       gender: "",
@@ -25,34 +27,95 @@ export async function createPatientAccount(newPatientData, patientId) {
       nextOfKinContact: "",
     });
 
-    await setDoc(doc(firestore, "medical condition", patientId), {
+    await setDoc(doc(firestore, "medical_condition", patientId), {
       nameUpdated: "",
       dateTimeUpdated: "",
+      hypertension: false,
+      diabetes: false,
+      hyperlipidemia: false,
+      atrial: false,
+      heart: false,
+      stroke: false,
+      vascular: false,
+      asthma: false,
+      copd: false,
+      renal: false,
+      liver: false,
     });
 
     await setDoc(doc(firestore, "allergy", patientId), {
       nameUpdated: "",
       dateTimeUpdated: "",
+      hasAllergy: false,
+      food: "",
+      medicine: "",
     });
 
     await setDoc(doc(firestore, "stroke_risk", patientId), {
       nameUpdated: "",
       dateTimeUpdated: "",
+      heartFailure: false,
+      hypertension: false,
+      age75: false,
+      diabetes: false,
+      stroke: false,
+      vascular: false,
+      age6574: false,
+      female: false,
+      score: 0,
+      result: "",
+      colorMsg: "",
     });
 
     await setDoc(doc(firestore, "bleeding_risk", patientId), {
       nameUpdated: "",
       dateTimeUpdated: "",
+      hypertension: false,
+      renal: false,
+      liver: false,
+      stroke: false,
+      bleeding: false,
+      inr: false,
+      age65: false,
+      drugs: false,
+      alcohol: false,
+      score: 0,
+      result: "",
+      colorMsg: "",
     });
 
     await setDoc(doc(firestore, "warfarin_quality", patientId), {
       nameUpdated: "",
       dateTimeUpdated: "",
+      sex: false,
+      age: false,
+      medHistory: false,
+      treatment: false,
+      tobacco: false,
+      race: false,
+      score: 0,
+      result: "",
+      colorMsg: "",
     });
 
     await setDoc(doc(firestore, "health_goal", patientId), {
       nameUpdated: "",
       dateTimeUpdated: "",
+      healthGoalList: [],
+      agreeToGoal: false,
+    });
+
+    await setDoc(doc(firestore, "medication", patientId), {
+      nameUpdated: "",
+      dateTimeUpdated: "",
+      medicine: [],
+    });
+
+    await setDoc(doc(firestore, "blood_thinner", patientId), {
+      selectedMedicine: "",
+      indication: {},
+      duration: {},
+      inrRange: {},
     });
   } catch (error) {
     throw new Error(`Error in register new patient: `, error);
@@ -76,16 +139,18 @@ export async function setCurrentPatient(dispatch, patientId) {
     ).data();
 
     let responseMedicalCondition = await (
-      await getDoc(doc(firestore, "medical condition", patientId))
+      await getDoc(doc(firestore, "medical_condition", patientId))
     ).data();
 
     let responseAllergy = await (
       await getDoc(doc(firestore, "allergy", patientId))
     ).data();
+    console.log("al", responseAllergy);
 
     let responseStrokeRisk = await (
       await getDoc(doc(firestore, "stroke_risk", patientId))
     ).data();
+    console.log("sr", responseStrokeRisk);
 
     let responseBleedingRisk = await (
       await getDoc(doc(firestore, "bleeding_risk", patientId))
@@ -99,81 +164,242 @@ export async function setCurrentPatient(dispatch, patientId) {
       await getDoc(doc(firestore, "health_goal", patientId))
     ).data();
 
-    const patientData = responsePatient;
-    const medicalConditionData = responseMedicalCondition;
-    const allergyData = responseAllergy;
-    const strokeRiskData = responseStrokeRisk;
-    const bleedingRiskData = responseBleedingRisk;
-    const warfarinQualityData = responseWarfarinQuality;
-    const healthGoalData = responseHealthGoal;
+    let responseMedication = await (
+      await getDoc(doc(firestore, "medication", patientId))
+    ).data();
 
+    let responseBloodThinner = await (
+      await getDoc(doc(firestore, "blood_thinner", patientId))
+    ).data();
+
+    let responseDefaultHealthGoal = await (
+      await getDoc(doc(firestore, "constant", "health_goal"))
+    ).data();
+
+    let responseStrokeRiskResultMessage = await (
+      await getDoc(doc(firestore, "constant", "stroke_risk"))
+    ).data();
+
+    let responseBleedingRiskResultMessage = await (
+      await getDoc(doc(firestore, "constant", "bleeding_risk"))
+    ).data();
+
+    let responseWarfarinQualityResultMessage = await (
+      await getDoc(doc(firestore, "constant", "warfarin_quality"))
+    ).data();
+
+    // patient profile
     if (responsePatient) {
       dispatch({
         type: "SET_CURRENT_PATIENT",
-        payload: patientData,
+        payload: responsePatient,
       });
 
-      localStorage.setItem("currentPatient", JSON.stringify(patientData));
+      localStorage.setItem("currentPatient", JSON.stringify(responsePatient));
+    } else {
+      dispatch({
+        type: "SET_CURRENT_PATIENT",
+        payload: {},
+      });
+
+      localStorage.setItem("currentPatient", JSON.stringify({}));
     }
 
+    // medical condition
     if (responseMedicalCondition) {
       dispatch({
         type: "SET_MEDICAL_CONDITION",
-        payload: medicalConditionData,
+        payload: responseMedicalCondition,
       });
 
       localStorage.setItem(
         "medicalCondition",
-        JSON.stringify(medicalConditionData)
+        JSON.stringify(responseMedicalCondition)
       );
+    } else {
+      dispatch({
+        type: "SET_MEDICAL_CONDITION",
+        payload: {},
+      });
+
+      localStorage.setItem("medicalCondition", JSON.stringify({}));
     }
 
+    // allergy
     if (responseAllergy) {
       dispatch({
         type: "SET_ALLERGY",
-        payload: allergyData,
+        payload: responseAllergy,
       });
 
-      localStorage.setItem("allergy", JSON.stringify(allergyData));
+      localStorage.setItem("allergy", JSON.stringify(responseAllergy));
+    } else {
+      dispatch({
+        type: "SET_ALLERGY",
+        payload: {},
+      });
+
+      localStorage.setItem("allergy", JSON.stringify({}));
     }
 
+    // stroke risk
     if (responseStrokeRisk) {
       dispatch({
         type: "SET_STROKE_RISK",
-        payload: strokeRiskData,
+        payload: responseStrokeRisk,
       });
 
-      localStorage.setItem("strokeRisk", JSON.stringify(strokeRiskData));
+      localStorage.setItem("strokeRisk", JSON.stringify(responseStrokeRisk));
+    } else {
+      dispatch({
+        type: "SET_STROKE_RISK",
+        payload: {},
+      });
+
+      localStorage.setItem("strokeRisk", JSON.stringify({}));
     }
 
+    // bleeding risk
     if (responseBleedingRisk) {
       dispatch({
         type: "SET_BLEEDING_RISK",
-        payload: bleedingRiskData,
+        payload: responseBleedingRisk,
       });
 
-      localStorage.setItem("bleedingRisk", JSON.stringify(bleedingRiskData));
+      localStorage.setItem(
+        "bleedingRisk",
+        JSON.stringify(responseBleedingRisk)
+      );
+    } else {
+      dispatch({
+        type: "SET_BLEEDING_RISK",
+        payload: {},
+      });
+
+      localStorage.setItem("bleedingRisk", JSON.stringify({}));
     }
 
+    // warfarin quality
     if (responseWarfarinQuality) {
       dispatch({
         type: "SET_WARFARIN_QUALITY",
-        payload: warfarinQualityData,
+        payload: responseWarfarinQuality,
       });
 
       localStorage.setItem(
         "warfarinQuality",
-        JSON.stringify(warfarinQualityData)
+        JSON.stringify(responseWarfarinQuality)
       );
+    } else {
+      dispatch({
+        type: "SET_WARFARIN_QUALITY",
+        payload: {},
+      });
+
+      localStorage.setItem("warfarinQuality", JSON.stringify({}));
     }
 
+    // health goal
     if (responseHealthGoal) {
       dispatch({
         type: "SET_HEALTH_GOAL",
-        payload: healthGoalData,
+        payload: responseHealthGoal,
       });
 
-      localStorage.setItem("healthGoal", JSON.stringify(healthGoalData));
+      localStorage.setItem("healthGoal", JSON.stringify(responseHealthGoal));
+    } else {
+      dispatch({
+        type: "SET_HEALTH_GOAL",
+        payload: {},
+      });
+
+      localStorage.setItem("healthGoal", JSON.stringify({}));
+    }
+
+    // medication
+    if (responseMedication) {
+      dispatch({
+        type: "SET_MEDICATION",
+        payload: responseMedication,
+      });
+
+      localStorage.setItem("medication", JSON.stringify(responseMedication));
+    } else {
+      dispatch({
+        type: "SET_MEDICATION",
+        payload: {},
+      });
+
+      localStorage.setItem("medication", JSON.stringify({}));
+    }
+
+    // blood thinner
+    if (responseBloodThinner) {
+      dispatch({
+        type: "SET_BLOOD_THINNER",
+        payload: responseBloodThinner,
+      });
+
+      localStorage.setItem(
+        "bloodThinner",
+        JSON.stringify(responseBloodThinner)
+      );
+    } else {
+      dispatch({
+        type: "SET_BLOOD_THINNER",
+        payload: {},
+      });
+
+      localStorage.setItem("bloodThinner", JSON.stringify({}));
+    }
+
+    // CONSTANT from db
+    if (responseDefaultHealthGoal) {
+      dispatch({
+        type: "SET_DEFAULT_HEALTH_GOAL",
+        payload: responseDefaultHealthGoal,
+      });
+
+      localStorage.setItem(
+        "defaultHealthGoal",
+        JSON.stringify(responseDefaultHealthGoal)
+      );
+    }
+
+    if (responseStrokeRiskResultMessage) {
+      dispatch({
+        type: "SET_STROKE_RISK_RESULT_MESSAGE",
+        payload: responseStrokeRiskResultMessage,
+      });
+
+      localStorage.setItem(
+        "strokeRiskResultMessage",
+        JSON.stringify(responseStrokeRiskResultMessage)
+      );
+    }
+
+    if (responseBleedingRiskResultMessage) {
+      dispatch({
+        type: "SET_BLEEDING_RISK_RESULT_MESSAGE",
+        payload: responseBleedingRiskResultMessage,
+      });
+
+      localStorage.setItem(
+        "bleedingRiskResultMessage",
+        JSON.stringify(responseBleedingRiskResultMessage)
+      );
+    }
+
+    if (responseWarfarinQualityResultMessage) {
+      dispatch({
+        type: "SET_WARFARIN_QUALITY_RESULT_MESSAGE",
+        payload: responseWarfarinQualityResultMessage,
+      });
+
+      localStorage.setItem(
+        "warfarinQualityResultMessage",
+        JSON.stringify(responseWarfarinQualityResultMessage)
+      );
     }
 
     dispatch({
@@ -203,10 +429,7 @@ export async function fetchPatientList(dispatch) {
         type: "SET_PATIENT_LIST",
         payload: patientListData,
       });
-      return patientListData;
     }
-
-    return;
   } catch (error) {
     throw new Error(`Error in set patient list: `, error);
   }
@@ -248,7 +471,7 @@ export async function updatePatientProfile(newData) {
 // update patient medical condition data
 export async function updateMedicalCondition(medicalConditionData, patientId) {
   try {
-    await updateDoc(doc(firestore, "medical condition", patientId), {
+    await updateDoc(doc(firestore, "medical_condition", patientId), {
       nameUpdated: medicalConditionData.nameUpdated,
       dateTimeUpdated: medicalConditionData.dateTimeUpdated,
       hypertension: medicalConditionData.hypertension,
@@ -265,7 +488,7 @@ export async function updateMedicalCondition(medicalConditionData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update medical condition data", error);
+    console.log("Error in update medical_condition data", error);
     return;
   }
 }
@@ -377,29 +600,79 @@ export async function updateHealthGoal(healthGoalData, patientId) {
   }
 }
 
+// update patient medication data
+export async function updateMedication(medicationData, patientId) {
+  try {
+    await updateDoc(doc(firestore, "medication", patientId), {
+      nameUpdated: medicationData.nameUpdated,
+      dateTimeUpdated: medicationData.dateTimeUpdated,
+      medicine: medicationData.medicineList,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.log("Error in update medication data", error);
+    return;
+  }
+}
+
+// update patient blood thinner data
+export async function updateBloodThinner(bloodThinnerData, patientId) {
+  try {
+    await updateDoc(doc(firestore, "blood_thinner", patientId), {
+      nameUpdated: bloodThinnerData.nameUpdated,
+      dateTimeUpdated: bloodThinnerData.dateTimeUpdated,
+      selectedMedicine: bloodThinnerData.selectedMedicine,
+      indication: bloodThinnerData.indication,
+      duration: bloodThinnerData.duration,
+      inrRange: bloodThinnerData.inrRange,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.log("Error in update blood thinner data", error);
+    return;
+  }
+}
+
 // delete patient by id
 export async function deletePatientById(id) {
   var patientRef = doc(firestore, "patient", id);
-  var medicalConRef = doc(firestore, "medical condition", id);
+  var medicalConRef = doc(firestore, "medical_condition", id);
   var allergyRef = doc(firestore, "allergy", id);
+  var healthGoalRef = doc(firestore, "health_goal", id);
+  var strokeRiskRef = doc(firestore, "stroke_risk", id);
+  var bleedingRiskRef = doc(firestore, "bleeding_risk", id);
+  var warfarinQualityRef = doc(firestore, "warfarin_quality", id);
 
   const patientDocSnap = await getDoc(patientRef);
   const medicalConDocSnap = await getDoc(medicalConRef);
   const allergyDocSnap = await getDoc(allergyRef);
+  const healthGoalDocSnap = await getDoc(healthGoalRef);
+  const strokeRiskDocSnap = await getDoc(strokeRiskRef);
+  const bleedingRiskDocSnap = await getDoc(bleedingRiskRef);
+  const warfarinQualityDocSnap = await getDoc(warfarinQualityRef);
 
   if (
     !patientDocSnap.exists() ||
     !medicalConDocSnap.exists() ||
-    !allergyDocSnap.exists()
+    !allergyDocSnap.exists() ||
+    !healthGoalDocSnap.exists() ||
+    !strokeRiskDocSnap.exists() ||
+    !bleedingRiskDocSnap.exists() ||
+    !warfarinQualityDocSnap.exists()
   ) {
     alert("Document does not exist");
     return;
   }
 
   try {
+    // delete ref
     await deleteDoc(patientRef);
     await deleteDoc(medicalConRef);
     await deleteDoc(allergyRef);
+    await deleteDoc(healthGoalRef);
+    await deleteDoc(strokeRiskRef);
+    await deleteDoc(bleedingRiskRef);
+    await deleteDoc(warfarinQualityRef);
   } catch (error) {
     console.log("Error in delete patient by id", error);
     return;

@@ -42,12 +42,12 @@ function MedicalCondition() {
   const [liver, setLiver] = useState(map.liver ? map.liver : false);
 
   const dateTimeUpdated = patientState.medicalCondition.dateTimeUpdated
-    ? patientState.medicalCondition.dateTimeUpdated.split("-")
+    ? patientState.medicalCondition.dateTimeUpdated
     : "";
 
   console.log(
     userState.userDetails.username,
-    getCurrentDate() + "-" + getCurrentTime(),
+    new Date().getTime(),
     hypertension,
     diabetes,
     hyperlipidemia,
@@ -63,7 +63,7 @@ function MedicalCondition() {
 
   const medicalConditionData = {
     nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: getCurrentDate() + "-" + getCurrentTime(),
+    dateTimeUpdated: new Date().getTime(),
     hypertension: hypertension,
     diabetes: diabetes,
     hyperlipidemia: hyperlipidemia,
@@ -83,12 +83,7 @@ function MedicalCondition() {
     if (window.confirm("Are you sure you want to continue?")) {
       await updateMedicalCondition(medicalConditionData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
-      pageDispatch({
-        type: "SET_CURRENT_PAGE",
-        payload: "Patient Details",
-      });
       alert("Update patient's medical condition successfully.");
-      navigate(`/dashboard/patient/${params.patientId}`);
     } else {
       return;
     }
@@ -113,7 +108,8 @@ function MedicalCondition() {
                 <span>:</span>
               </h4>
               <p>
-                {dateTimeUpdated[0]} {dateTimeUpdated[1]}
+                {getCurrentDate(dateTimeUpdated)}{" "}
+                {getCurrentTime(dateTimeUpdated)}
               </p>
             </div>
           </div>
@@ -226,7 +222,7 @@ function MedicalCondition() {
                 });
               }}
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>

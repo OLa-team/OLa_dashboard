@@ -31,14 +31,12 @@ function Allergy() {
   );
 
   const dateTimeUpdated = patientState.allergy.dateTimeUpdated
-    ? patientState.allergy.dateTimeUpdated.split("-")
+    ? patientState.allergy.dateTimeUpdated
     : "";
-
-  console.log(hasAllergy, food, medicine);
 
   const allergyData = {
     nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: getCurrentDate() + "-" + getCurrentTime(),
+    dateTimeUpdated: new Date().getTime(),
     hasAllergy: food === "" && medicine === "" ? false : hasAllergy,
     food: hasAllergy ? food : "",
     medicine: hasAllergy ? medicine : "",
@@ -50,12 +48,7 @@ function Allergy() {
     if (window.confirm("Are you sure you want to continue?")) {
       await updateAllergy(allergyData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
-      pageDispatch({
-        type: "SET_CURRENT_PAGE",
-        payload: "Patient Details",
-      });
       alert("Update patient's allergy successfully.");
-      navigate(`/dashboard/patient/${params.patientId}`);
     } else {
       return;
     }
@@ -80,7 +73,8 @@ function Allergy() {
                 <span>:</span>
               </h4>
               <p>
-                {dateTimeUpdated[0]} {dateTimeUpdated[1]}
+                {getCurrentDate(dateTimeUpdated)}{" "}
+                {getCurrentTime(dateTimeUpdated)}
               </p>
             </div>
           </div>
@@ -152,7 +146,7 @@ function Allergy() {
                 });
               }}
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>

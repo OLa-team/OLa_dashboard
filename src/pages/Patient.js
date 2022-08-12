@@ -5,7 +5,8 @@ import { IoPersonCircle } from "react-icons/io5";
 import { GiMedicines, GiStairsGoal } from "react-icons/gi";
 import { MdBloodtype, MdNoFood } from "react-icons/md";
 import { CgDanger } from "react-icons/cg";
-import { RiArrowGoBackFill } from "react-icons/ri";
+// import { RiArrowGoBackFill } from "react-icons/ri";
+import { TiArrowBack } from "react-icons/ti";
 import { HiInformationCircle } from "react-icons/hi";
 import { usePageDispatch, usePatientState } from "../context";
 import { useParams, useNavigate, Link } from "react-router-dom";
@@ -71,7 +72,8 @@ function Patient() {
               });
             }}
           >
-            <RiArrowGoBackFill />
+            {/* <RiArrowGoBackFill /> */}
+            <TiArrowBack style={{ fontSize: "22px" }} />
             <h4>Back</h4>
           </div>
 
@@ -121,7 +123,16 @@ function Patient() {
           </Grid>
 
           <Grid item xs={3}>
-            <div className="patientModule">
+            <div
+              className="patientModule"
+              onClick={() => {
+                navigate(`medication`);
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "Current Medication",
+                });
+              }}
+            >
               <GiMedicines className="iconModule" />
               <h2>Current Medication</h2>
             </div>
@@ -176,7 +187,16 @@ function Patient() {
           </Grid>
 
           <Grid item xs={3}>
-            <div className="patientModule">
+            <div
+              className="patientModule"
+              onClick={() => {
+                navigate(`bloodThinner`);
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "Blood Thinner / Clot Preventer",
+                });
+              }}
+            >
               <MdBloodtype className="iconModule" />
               <h2>Blood Thinner </h2>
             </div>

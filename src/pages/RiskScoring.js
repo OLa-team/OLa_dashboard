@@ -15,7 +15,17 @@ function RiskScoring() {
 
   return (
     <div className="riskScoring">
-      <div style={{ padding: "70px 90px", height: "70%" }}>
+      <div
+        style={{
+          padding: "70px 90px",
+          height: "70%",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "90%",
+        }}
+      >
         <h1 style={{ textAlign: "center", fontSize: "35px" }}>
           Risk Assessment
         </h1>

@@ -21,6 +21,24 @@ let wq = localStorage.getItem("warfarinQuality")
 let hg = localStorage.getItem("healthGoal")
   ? JSON.parse(localStorage.getItem("healthGoal"))
   : null;
+let md = localStorage.getItem("medication")
+  ? JSON.parse(localStorage.getItem("medication"))
+  : null;
+let bt = localStorage.getItem("bloodThinner")
+  ? JSON.parse(localStorage.getItem("bloodThinner"))
+  : null;
+let dhg = localStorage.getItem("defaultHealthGoal")
+  ? JSON.parse(localStorage.getItem("defaultHealthGoal"))
+  : null;
+let srrm = localStorage.getItem("strokeRiskResultMessage")
+  ? JSON.parse(localStorage.getItem("strokeRiskResultMessage"))
+  : null;
+let brrm = localStorage.getItem("bleedingRiskResultMessage")
+  ? JSON.parse(localStorage.getItem("bleedingRiskResultMessage"))
+  : null;
+let wqrm = localStorage.getItem("warfarinQualityResultMessage")
+  ? JSON.parse(localStorage.getItem("warfarinQualityResultMessage"))
+  : null;
 
 // Initial state
 const initialState = {
@@ -34,6 +52,12 @@ const initialState = {
   bleedingRisk: br || {},
   warfarinQuality: wq || {},
   healthGoal: hg || {},
+  medication: md || {},
+  bloodThinner: bt || {},
+  defaultHealthGoal: dhg || {},
+  strokeRiskResultMessage: srrm || {},
+  bleedingRiskResultMessage: brrm || {},
+  warfarinQualityResultMessage: wqrm || {},
   loading: false,
 };
 
@@ -126,6 +150,42 @@ const PatientReducer = (initialState, action) => {
       return {
         ...initialState,
         healthGoal: action.payload,
+      };
+
+    case "SET_MEDICATION":
+      return {
+        ...initialState,
+        medication: action.payload,
+      };
+
+    case "SET_BLOOD_THINNER":
+      return {
+        ...initialState,
+        bloodThinner: action.payload,
+      };
+
+    case "SET_DEFAULT_HEALTH_GOAL":
+      return {
+        ...initialState,
+        defaultHealthGoal: action.payload,
+      };
+
+    case "SET_STROKE_RISK_RESULT_MESSAGE":
+      return {
+        ...initialState,
+        strokeRiskResultMessage: action.payload,
+      };
+
+    case "SET_BLEEDING_RISK_RESULT_MESSAGE":
+      return {
+        ...initialState,
+        bleedingRiskResultMessage: action.payload,
+      };
+
+    case "SET_WARFARIN_QUALITY_RESULT_MESSAGE":
+      return {
+        ...initialState,
+        warfarinQualityResultMessage: action.payload,
       };
 
     default:

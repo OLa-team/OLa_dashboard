@@ -66,6 +66,10 @@ function WarfarinQuality() {
       : ""
   );
 
+  let resultMessages = patientState.warfarinQualityResultMessage
+    ? patientState.warfarinQualityResultMessage
+    : [];
+
   let testResult = [
     sex,
     age,
@@ -88,23 +92,21 @@ function WarfarinQuality() {
     console.log(currentScore);
 
     if (currentScore <= 2) {
-      setResult("Patient would benefit from a vitamin K antagonist (VKA)");
+      setResult(resultMessages.msg1);
       setColorMsg("#45f248");
     } else {
-      setResult(
-        "Patient is less likely to achieve a good TTR and alternative strategies (e.g. a non-VKA oral anticoagulant (NOAC) should be used"
-      );
+      setResult(resultMessages.msg2);
       setColorMsg("#ec2029");
     }
   }, [testResult]);
 
   const dateTimeUpdated = patientState.warfarinQuality.dateTimeUpdated
-    ? patientState.warfarinQuality.dateTimeUpdated.split("-")
+    ? patientState.warfarinQuality.dateTimeUpdated
     : "";
 
   let warfarinQualityData = {
     nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: getCurrentDate() + "-" + getCurrentTime(),
+    dateTimeUpdated: new Date().getTime(),
     sex: sex,
     age: age,
     medHistory: medHistory,
@@ -152,7 +154,8 @@ function WarfarinQuality() {
                 <span>:</span>
               </h4>
               <p>
-                {dateTimeUpdated[0]} {dateTimeUpdated[1]}
+                {getCurrentDate(dateTimeUpdated)}{" "}
+                {getCurrentTime(dateTimeUpdated)}
               </p>
             </div>
           </div>
