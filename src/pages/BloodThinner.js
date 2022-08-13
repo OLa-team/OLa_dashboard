@@ -25,30 +25,17 @@ function BloodThinner() {
       ? patientState.bloodThinner.selectedMedicine
       : ""
   );
-  const [indication, setIndication] = useState({
-    select: patientState.bloodThinner.indication.select
-      ? patientState.bloodThinner.indication.select
-      : "",
-    value: patientState.bloodThinner.indication.value
-      ? patientState.bloodThinner.indication.value
-      : "",
-  });
-  const [duration, setDuration] = useState({
-    select: patientState.bloodThinner.duration.select
-      ? patientState.bloodThinner.duration.select
-      : "",
-    value: patientState.bloodThinner.duration.value
-      ? patientState.bloodThinner.duration.value
-      : "",
-  });
-  const [inrRange, setInrRange] = useState({
-    select: patientState.bloodThinner.inrRange.select
-      ? patientState.bloodThinner.inrRange.select
-      : "",
-    value: patientState.bloodThinner.inrRange.value
-      ? patientState.bloodThinner.inrRange.value
-      : "",
-  });
+  const [indication, setIndication] = useState(
+    patientState.bloodThinner.indication
+      ? patientState.bloodThinner.indication
+      : ""
+  );
+  const [duration, setDuration] = useState(
+    patientState.bloodThinner.duration ? patientState.bloodThinner.duration : ""
+  );
+  const [inrRange, setInrRange] = useState(
+    patientState.bloodThinner.inrRange ? patientState.bloodThinner.inrRange : ""
+  );
 
   const dateTimeUpdated = patientState.bloodThinner.dateTimeUpdated
     ? patientState.bloodThinner.dateTimeUpdated
@@ -62,8 +49,6 @@ function BloodThinner() {
     duration: duration,
     inrRange: inrRange,
   };
-
-  console.log(bloodThinnerData);
 
   async function handleUpdateBloodThinner(e) {
     e.preventDefault();
@@ -153,71 +138,58 @@ function BloodThinner() {
                     <div>
                       <input
                         type="checkbox"
-                        checked={indication.select === "af" ? true : false}
-                        onChange={() =>
-                          setIndication({
-                            select: "af",
-                            value: "af",
-                          })
-                        }
+                        checked={indication === "af" ? true : false}
+                        onChange={() => setIndication("af")}
                       />
                       <p>AF</p>
                     </div>
                     <div>
                       <input
                         type="checkbox"
-                        checked={indication.select === "dvt" ? true : false}
-                        onChange={() =>
-                          setIndication({
-                            select: "dvt",
-                            value: "dvt",
-                          })
-                        }
+                        checked={indication === "dvt" ? true : false}
+                        onChange={() => setIndication("dvt")}
                       />
                       <p>DVT</p>
                     </div>
                     <div>
                       <input
                         type="checkbox"
-                        checked={indication.select === "pe" ? true : false}
-                        onChange={() =>
-                          setIndication({
-                            select: "pe",
-                            value: "pe",
-                          })
-                        }
+                        checked={indication === "pe" ? true : false}
+                        onChange={() => setIndication("pe")}
                       />
                       <p>PE</p>
                     </div>
                     <div>
                       <input
                         type="checkbox"
-                        checked={indication.select === "others" ? true : false}
-                        onChange={() =>
-                          setIndication({
-                            select: "others",
-                            value: "",
-                          })
+                        checked={
+                          indication !== "af" &&
+                          indication !== "dvt" &&
+                          indication !== "pe"
+                            ? true
+                            : false
                         }
+                        onChange={() => setIndication("")}
                       />
                       <p>
                         Others, please specify:{" "}
                         <input
                           type="text"
                           value={
-                            indication.select === "others"
-                              ? indication.value
+                            indication !== "af" &&
+                            indication !== "dvt" &&
+                            indication !== "pe"
+                              ? indication
                               : ""
                           }
                           disabled={
-                            indication.select === "others" ? false : true
+                            indication === "af" ||
+                            indication === "dvt" ||
+                            indication === "pe"
+                              ? true
+                              : false
                           }
-                          onChange={(e) =>
-                            setIndication({
-                              select: "others",
-                              value: e.target.value,
-                            })
-                          }
+                          onChange={(e) => setIndication(e.target.value)}
                         />
                       </p>
                     </div>
@@ -233,41 +205,24 @@ function BloodThinner() {
                     <div>
                       <input
                         type="checkbox"
-                        checked={duration.select === "lifelong" ? true : false}
-                        onChange={() =>
-                          setDuration({
-                            select: "lifelong",
-                            value: "lifelong",
-                          })
-                        }
+                        checked={duration === "lifelong" ? true : false}
+                        onChange={() => setDuration("lifelong")}
                       />
                       <p>Lifelong</p>
                     </div>
                     <div>
                       <input
                         type="checkbox"
-                        checked={duration.select === "others" ? true : false}
-                        onChange={() =>
-                          setDuration({
-                            select: "others",
-                            value: "",
-                          })
-                        }
+                        checked={duration !== "lifelong" ? true : false}
+                        onChange={() => setDuration("")}
                       />
                       <p>
                         Others, please specify:{" "}
                         <input
                           type="text"
-                          value={
-                            duration.select === "others" ? duration.value : ""
-                          }
-                          disabled={duration.select === "others" ? false : true}
-                          onChange={(e) =>
-                            setDuration({
-                              select: "others",
-                              value: e.target.value,
-                            })
-                          }
+                          value={duration !== "lifelong" ? duration : ""}
+                          disabled={duration === "lifelong" ? true : false}
+                          onChange={(e) => setDuration(e.target.value)}
                         />
                       </p>
                     </div>
@@ -285,47 +240,24 @@ function BloodThinner() {
                         <div>
                           <input
                             type="checkbox"
-                            checked={inrRange.select === "2-3" ? true : false}
-                            onChange={() =>
-                              setInrRange({
-                                select: "2-3",
-                                value: "2-3",
-                              })
-                            }
+                            checked={inrRange === "2-3" ? true : false}
+                            onChange={() => setInrRange("2-3")}
                           />
                           <p>2-3</p>
                         </div>
                         <div>
                           <input
                             type="checkbox"
-                            checked={
-                              inrRange.select === "others" ? true : false
-                            }
-                            onChange={() =>
-                              setInrRange({
-                                select: "others",
-                                value: "",
-                              })
-                            }
+                            checked={inrRange !== "2-3" ? true : false}
+                            onChange={() => setInrRange("")}
                           />
                           <p>
                             Others, please specify:{" "}
                             <input
                               type="text"
-                              value={
-                                inrRange.select === "others"
-                                  ? inrRange.value
-                                  : ""
-                              }
-                              disabled={
-                                inrRange.select === "others" ? false : true
-                              }
-                              onChange={(e) =>
-                                setInrRange({
-                                  select: "others",
-                                  value: e.target.value,
-                                })
-                              }
+                              value={inrRange !== "2-3" ? inrRange : ""}
+                              disabled={inrRange === "2-3" ? true : false}
+                              onChange={(e) => setInrRange(e.target.value)}
                             />
                           </p>
                         </div>
