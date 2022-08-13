@@ -96,7 +96,12 @@ function BloodThinner() {
               className={
                 selectedMedicine === "warfarin" ? "activeMedicine" : ""
               }
-              onClick={() => setSelectedMedicine("warfarin")}
+              onClick={() => {
+                setSelectedMedicine("warfarin");
+                setDuration("");
+                setIndication("");
+                setInrRange("");
+              }}
             >
               Warfarin
             </div>
@@ -104,7 +109,12 @@ function BloodThinner() {
               className={
                 selectedMedicine === "dabigatran" ? "activeMedicine" : ""
               }
-              onClick={() => setSelectedMedicine("dabigatran")}
+              onClick={() => {
+                setSelectedMedicine("dabigatran");
+                setDuration("");
+                setIndication("");
+                setInrRange("");
+              }}
             >
               Dabigatran
             </div>
@@ -112,7 +122,12 @@ function BloodThinner() {
               className={
                 selectedMedicine === "apixaban" ? "activeMedicine" : ""
               }
-              onClick={() => setSelectedMedicine("apixaban")}
+              onClick={() => {
+                setSelectedMedicine("apixaban");
+                setDuration("");
+                setIndication("");
+                setInrRange("");
+              }}
             >
               Apixaban
             </div>
@@ -120,7 +135,12 @@ function BloodThinner() {
               className={
                 selectedMedicine === "rivaroxaban" ? "activeMedicine" : ""
               }
-              onClick={() => setSelectedMedicine("rivaroxaban")}
+              onClick={() => {
+                setSelectedMedicine("rivaroxaban");
+                setDuration("");
+                setIndication("");
+                setInrRange("");
+              }}
             >
               Rivaroxaban
             </div>
@@ -165,11 +185,12 @@ function BloodThinner() {
                         checked={
                           indication !== "af" &&
                           indication !== "dvt" &&
-                          indication !== "pe"
+                          indication !== "pe" &&
+                          indication !== ""
                             ? true
                             : false
                         }
-                        onChange={() => setIndication("")}
+                        onChange={() => setIndication("others")}
                       />
                       <p>
                         Others, please specify:{" "}
@@ -178,7 +199,8 @@ function BloodThinner() {
                           value={
                             indication !== "af" &&
                             indication !== "dvt" &&
-                            indication !== "pe"
+                            indication !== "pe" &&
+                            indication !== "others"
                               ? indication
                               : ""
                           }
@@ -213,14 +235,22 @@ function BloodThinner() {
                     <div>
                       <input
                         type="checkbox"
-                        checked={duration !== "lifelong" ? true : false}
-                        onChange={() => setDuration("")}
+                        checked={
+                          duration !== "lifelong" && duration !== ""
+                            ? true
+                            : false
+                        }
+                        onChange={() => setDuration("others")}
                       />
                       <p>
                         Others, please specify:{" "}
                         <input
                           type="text"
-                          value={duration !== "lifelong" ? duration : ""}
+                          value={
+                            duration !== "lifelong" && duration !== "others"
+                              ? duration
+                              : ""
+                          }
                           disabled={duration === "lifelong" ? true : false}
                           onChange={(e) => setDuration(e.target.value)}
                         />
@@ -248,14 +278,22 @@ function BloodThinner() {
                         <div>
                           <input
                             type="checkbox"
-                            checked={inrRange !== "2-3" ? true : false}
-                            onChange={() => setInrRange("")}
+                            checked={
+                              inrRange !== "2-3" && inrRange !== ""
+                                ? true
+                                : false
+                            }
+                            onChange={() => setInrRange("others")}
                           />
                           <p>
                             Others, please specify:{" "}
                             <input
                               type="text"
-                              value={inrRange !== "2-3" ? inrRange : ""}
+                              value={
+                                inrRange !== "2-3" && inrRange !== "others"
+                                  ? inrRange
+                                  : ""
+                              }
                               disabled={inrRange === "2-3" ? true : false}
                               onChange={(e) => setInrRange(e.target.value)}
                             />
