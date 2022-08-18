@@ -137,7 +137,7 @@ function StrokeRisk() {
 
   return (
     <div className="strokeRisk">
-      <div style={{ padding: "50px 90px" }}>
+      <div style={{ padding: "30px 70px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>CHA₂DS₂-VASc test</h1>
           <div className="lastUpdatedBox">

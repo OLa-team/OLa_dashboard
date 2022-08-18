@@ -20,9 +20,9 @@ function BloodThinner() {
   const patientId = params.patientId;
   const userState = useAuthState();
 
-  const [selectedMedicine, setSelectedMedicine] = useState(
-    patientState.bloodThinner.selectedMedicine
-      ? patientState.bloodThinner.selectedMedicine
+  const [anticoagulant, setAnticoagulant] = useState(
+    patientState.bloodThinner.anticoagulant
+      ? patientState.bloodThinner.anticoagulant
       : ""
   );
   const [indication, setIndication] = useState(
@@ -44,14 +44,14 @@ function BloodThinner() {
   let bloodThinnerData = {
     nameUpdated: userState.userDetails.username,
     dateTimeUpdated: new Date().getTime(),
-    selectedMedicine: selectedMedicine,
+    anticoagulant: anticoagulant,
     indication: indication,
     duration: duration,
     inrRange: inrRange,
   };
 
-  async function handleUpdateBloodThinner(e) {
-    e.preventDefault();
+  async function handleUpdateBloodThinner() {
+    // e.preventDefault();
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateBloodThinner(bloodThinnerData, patientId);
@@ -87,17 +87,12 @@ function BloodThinner() {
           </div>
         </div>
 
-        <form
-          className="bloodThinnerForm"
-          onSubmit={(e) => handleUpdateBloodThinner(e)}
-        >
+        <form className="bloodThinnerForm">
           <div className="upperBloodThinner">
             <div
-              className={
-                selectedMedicine === "warfarin" ? "activeMedicine" : ""
-              }
+              className={anticoagulant === "warfarin" ? "activeMedicine" : ""}
               onClick={() => {
-                setSelectedMedicine("warfarin");
+                setAnticoagulant("warfarin");
                 setDuration("");
                 setIndication("");
                 setInrRange("");
@@ -106,11 +101,9 @@ function BloodThinner() {
               Warfarin
             </div>
             <div
-              className={
-                selectedMedicine === "dabigatran" ? "activeMedicine" : ""
-              }
+              className={anticoagulant === "dabigatran" ? "activeMedicine" : ""}
               onClick={() => {
-                setSelectedMedicine("dabigatran");
+                setAnticoagulant("dabigatran");
                 setDuration("");
                 setIndication("");
                 setInrRange("");
@@ -119,11 +112,9 @@ function BloodThinner() {
               Dabigatran
             </div>
             <div
-              className={
-                selectedMedicine === "apixaban" ? "activeMedicine" : ""
-              }
+              className={anticoagulant === "apixaban" ? "activeMedicine" : ""}
               onClick={() => {
-                setSelectedMedicine("apixaban");
+                setAnticoagulant("apixaban");
                 setDuration("");
                 setIndication("");
                 setInrRange("");
@@ -133,10 +124,10 @@ function BloodThinner() {
             </div>
             <div
               className={
-                selectedMedicine === "rivaroxaban" ? "activeMedicine" : ""
+                anticoagulant === "rivaroxaban" ? "activeMedicine" : ""
               }
               onClick={() => {
-                setSelectedMedicine("rivaroxaban");
+                setAnticoagulant("rivaroxaban");
                 setDuration("");
                 setIndication("");
                 setInrRange("");
@@ -147,7 +138,7 @@ function BloodThinner() {
           </div>
 
           <div className="lowerBloodThinner">
-            {selectedMedicine !== "" && (
+            {anticoagulant !== "" && (
               <>
                 <div className="checkboxBloodThinner">
                   <h3>
@@ -259,7 +250,7 @@ function BloodThinner() {
                   </div>
                 </div>
 
-                {selectedMedicine === "warfarin" && (
+                {anticoagulant === "warfarin" && (
                   <>
                     <div className="checkboxBloodThinner">
                       <h3>
@@ -442,26 +433,28 @@ function BloodThinner() {
               Graph
             </button>
           </div>
-
-          <div className="saveAndCancelButton bt">
-            <button className="saveProfile" type="submit">
-              Save
-            </button>
-            <button
-              type="button"
-              className="cancelProfile"
-              onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}/`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Patient Details",
-                });
-              }}
-            >
-              Back
-            </button>
-          </div>
         </form>
+        <div className="saveAndCancelButton bt">
+          <button
+            className="saveProfile"
+            onClick={() => handleUpdateBloodThinner()}
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            className="cancelProfile"
+            onClick={() => {
+              navigate(`/dashboard/patient/${params.patientId}/`);
+              pageDispatch({
+                type: "SET_CURRENT_PAGE",
+                payload: "Patient Details",
+              });
+            }}
+          >
+            Back
+          </button>
+        </div>
       </div>
     </div>
   );

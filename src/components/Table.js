@@ -11,6 +11,7 @@ function Table({
   selectFunction,
   toolbar,
   gridStyle,
+  density,
 }) {
   const [pageSize, setPageSize] = useState(10);
 
@@ -27,7 +28,8 @@ function Table({
         checkboxSelection
         disableSelectionOnClick
         onRowClick={(row) => clickRowFunction(row)}
-        density="comfortable"
+        onCellClick={(cell) => console.log("cell", cell)}
+        density={density}
         onSelectionModelChange={(ids) => selectFunction(ids, data)}
         components={{
           Toolbar: () => {

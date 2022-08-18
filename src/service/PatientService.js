@@ -8,7 +8,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase";
-import { v4 as uuid } from "uuid";
 
 const patientCollectionRef = collection(firestore, "patient");
 
@@ -47,8 +46,8 @@ export async function createPatientAccount(newPatientData, patientId) {
       nameUpdated: "",
       dateTimeUpdated: "",
       hasAllergy: false,
-      food: "",
-      medicine: "",
+      food: [],
+      medicine: [],
     });
 
     await setDoc(doc(firestore, "stroke_risk", patientId), {
@@ -112,10 +111,13 @@ export async function createPatientAccount(newPatientData, patientId) {
     });
 
     await setDoc(doc(firestore, "blood_thinner", patientId), {
-      selectedMedicine: "",
+      nameUpdated: "",
+      dateTimeUpdated: "",
+      anticoagulant: "",
       indication: {},
       duration: {},
       inrRange: {},
+      record: [],
     });
   } catch (error) {
     throw new Error(`Error in register new patient: `, error);
@@ -621,7 +623,7 @@ export async function updateBloodThinner(bloodThinnerData, patientId) {
     await updateDoc(doc(firestore, "blood_thinner", patientId), {
       nameUpdated: bloodThinnerData.nameUpdated,
       dateTimeUpdated: bloodThinnerData.dateTimeUpdated,
-      selectedMedicine: bloodThinnerData.selectedMedicine,
+      anticoagulant: bloodThinnerData.anticoagulant,
       indication: bloodThinnerData.indication,
       duration: bloodThinnerData.duration,
       inrRange: bloodThinnerData.inrRange,
@@ -629,6 +631,24 @@ export async function updateBloodThinner(bloodThinnerData, patientId) {
   } catch (error) {
     alert(error.message);
     console.log("Error in update blood thinner data", error);
+    return;
+  }
+}
+
+// update patient blood thinner record data
+export async function updateBloodThinnerRecord(
+  bloodThinnerRecordData,
+  patientId
+) {
+  try {
+    await updateDoc(doc(firestore, "blood_thinner", patientId), {
+      nameUpdated: bloodThinnerRecordData.nameUpdated,
+      dateTimeUpdated: bloodThinnerRecordData.dateTimeUpdated,
+      record: bloodThinnerRecordData.record,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.log("Error in update blood thinner record data", error);
     return;
   }
 }
@@ -642,6 +662,7 @@ export async function deletePatientById(id) {
   var strokeRiskRef = doc(firestore, "stroke_risk", id);
   var bleedingRiskRef = doc(firestore, "bleeding_risk", id);
   var warfarinQualityRef = doc(firestore, "warfarin_quality", id);
+  var medicationRef = doc(firestore, "medication", id);
 
   const patientDocSnap = await getDoc(patientRef);
   const medicalConDocSnap = await getDoc(medicalConRef);
@@ -650,6 +671,7 @@ export async function deletePatientById(id) {
   const strokeRiskDocSnap = await getDoc(strokeRiskRef);
   const bleedingRiskDocSnap = await getDoc(bleedingRiskRef);
   const warfarinQualityDocSnap = await getDoc(warfarinQualityRef);
+  const medicationDocSnap = await getDoc(medicationRef);
 
   if (
     !patientDocSnap.exists() ||
@@ -658,7 +680,8 @@ export async function deletePatientById(id) {
     !healthGoalDocSnap.exists() ||
     !strokeRiskDocSnap.exists() ||
     !bleedingRiskDocSnap.exists() ||
-    !warfarinQualityDocSnap.exists()
+    !warfarinQualityDocSnap.exists() ||
+    !medicationDocSnap.exists()
   ) {
     alert("Document does not exist");
     return;
@@ -673,6 +696,7 @@ export async function deletePatientById(id) {
     await deleteDoc(strokeRiskRef);
     await deleteDoc(bleedingRiskRef);
     await deleteDoc(warfarinQualityRef);
+    await deleteDoc(medicationRef);
   } catch (error) {
     console.log("Error in delete patient by id", error);
     return;
@@ -690,6 +714,5 @@ export function deleteAllSelectedPatients(dispatch, patientList) {
     payload: patientList,
   });
 
-  console.log("deleted patients", patientList);
   return patientList;
 }

@@ -45,22 +45,6 @@ function MedicalCondition() {
     ? patientState.medicalCondition.dateTimeUpdated
     : "";
 
-  console.log(
-    userState.userDetails.username,
-    new Date().getTime(),
-    hypertension,
-    diabetes,
-    hyperlipidemia,
-    atrial,
-    heart,
-    stroke,
-    vascular,
-    asthma,
-    copd,
-    renal,
-    liver
-  );
-
   const medicalConditionData = {
     nameUpdated: userState.userDetails.username,
     dateTimeUpdated: new Date().getTime(),

@@ -142,7 +142,7 @@ function PatientProfile() {
 
   return (
     <div className="patientProfile">
-      <div style={{ padding: "50px 70px" }}>
+      <div style={{ padding: "30px 70px" }}>
         <h1>General Information</h1>
 
         <form

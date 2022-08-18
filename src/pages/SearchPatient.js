@@ -90,6 +90,7 @@ function SearchPatient() {
     } else {
       return;
     }
+    alert("Deleted the patient(s) successfully");
   }
 
   useEffect(() => {
@@ -126,6 +127,7 @@ function SearchPatient() {
         selectFunction={setSelectedPatientList}
         toolbar={true}
         gridStyle={gridStyle}
+        density="standard"
         // deletePatient={(data) => setSelectedPatients(data)}
       />
     </div>

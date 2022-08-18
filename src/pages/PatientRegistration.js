@@ -27,6 +27,7 @@ function PatientRegistration() {
   function submitPatientRegistration(e) {
     e.preventDefault();
 
+    getPatients();
     setColor("red");
     //  Check validation of phone number
     if (
@@ -82,6 +83,7 @@ function PatientRegistration() {
 
   const getPatients = async () => {
     const data = await getDocs(patientCollectionRef);
+
     setPatients(data.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   };
 

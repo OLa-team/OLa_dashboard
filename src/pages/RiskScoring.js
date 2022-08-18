@@ -18,7 +18,6 @@ function RiskScoring() {
       <div
         style={{
           padding: "70px 90px",
-          height: "70%",
           position: "absolute",
           top: "50%",
           left: "50%",

@@ -1,31 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Line, Chart } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { useNavigate, useParams } from "react-router-dom";
-import { usePageDispatch } from "../context";
+import { usePageDispatch, usePatientState } from "../context";
 
 function BTGraph() {
   const navigate = useNavigate();
   const params = useParams();
   const pageDispatch = usePageDispatch();
+  const patientState = usePatientState();
 
-  const labels = [
-    "22.7.2022",
-    "25.7.2022",
-    "28.7.2022",
-    "31.7.2022",
-    "3.8.2022",
-    "6.8.2022",
-    "9.8.2022",
-  ];
+  const labels = patientState.bloodThinner.record
+    ? patientState.bloodThinner.record.map((record) => record.date)
+    : [];
+  const dataValue = patientState.bloodThinner.record
+    ? patientState.bloodThinner.record.map((record) => parseFloat(record.inr))
+    : [];
   const data = {
     labels: labels,
     datasets: [
       {
-        label: "INR Record",
+        label: "INR",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
-        data: [1.5, 1.0, 2.5, 2.0, 1.3, 3.0, 2.0],
+        data: dataValue,
       },
     ],
   };
@@ -60,6 +58,7 @@ function BTGraph() {
       },
     },
   };
+
   return (
     <div className="btGraph">
       <div style={{ padding: "30px 70px", height: "80%" }}>

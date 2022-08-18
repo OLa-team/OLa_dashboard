@@ -137,7 +137,7 @@ function WarfarinQuality() {
 
   return (
     <div className="warfarinQuality">
-      <div style={{ padding: "50px 90px" }}>
+      <div style={{ padding: "40px 70px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>SAMe-TT₂R₂ test</h1>
           <div className="lastUpdatedBox">

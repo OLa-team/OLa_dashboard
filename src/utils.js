@@ -1,4 +1,6 @@
 function getCurrentDate(date) {
+  if (date === "") return "";
+
   var today = new Date(date);
   var currentDate =
     today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
@@ -7,6 +9,8 @@ function getCurrentDate(date) {
 }
 
 function getCurrentTime(date) {
+  if (date === "") return "";
+
   var today = new Date(date);
 
   var hour = today.getHours() > 12 ? today.getHours() - 12 : today.getHours();

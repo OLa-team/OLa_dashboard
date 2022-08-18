@@ -54,7 +54,7 @@ function Medication() {
   const frequencyList = ["OD", "BD", "TDS", "QID", "PRN"];
 
   const style = {
-    height: "83%",
+    height: "75%",
     width: "100%",
     margin: "auto",
   };
@@ -126,16 +126,10 @@ function Medication() {
   async function handleAddOrEditMedication(e) {
     e.preventDefault();
 
-    if (name === "" || dose === "" || dose === "0" || frequency === "") {
-      alert("Please fill in the correct info");
-      return;
-    }
-
     if (openForm.action === "add") {
       const medicineId = uuid().slice(0, 5);
       let medicineData = {
         id: medicineId,
-        medicineId: medicineId,
         name: name,
         dose: dose,
         frequency: frequency,
@@ -146,7 +140,6 @@ function Medication() {
     } else {
       let medicineData = {
         id: medicineId,
-        medicineId: medicineId,
         name: name,
         dose: dose,
         frequency: frequency,
@@ -154,7 +147,7 @@ function Medication() {
       };
 
       setMedicineList((medicineList) =>
-        medicineList.filter((medicine) => medicine.medicineId !== medicineId)
+        medicineList.filter((medicine) => medicine.id !== medicineId)
       );
 
       setMedicineList((medicineList) => [medicineData, ...medicineList]);
@@ -186,7 +179,7 @@ function Medication() {
     setDose(row.row.dose);
     setFrequency(row.row.frequency);
     setNote(row.row.note);
-    setMedicineId(row.row.medicineId);
+    setMedicineId(row.row.id);
 
     setOpenForm({
       open: true,
@@ -261,6 +254,7 @@ function Medication() {
           selectFunction={setSelectedMedicineList}
           toolbar={false}
           gridStyle={gridStyle}
+          density="standard"
         />
 
         <div className={openForm.open ? "medBg" : ""}></div>

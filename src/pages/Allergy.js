@@ -24,10 +24,14 @@ function Allergy() {
     patientState.allergy.hasAllergy ? patientState.allergy.hasAllergy : false
   );
   const [food, setFood] = useState(
-    patientState.allergy.food ? patientState.allergy.food : ""
+    patientState.allergy.food
+      ? convertArrayToStr(patientState.allergy.food)
+      : ""
   );
   const [medicine, setMedicine] = useState(
-    patientState.allergy.medicine ? patientState.allergy.medicine : ""
+    patientState.allergy.medicine
+      ? convertArrayToStr(patientState.allergy.medicine)
+      : ""
   );
 
   const dateTimeUpdated = patientState.allergy.dateTimeUpdated
@@ -38,9 +42,19 @@ function Allergy() {
     nameUpdated: userState.userDetails.username,
     dateTimeUpdated: new Date().getTime(),
     hasAllergy: food === "" && medicine === "" ? false : hasAllergy,
-    food: hasAllergy ? food : "",
-    medicine: hasAllergy ? medicine : "",
+    food: hasAllergy ? food.split(",") : "",
+    medicine: hasAllergy ? medicine.split(",") : "",
   };
+
+  function convertArrayToStr(arr) {
+    let str = "";
+    for (let i = 0; i < arr.length; i++) {
+      if (i === arr.length - 1) str += arr[i];
+      else str += arr[i] + ", ";
+    }
+
+    return str;
+  }
 
   async function handleSubmitAllergy(e) {
     e.preventDefault();
