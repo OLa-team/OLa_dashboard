@@ -117,7 +117,9 @@ export async function createPatientAccount(newPatientData, patientId) {
       indication: {},
       duration: {},
       inrRange: {},
-      record: [],
+      inrRecord: [],
+      creatinineRecord: [],
+      dose: "",
     });
   } catch (error) {
     throw new Error(`Error in register new patient: `, error);
@@ -635,20 +637,33 @@ export async function updateBloodThinner(bloodThinnerData, patientId) {
   }
 }
 
-// update patient blood thinner record data
-export async function updateBloodThinnerRecord(
-  bloodThinnerRecordData,
-  patientId
-) {
+// update patient inr record data
+export async function updateInrRecord(inrRecordData, patientId) {
   try {
     await updateDoc(doc(firestore, "blood_thinner", patientId), {
-      nameUpdated: bloodThinnerRecordData.nameUpdated,
-      dateTimeUpdated: bloodThinnerRecordData.dateTimeUpdated,
-      record: bloodThinnerRecordData.record,
+      nameUpdated: inrRecordData.nameUpdated,
+      dateTimeUpdated: inrRecordData.dateTimeUpdated,
+      inrRecord: inrRecordData.inrRecord,
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update blood thinner record data", error);
+    console.log("Error in update inr record data", error);
+    return;
+  }
+}
+
+// update patient creatinine record data
+export async function updateCreatinineRecord(creatinineRecordData, patientId) {
+  try {
+    await updateDoc(doc(firestore, "blood_thinner", patientId), {
+      nameUpdated: creatinineRecordData.nameUpdated,
+      dateTimeUpdated: creatinineRecordData.dateTimeUpdated,
+      creatinineRecord: creatinineRecordData.creatinineRecord,
+      dose: creatinineRecordData.dose,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.log("Error in update creatinine record data", error);
     return;
   }
 }

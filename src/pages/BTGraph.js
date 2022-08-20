@@ -10,17 +10,35 @@ function BTGraph() {
   const pageDispatch = usePageDispatch();
   const patientState = usePatientState();
 
-  const labels = patientState.bloodThinner.record
-    ? patientState.bloodThinner.record.map((record) => record.date)
-    : [];
-  const dataValue = patientState.bloodThinner.record
-    ? patientState.bloodThinner.record.map((record) => parseFloat(record.inr))
-    : [];
+  const anticoagulant = patientState.bloodThinner.anticoagulant
+    ? patientState.bloodThinner.anticoagulant
+    : "";
+
+  const labels =
+    anticoagulant === "warfarin"
+      ? patientState.bloodThinner.inrRecord
+        ? patientState.bloodThinner.inrRecord.map((record) => record.date)
+        : []
+      : patientState.bloodThinner.creatinineRecord
+      ? patientState.bloodThinner.creatinineRecord.map((record) => record.date)
+      : [];
+  const dataValue =
+    anticoagulant === "warfarin"
+      ? patientState.bloodThinner.inrRecord
+        ? patientState.bloodThinner.inrRecord.map((record) =>
+            parseFloat(record.inr)
+          )
+        : []
+      : patientState.bloodThinner.creatinineRecord
+      ? patientState.bloodThinner.creatinineRecord.map((record) =>
+          parseFloat(record.creatinineClearance)
+        )
+      : [];
   const data = {
     labels: labels,
     datasets: [
       {
-        label: "INR",
+        label: anticoagulant === "warfarin" ? "INR" : "Creatinine Clearance",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
         data: dataValue,
@@ -62,7 +80,10 @@ function BTGraph() {
   return (
     <div className="btGraph">
       <div style={{ padding: "30px 70px", height: "80%" }}>
-        <h1>INR Trend Graph</h1>
+        <h1>
+          {anticoagulant === "warfarin" ? "INR" : "Creatinine Clearance"} Trend
+          Graph
+        </h1>
         <div className="btLineGraph">
           <Line data={data} options={options} />
         </div>

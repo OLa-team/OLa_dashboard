@@ -1,4 +1,10 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { firestore } from "../firebase";
 
 const hcpsCollectionRef = collection(firestore, "hcp");
@@ -50,5 +56,40 @@ export async function registerHcp(email, username) {
     await addDoc(hcpsCollectionRef, { email: email, username: username });
   } catch (error) {
     throw new Error(`Error in register new hcp: `, error);
+  }
+}
+
+// update hcp profile
+export async function updateHcpProfile(hcpProfileData, hcpId) {
+  try {
+    await updateDoc(doc(firestore, "hcp", hcpId), {
+      username: hcpProfileData.username,
+      icNo: hcpProfileData.icNo,
+      email: hcpProfileData.email,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.log("Error in update hcp profile data", error);
+    return;
+  }
+}
+
+// set hcp data
+export async function setCurrentHcp(dispatch, hcpId) {
+  try {
+    let response = await getDocs(hcpsCollectionRef);
+    let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    let findHcpData = data.filter((hcp) => hcp.id === hcpId);
+    let hcpData = findHcpData[0];
+
+    if (findHcpData.length === 1) {
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: hcpData,
+      });
+      localStorage.setItem("currentUser", JSON.stringify(hcpData));
+    }
+  } catch (error) {
+    throw new Error(`Error in set current hcp: `, error);
   }
 }

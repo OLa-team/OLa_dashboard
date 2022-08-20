@@ -4,10 +4,11 @@ let user = localStorage.getItem("currentUser")
   ? JSON.parse(localStorage.getItem("currentUser"))
   : "";
 let token = localStorage.getItem("currentUser") ? user.id : "";
+console.log("user", user);
 
 // Initial state
 const initialState = {
-  userDetails: "" || user,
+  userDetails: user,
   token: "" || token,
   loading: false,
   errorMessage: null,

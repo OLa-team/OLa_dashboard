@@ -22,6 +22,8 @@ function Table({
         columns={columns}
         style={gridStyle}
         // autoPageSize={true}
+        hideFooterPagination={true}
+        hideFooter={true}
         pageSize={pageSize}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         rowsPerPageOptions={[10, 20, 50]}

@@ -1,4 +1,9 @@
-import { loginUser, logout, registerHcp } from "./AuthService";
+import {
+  loginUser,
+  logout,
+  registerHcp,
+  updateHcpProfile,
+} from "./AuthService";
 import {
   createPatientAccount,
   fetchPatientList,
@@ -12,6 +17,8 @@ import {
   updateHealthGoal,
   updateMedication,
   updateBloodThinner,
+  updateInrRecord,
+  updateCreatinineRecord,
   deletePatientById,
   deleteAllSelectedPatients,
   setCurrentPatient,
@@ -21,6 +28,7 @@ export {
   loginUser,
   logout,
   registerHcp,
+  updateHcpProfile,
   createPatientAccount,
   fetchPatientList,
   filterPatientList,
@@ -33,6 +41,8 @@ export {
   updateHealthGoal,
   updateMedication,
   updateBloodThinner,
+  updateInrRecord,
+  updateCreatinineRecord,
   deletePatientById,
   deleteAllSelectedPatients,
   setCurrentPatient,
