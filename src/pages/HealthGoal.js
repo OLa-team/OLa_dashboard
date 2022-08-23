@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
-import Dropdown from "../components/Dropdown";
-import { TiTick, TiDeleteOutline } from "react-icons/ti";
+import React, { useState } from "react";
+import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -12,6 +10,7 @@ import {
 } from "../context";
 import { getCurrentDate, getCurrentTime } from "../utils";
 import { setCurrentPatient, updateHealthGoal } from "../service";
+import DatalistInput from "react-datalist-input";
 
 function HealthGoal() {
   const navigate = useNavigate();
@@ -23,7 +22,12 @@ function HealthGoal() {
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
 
-  let defaultGoals = Object.values(patientState.defaultHealthGoal);
+  let defaultGoals = Object.values(patientState.defaultHealthGoal)[1];
+  let optionalGoalList = Object.values(patientState.defaultHealthGoal)[0].map(
+    (goal) => ({ id: goal, value: goal })
+  );
+
+  console.log("default", Object.values(patientState.defaultHealthGoal));
 
   const [newHealthGoal, setNewHealthGoal] = useState("");
   const [healthGoalList, setHealthGoalList] = useState(
@@ -39,7 +43,11 @@ function HealthGoal() {
 
   function handleAddNewHealthGoal() {
     if (newHealthGoal !== "") {
-      setHealthGoalList((arr) => [...arr, `I will ${newHealthGoal}`]);
+      if (newHealthGoal.startsWith("I will")) {
+        setHealthGoalList((arr) => [...arr, newHealthGoal]);
+      } else {
+        setHealthGoalList((arr) => [...arr, `I will ${newHealthGoal}`]);
+      }
 
       setNewHealthGoal("");
     } else {
@@ -69,6 +77,11 @@ function HealthGoal() {
 
   async function handleSubmitHealthGoal(e) {
     e.preventDefault();
+
+    if (agreeToGoal === false) {
+      alert("Please agree to follow the health goals");
+      return;
+    }
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateHealthGoal(healthGoalData, patientId);
@@ -112,13 +125,17 @@ function HealthGoal() {
           }}
         >
           <div className="addHealthGoal">
-            <input
-              type="text"
-              placeholder="Enter a new health goal"
-              name="newHealthGoal"
+            <DatalistInput
               value={newHealthGoal}
+              items={optionalGoalList}
+              placeholder="Enter or select the goal"
               onChange={(e) => setNewHealthGoal(e.target.value)}
+              onSelect={(item) => {
+                setNewHealthGoal(item.value);
+                console.log(item.value);
+              }}
             />
+
             <button type="button" onClick={() => handleAddNewHealthGoal()}>
               Add
             </button>
@@ -127,7 +144,7 @@ function HealthGoal() {
           <div className="healthGoalList">
             {defaultGoals.map((goal) => {
               return (
-                <div>
+                <div key={goal}>
                   <TiTick
                     key={goal}
                     style={{

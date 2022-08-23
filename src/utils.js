@@ -1,3 +1,23 @@
+import emailjs from "emailjs-com";
+
+function sendEmail(e) {
+  emailjs
+    .sendForm(
+      "service_6sjfn5k",
+      "template_cebkue4",
+      e.target,
+      "Zcvto6WUPOUtNW8KT"
+    )
+    .then(
+      (result) => {
+        console.log(result.text);
+      },
+      (error) => {
+        console.log(error.text);
+      }
+    );
+}
+
 function getCurrentDate(date) {
   if (date === "") return "";
 
@@ -24,4 +44,4 @@ function getCurrentTime(date) {
   return currentTime;
 }
 
-export { getCurrentDate, getCurrentTime };
+export { getCurrentDate, getCurrentTime, sendEmail };

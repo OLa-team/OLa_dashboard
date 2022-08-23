@@ -72,7 +72,7 @@ function Register() {
             <h2>Create an account</h2>
           </div>
           <form onSubmit={(e) => signUp(e)}>
-            <div className="input">
+            <div className="registrationInput">
               <i className="fa fa-user icon">
                 <BsPersonFill />
               </i>
@@ -85,7 +85,7 @@ function Register() {
                 required
               />
             </div>
-            <div className="input">
+            <div className="registrationInput">
               <i className="fa fa-envelope icon">
                 <FaEnvelope />
               </i>
@@ -100,12 +100,15 @@ function Register() {
             </div>
             <p style={{ color: "red" }}>{message}</p>
 
-            <button className="createAccount">Sign Up</button>
+            <button className="signUpBtn">Sign Up</button>
           </form>
 
-          <Link to="/login" className="toSignIn">
-            Sign In
-          </Link>
+          <p>
+            Already have an account? {"  "}
+            <Link to="/login" className="toSignIn">
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
     </div>

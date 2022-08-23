@@ -11,18 +11,16 @@ import {
 } from "../service";
 
 function SearchPatient() {
-  // State
-  const [searchResult, setSearchResult] = useState("");
-  const [selectedPatients, setSelectedPatients] = useState([]);
-
   // Global state
   const patientState = usePatientState();
 
   // Dispatch
   const dispatch = usePatientDispatch();
-
   const navigate = useNavigate();
-  console.log("list", patientState.patientList);
+
+  // State
+  const [searchResult, setSearchResult] = useState("");
+  const [selectedPatients, setSelectedPatients] = useState([]);
 
   const style = { height: "90%", width: "95%", margin: "auto" };
 
@@ -63,7 +61,6 @@ function SearchPatient() {
   function setSelectedPatientList(ids, data) {
     const selectedIDs = new Set(ids);
     const selectedRowData = data.filter((row) => selectedIDs.has(row.id));
-    console.log(selectedRowData);
 
     dispatch({
       type: "SELECT_AND_SET_SELECTED_PATIENT_LIST_TO_DELETE",
@@ -125,9 +122,9 @@ function SearchPatient() {
         columns={columns}
         clickRowFunction={selectPatient}
         selectFunction={setSelectedPatientList}
-        toolbar={true}
+        toolbar={false}
         gridStyle={gridStyle}
-        density="standard"
+        density="comfortable"
         // deletePatient={(data) => setSelectedPatients(data)}
       />
     </div>

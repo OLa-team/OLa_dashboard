@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import small from "../../src/assets/small.png";
 import logoWhite from "../../src/assets/logo-white.png";
 import { Link } from "react-router-dom";
-import emailjs from "emailjs-com";
 import { useAuthDispatch, useAuthState } from "../context";
 import { loginUser } from "../service";
 import ClipLoader from "react-spinners/ClipLoader";
+import { sendEmail } from "../utils";
 
 function Login() {
   // State
@@ -29,7 +29,7 @@ function Login() {
       sendEmail(e);
       e.target.reset();
       setColor("rgb(46, 183, 46)");
-      setMessage("Kindly check your email for the link to log in");
+      setMessage("Kindly check your email for the login link");
       setSpamMessage(
         "(*Please check your spam or junk mail folder if you did not receive any verification email.)"
       );
@@ -38,24 +38,6 @@ function Login() {
       setMessage("Please enter a valid email");
       console.log("No such hcp email, login error: ", error);
     }
-  }
-
-  function sendEmail(e) {
-    emailjs
-      .sendForm(
-        "service_6sjfn5k",
-        "template_cebkue4",
-        e.target,
-        "Zcvto6WUPOUtNW8KT"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
   }
 
   const override: CSSProperties = {

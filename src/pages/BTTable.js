@@ -63,8 +63,8 @@ function BTTable() {
   const gender = patientState.currentPatient.gender
     ? patientState.currentPatient.gender
     : "";
-  const [weight, setWeight] = useState("");
-  const [serumCreatinine, setSerumCreatinine] = useState("");
+  const [weight, setWeight] = useState(0);
+  const [serumCreatinine, setSerumCreatinine] = useState(0);
   const [creatinineClearance, setCreatinineClearance] = useState("");
   const [creatinineRecordId, setCreatinineRecordId] = useState("");
   const [selectedCreatinine, setSelectedCreatinine] = useState();
@@ -357,6 +357,7 @@ function BTTable() {
   function handleAddOrEditCreatinineData(e) {
     e.preventDefault();
 
+    console.log("cc", creatinineClearance);
     if (openCreatinineForm.action === "add") {
       const creatinineRecordId = uuid().slice(0, 5);
       let creatinineRecordData = {
@@ -396,6 +397,7 @@ function BTTable() {
       ]);
     }
 
+    // sort
     setCreatinineRecordList((creatinineRecordList) =>
       [...creatinineRecordList].sort((a, b) => (a.date > b.date ? 1 : -1))
     );
@@ -439,6 +441,11 @@ function BTTable() {
 
   async function handleSubmitCreatinineData(e) {
     e.preventDefault();
+
+    console.log(creatinineRecordList.length);
+    if (creatinineRecordList.length === 0) {
+      setDose();
+    }
 
     let creatinineRecordData = {
       nameUpdated: userState.userDetails.username,
@@ -661,29 +668,29 @@ function BTTable() {
                 />
               </div>
               <label>
-                Sunday: <p>{sun}</p>
+                Sunday: <p>{sun} mg</p>
               </label>
               <label>
-                Monday: <p>{mon}</p>
+                Monday: <p>{mon} mg</p>
               </label>
               <label>
-                Tuesday: <p>{tues}</p>
+                Tuesday: <p>{tues} mg</p>
               </label>
               <label>
-                Wednesday: <p>{wed}</p>
+                Wednesday: <p>{wed} mg</p>
               </label>
               <label>
-                Thursday: <p>{thur}</p>
+                Thursday: <p>{thur} mg</p>
               </label>
               <label>
-                Friday: <p>{fri}</p>
+                Friday: <p>{fri} mg</p>
               </label>
               <label>
-                Saturday: <p>{sat}</p>
+                Saturday: <p>{sat} mg</p>
               </label>
               <div style={{ padding: "5px 3px" }}>
                 <h4>Total: </h4>
-                <h4>{totalDose}</h4>
+                <h4>{totalDose} mg</h4>
               </div>
             </div>
           )}
@@ -742,65 +749,86 @@ function BTTable() {
                   <div className="weeklyDoseRow">
                     <div>
                       <label>Sunday:</label>
-                      <input
-                        type="number"
-                        value={sun}
-                        onChange={(e) => setSun(parseFloat(e.target.value))}
-                      />
+                      <span>
+                        <input
+                          type="number"
+                          value={sun}
+                          onChange={(e) => setSun(parseFloat(e.target.value))}
+                        />
+                        <p>mg</p>
+                      </span>
                     </div>
                     <div>
                       <label>Monday:</label>
-                      <input
-                        type="number"
-                        value={mon}
-                        onChange={(e) => setMon(parseFloat(e.target.value))}
-                      />
+                      <span>
+                        <input
+                          type="number"
+                          value={mon}
+                          onChange={(e) => setMon(parseFloat(e.target.value))}
+                        />
+                        <p>mg</p>
+                      </span>
                     </div>
                   </div>
                   <div className="weeklyDoseRow">
                     <div>
                       <label>Tuesday:</label>
-                      <input
-                        type="number"
-                        value={tues}
-                        onChange={(e) => setTues(parseFloat(e.target.value))}
-                      />
+                      <span>
+                        <input
+                          type="number"
+                          value={tues}
+                          onChange={(e) => setTues(parseFloat(e.target.value))}
+                        />
+                        <p>mg</p>
+                      </span>
                     </div>
                     <div>
                       <label>Wednesday:</label>
-                      <input
-                        type="number"
-                        value={wed}
-                        onChange={(e) => setWed(parseFloat(e.target.value))}
-                      />
+                      <span>
+                        <input
+                          type="number"
+                          value={wed}
+                          onChange={(e) => setWed(parseFloat(e.target.value))}
+                        />
+                        <p>mg</p>
+                      </span>
                     </div>
                   </div>
                   <div className="weeklyDoseRow">
                     <div>
                       <label>Thursday:</label>
-                      <input
-                        type="number"
-                        value={thur}
-                        onChange={(e) => setThur(parseFloat(e.target.value))}
-                      />
+                      <span>
+                        <input
+                          type="number"
+                          value={thur}
+                          onChange={(e) => setThur(parseFloat(e.target.value))}
+                        />
+                        <p>mg</p>
+                      </span>
                     </div>
                     <div>
                       <label>Friday:</label>
-                      <input
-                        type="number"
-                        value={fri}
-                        onChange={(e) => setFri(parseFloat(e.target.value))}
-                      />
+                      <span>
+                        <input
+                          type="number"
+                          value={fri}
+                          onChange={(e) => setFri(parseFloat(e.target.value))}
+                        />
+                        <p>mg</p>
+                      </span>
                     </div>
                   </div>
                   <div className="weeklyDoseRow">
                     <div>
                       <label>Saturday:</label>
-                      <input
-                        type="number"
-                        value={sat}
-                        onChange={(e) => setSat(parseFloat(e.target.value))}
-                      />
+                      <span>
+                        <input
+                          type="number"
+                          value={sat}
+                          onChange={(e) => setSat(parseFloat(e.target.value))}
+                        />
+                        <p>mg</p>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -947,25 +975,12 @@ function BTTable() {
               <div>
                 <label>Serum Creatinine: </label>
                 <input
-                  type="text"
+                  type="number"
                   name="serumCreatinine"
                   placeholder="Enter serum creatinine"
                   value={serumCreatinine}
                   onChange={(e) => {
                     setSerumCreatinine(e.target.value);
-                  }}
-                  required
-                />
-              </div>
-              <div>
-                <label>Creatinine Clearance: </label>
-                <input
-                  type="text"
-                  name="creatinineClearance"
-                  placeholder="Enter creatinine clearance"
-                  value={creatinineClearance}
-                  onChange={(e) => {
-                    setCreatinineClearance(e.target.value);
                   }}
                   required
                 />
