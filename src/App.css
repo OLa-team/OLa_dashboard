@@ -758,7 +758,8 @@ input:-webkit-autofill:active {
   height: 100%;
 }
 
-.patientModule {
+.patientModule,
+.monitoringModule {
   background-color: white;
   height: 100%;
   text-align: center;
@@ -777,7 +778,8 @@ input:-webkit-autofill:active {
   margin-bottom: 15px;
 }
 
-.patientModule:hover {
+.patientModule:hover,
+.monitoringModule:hover {
   transform: scale(1.05);
   color: #ec2029;
 }
@@ -855,7 +857,7 @@ input:-webkit-autofill:active {
 }
 
 .saveAndCancelButton button {
-  padding: 6px 13px;
+  padding: 7px 13px;
   border-radius: 15px;
   margin-right: 15px;
   margin-top: 0px;
@@ -1423,8 +1425,12 @@ input:-webkit-autofill:active {
   }
 }
 
-.saveAndCancelButton.med {
-  bottom: 25px;
+.saveOrCancelBtBtn,
+.saveOrCancelMedBtn {
+  position: absolute;
+  bottom: 18px !important;
+  right: 35px;
+  display: flex;
 }
 
 .addAndDeleteMedicationButton,
@@ -1828,7 +1834,7 @@ input:-webkit-autofill:active {
 .addOrEditBloodThinnerForm,
 .addOrEditCreatinineForm {
   width: fit-content;
-  height: 80%;
+  height: fit-content;
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 20px;
@@ -1842,6 +1848,10 @@ input:-webkit-autofill:active {
   opacity: 1;
   padding: 20px 30px;
   transition: all 0.5s ease;
+}
+
+.addOrEditBloodThinnerForm {
+  height: 80% !important;
 }
 
 .addOrEditBloodThinnerForm h1,
@@ -2047,4 +2057,81 @@ input:-webkit-autofill:active {
 .MuiDataGrid-root .MuiDataGrid-cell {
   white-space: normal !important;
   word-wrap: break-word !important;
+}
+
+/* Patient monitoring */
+.patientMonitoring {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  opacity: 0.85;
+  border-radius: 20px;
+  /* background-color: white; */
+  /* box-shadow: 5px 10px 8px #888888; */
+  position: relative;
+}
+
+.monitoringWrapper {
+  padding: 40px 70px;
+  margin: auto;
+  width: 80%;
+  height: 70%;
+}
+
+.monitoringWrapper .backArrow {
+  left: 140px;
+  top: 55px;
+}
+
+.monitoringWrapper h1 {
+  padding-bottom: 50px;
+}
+
+.eachMonitoringPage {
+  width: 95%;
+  height: 80%;
+  margin: auto;
+  opacity: 0.85;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 5px 10px 8px #888888;
+  position: relative;
+}
+
+.eachMonitoringPage h2 {
+  display: flex;
+  align-items: center;
+}
+
+.eachMonitoringPage h2 svg {
+  padding-right: 25px;
+  cursor: pointer;
+}
+
+.displayMode {
+  display: flex;
+  justify-content: space-around;
+  /* background-color: red; */
+  width: 225px;
+}
+
+.displayMode div {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.displayMode div input {
+  margin-right: 10px;
+  accent-color: red;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.monitoringGraph {
+  width: 100%;
+  height: 75%;
+  margin-top: 20px;
+  font-size: 20px;
 }

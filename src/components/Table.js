@@ -12,6 +12,7 @@ function Table({
   toolbar,
   gridStyle,
   density,
+  checkboxSelection,
 }) {
   const [pageSize, setPageSize] = useState(10);
 
@@ -27,7 +28,7 @@ function Table({
         pageSize={pageSize}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         rowsPerPageOptions={[10, 20, 50]}
-        checkboxSelection
+        checkboxSelection={checkboxSelection}
         disableSelectionOnClick
         onRowClick={(row) => clickRowFunction(row)}
         onCellClick={(cell) => console.log("cell", cell)}

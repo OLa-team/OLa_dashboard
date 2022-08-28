@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdAdd, MdDelete } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
-import Table from "../components/Table";
+import Table from "../../components/Table";
 import {
   useAuthState,
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
-} from "../context";
+} from "../../context";
 import { v4 as uuid } from "uuid";
 import {
   setCurrentPatient,
   updateCreatinineRecord,
   updateInrRecord,
-} from "../service/PatientService";
-import { getCurrentDate, getCurrentTime } from "../utils";
+} from "../../service/PatientService";
+import { getCurrentDate, getCurrentTime } from "../../utils";
 
 function BTTable() {
   const navigate = useNavigate();
@@ -47,6 +47,10 @@ function BTTable() {
       ? patientState.bloodThinner.inrRecord
       : []
   );
+  console.log("inrList", inrRecordList);
+  const inrRange = patientState.bloodThinner.inrRange
+    ? patientState.bloodThinner.inrRange
+    : "";
   const [openWeeklyDose, setOpenWeeklyDose] = useState(false);
   const [openInrForm, setOpenInrForm] = useState({
     open: false,
@@ -77,6 +81,28 @@ function BTTable() {
     open: false,
     action: "add",
   });
+  const [daysSinceLastTest, setDaysSinceLastTest] = useState(0);
+  const [inrDiff, setInrDiff] = useState(0);
+  const [previousInrWithinRange, setPreviousInrWithinRange] = useState("");
+  const [currentInrWithinRange, setCurrentInrWithinRange] = useState("");
+  const [scenario, setScenario] = useState("");
+  const [inrDiffAboveRange, setInrDiffAboveRange] = useState(0);
+  const [inrDiffWithinRange, setInrDiffWithinRange] = useState(0);
+  const [inrDiffBelowRange, setInrDiffBelowRange] = useState(0);
+  const [daysWithinRangeSinceLastTest, setDaysWithinRangeSinceLastTest] =
+    useState(0);
+  const [
+    percentageDaysWithinRangeSinceLastTest,
+    setPercentageDaysWithinRangeSinceLastTest,
+  ] = useState(0);
+
+  const [daysWithinRange, setDaysWithinRange] = useState(0);
+  const [totalDays, setTotalDays] = useState(0);
+  const [percentageDaysWithinRange, setPercentageDaysWithinRange] = useState(0);
+
+  const [totalNumberOfTests, setTotalNumberOfTests] = useState(0);
+  const [numberOfTestsInRange, setNumberOfTestsInRange] = useState(0);
+  const [percentageOfTestsInRange, setPercentageOfTestsInRange] = useState(0);
 
   const anticoagulant = patientState.bloodThinner.anticoagulant
     ? patientState.bloodThinner.anticoagulant
@@ -190,21 +216,35 @@ function BTTable() {
     arr.push(thur);
     arr.push(fri);
     arr.push(sat);
-    console.log(arr);
 
     let totalDoseAmount = 0;
     arr.forEach((a) => (totalDoseAmount += a));
+
+    ttrCalculation();
 
     if (openInrForm.action === "add") {
       const inrRecordId = uuid().slice(0, 5);
       let inrRecordData = {
         id: inrRecordId,
         date: date,
-        inr: inr,
+        inr: parseFloat(inr),
         weeklyDoses: arr,
         totalDose: totalDoseAmount,
         duration: duration,
         note: note,
+
+        daysSinceLastTest: parseFloat(daysSinceLastTest),
+        inrDiff: parseFloat(inrDiff),
+        previousInrWithinRange: previousInrWithinRange,
+        currentInrWithinRange: currentInrWithinRange,
+        scenario: scenario,
+        inrDiffAboveRange: parseFloat(inrDiffAboveRange),
+        inrDiffWithinRange: parseFloat(inrDiffWithinRange),
+        inrDiffBelowRange: parseFloat(inrDiffBelowRange),
+        daysWithinRangeSinceLastTest: parseFloat(daysWithinRangeSinceLastTest),
+        percentageDaysWithinRangeSinceLastTest: parseFloat(
+          percentageDaysWithinRangeSinceLastTest
+        ),
       };
 
       setInrRecordList((inrRecordList) => [...inrRecordList, inrRecordData]);
@@ -212,11 +252,24 @@ function BTTable() {
       let inrRecordData = {
         id: inrRecordId,
         date: date,
-        inr: inr,
+        inr: parseFloat(inr),
         weeklyDoses: arr,
         totalDose: totalDoseAmount,
         duration: duration,
         note: note,
+
+        daysSinceLastTest: parseFloat(daysSinceLastTest),
+        inrDiff: parseFloat(inrDiff),
+        previousInrWithinRange: previousInrWithinRange,
+        currentInrWithinRange: currentInrWithinRange,
+        scenario: scenario,
+        inrDiffAboveRange: parseFloat(inrDiffAboveRange),
+        inrDiffWithinRange: parseFloat(inrDiffWithinRange),
+        inrDiffBelowRange: parseFloat(inrDiffBelowRange),
+        daysWithinRangeSinceLastTest: parseFloat(daysWithinRangeSinceLastTest),
+        percentageDaysWithinRangeSinceLastTest: parseFloat(
+          percentageDaysWithinRangeSinceLastTest
+        ),
       };
 
       setInrRecordList((inrRecordList) =>
@@ -280,7 +333,13 @@ function BTTable() {
       nameUpdated: userState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
       inrRecord: inrRecordList,
+
+      percentageDaysWithinRange: parseFloat(percentageDaysWithinRange),
+
+      percentageOfTestsInRange: parseFloat(percentageOfTestsInRange),
     };
+
+    console.log("inrRecordData", inrRecordData);
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateInrRecord(inrRecordData, patientId);
@@ -303,30 +362,27 @@ function BTTable() {
     {
       field: "date",
       headerName: "Date",
-      // flex: 1,
-      width: 130,
+      flex: 1,
     },
     {
       field: "age",
       headerName: "Age",
-      // flex: 1,
-      width: 80,
+      flex: 1,
     },
     {
       field: "weight",
       headerName: "Body weight",
-      // flex: 1,
-      width: 130,
+      flex: 1,
     },
     {
       field: "serumCreatinine",
       headerName: "Serum Creatinine (mg/dl)",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "creatinineClearance",
       headerName: "Creatinine Clearance (mls/min)",
-      flex: 1,
+      flex: 2.5,
     },
     {
       field: "note",
@@ -336,8 +392,7 @@ function BTTable() {
     {
       field: "button",
       headerName: "Action",
-      // flex: 1,
-      width: 120,
+      flex: 1,
       sortable: false,
       renderCell: (params) => {
         return (
@@ -357,15 +412,21 @@ function BTTable() {
   function handleAddOrEditCreatinineData(e) {
     e.preventDefault();
 
-    console.log("cc", creatinineClearance);
+    if (gender === "" || age === 0) {
+      alert(
+        "Please complete the patient's personal information first. (gender/age)"
+      );
+      return;
+    }
+
     if (openCreatinineForm.action === "add") {
       const creatinineRecordId = uuid().slice(0, 5);
       let creatinineRecordData = {
         id: creatinineRecordId,
         age: age,
         date: date,
-        weight: weight,
-        serumCreatinine: serumCreatinine,
+        weight: parseFloat(weight),
+        serumCreatinine: parseFloat(serumCreatinine),
         creatinineClearance: creatinineClearance,
         note: note,
       };
@@ -379,8 +440,8 @@ function BTTable() {
         id: creatinineRecordId,
         age: age,
         date: date,
-        weight: weight,
-        serumCreatinine: serumCreatinine,
+        weight: parseFloat(weight),
+        serumCreatinine: parseFloat(serumCreatinine),
         creatinineClearance: creatinineClearance,
         note: note,
       };
@@ -442,7 +503,6 @@ function BTTable() {
   async function handleSubmitCreatinineData(e) {
     e.preventDefault();
 
-    console.log(creatinineRecordList.length);
     if (creatinineRecordList.length === 0) {
       setDose();
     }
@@ -491,6 +551,193 @@ function BTTable() {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  function calculateCreatinineClearance(serumCreatinine) {
+    let genderFactor = gender === "male" ? 1.23 : 1.04;
+    let result = ((140 - age) * weight * genderFactor) / serumCreatinine;
+
+    setCreatinineClearance(Math.round(result));
+  }
+
+  // Calculation of Time in Therapeutic Range(TTR) for the Quality Control Measurement of Warfarin
+  function ttrCalculation() {
+    var inrRangeArr = inrRange.trim().split("-");
+    var lowRange = parseInt(inrRangeArr[0].trim());
+    var highRange = parseInt(inrRangeArr[1].trim());
+
+    console.log("low", lowRange, "high", highRange);
+
+    let _daysSinceLastTest = 0;
+    let _inrDiff = 0;
+    let _previousInrWithinRange = "";
+    let _currentInrWithinRange = "";
+    let _scenario = "";
+    let _inrDiffAboveRange = 0;
+    let _inrDiffWithinRange = 0;
+    let _inrDiffBelowRange = 0;
+    let _daysWithinRangeSinceLastTest = 0;
+    let _percentageDaysWithinRangeSinceLastTest = 0;
+
+    if (inrRecordList.length === 0) {
+      if (inr < lowRange) _currentInrWithinRange = "Below";
+      else if (inr > highRange) _currentInrWithinRange = "Above";
+      else _currentInrWithinRange = "In Range";
+    } else {
+      let previousRecord = patientState.bloodThinner.inrRecord
+        ? patientState.bloodThinner.inrRecord[
+            patientState.bloodThinner.inrRecord.length - 1
+          ]
+        : [];
+      console.log("previous record", previousRecord);
+      console.log("inr", inr);
+
+      // Days Since Last Test
+      let diff =
+        new Date(date).getTime() - new Date(previousRecord.date).getTime();
+      _daysSinceLastTest = Math.ceil(diff / (1000 * 3600 * 24));
+      // INR Diff
+      _inrDiff = Math.round((inr - previousRecord.inr) * 10) / 10;
+      // Previous INR Within Range
+      _previousInrWithinRange = previousRecord.currentInrWithinRange;
+      // Current INR Within Range
+      if (inr < lowRange) _currentInrWithinRange = "Below";
+      else if (inr > highRange) _currentInrWithinRange = "Above";
+      else _currentInrWithinRange = "In Range";
+      // Scenario
+      _scenario =
+        _previousInrWithinRange.localeCompare(_currentInrWithinRange) === 0
+          ? _previousInrWithinRange
+          : "Calculate";
+      // INR Diff Above Range
+      if (_scenario.localeCompare("Above") === 0) {
+        _inrDiffAboveRange = Math.abs(inrDiff);
+      } else if (_previousInrWithinRange.localeCompare("Above") === 0) {
+        _inrDiffAboveRange = Math.abs(previousRecord.inr - highRange);
+      } else if (_currentInrWithinRange.localeCompare("Above") === 0) {
+        _inrDiffAboveRange = Math.abs(inr - highRange);
+      }
+      // INR Diff Within Range
+      _inrDiffWithinRange = parseFloat(
+        Math.abs(_inrDiff) -
+          Math.abs(_inrDiffAboveRange) -
+          Math.abs(_inrDiffBelowRange)
+      ).toFixed(1);
+      // INR Diff Below Range
+      if (_scenario.localeCompare("Below") === 0) {
+        _inrDiffBelowRange = Math.abs(inrDiff);
+      } else if (_previousInrWithinRange.localeCompare("Below") === 0) {
+        _inrDiffBelowRange = Math.abs(previousRecord.inr - lowRange);
+      } else if (_currentInrWithinRange.localeCompare("Below") === 0) {
+        _inrDiffBelowRange = Math.abs(inr - lowRange);
+      }
+      // % Days Within Range since last test
+      if (_inrDiff === 0) {
+        if (_currentInrWithinRange.localeCompare("In Range") === 0) {
+          _percentageDaysWithinRangeSinceLastTest = 1;
+        } else {
+          _percentageDaysWithinRangeSinceLastTest = 0;
+        }
+      } else {
+        _percentageDaysWithinRangeSinceLastTest = parseFloat(
+          _inrDiffWithinRange / Math.abs(_inrDiff)
+        );
+      }
+      // Days Within Range since last test
+      _daysWithinRangeSinceLastTest = parseFloat(
+        _percentageDaysWithinRangeSinceLastTest * _daysSinceLastTest
+      ).toFixed(1);
+    }
+
+    // ttr calculation
+    let _daysWithinRange = 0;
+    let _totalDays = 0;
+    let _percentageDaysWithinRange = 0;
+
+    let _totalNumberOfTests = 0;
+    let _numberOfTestsInRange = 0;
+    let _percentageOfTestsInRange = 0;
+
+    console.log("inrRecordList", inrRecordList);
+    for (let i = 0; i < inrRecordList.length; i++) {
+      let record = inrRecordList[i];
+
+      console.log("days", _daysWithinRange);
+      console.log(
+        "record.daysWithinRangeSinceLastTest",
+        record.daysWithinRangeSinceLastTest
+      );
+      _daysWithinRange += record.daysWithinRangeSinceLastTest;
+      _totalDays += record.daysSinceLastTest;
+      if (record.currentInrWithinRange.localeCompare("In Range") === 0) {
+        _numberOfTestsInRange += 1;
+      }
+    }
+    // // Days Within Range
+    // _daysWithinRange += _daysWithinRangeSinceLastTest;
+    // // Total Days
+    // _totalDays += _daysSinceLastTest;
+
+    // % Days Within Range
+    _percentageDaysWithinRange = _daysWithinRange / _totalDays;
+
+    // % in Range
+    // Total Number of Tests
+    _totalNumberOfTests = inrRecordList.length;
+
+    // Number of Tests in Range
+    // if (_currentInrWithinRange.localeCompare("In Range") === 0) {
+    //   _numberOfTestsInRange += 1;
+    // }
+
+    // % of Tests in Range
+    _percentageOfTestsInRange = _numberOfTestsInRange / _totalNumberOfTests;
+
+    console.log("Days Within Range: ", _daysWithinRange);
+    console.log("Total days: ", _totalDays);
+    console.log("% Days Within Range: ", _percentageDaysWithinRange);
+
+    console.log("Total number of tests", _totalNumberOfTests);
+    console.log("Number of tests in range", _numberOfTestsInRange);
+    console.log("% Tests In Range: ", _percentageOfTestsInRange);
+
+    setPercentageDaysWithinRange(_percentageDaysWithinRange);
+    setPercentageOfTestsInRange(_percentageOfTestsInRange);
+
+    // Rosendaal Method
+
+    console.log(_daysSinceLastTest);
+    console.log(_inrDiff);
+    console.log(_previousInrWithinRange);
+    console.log(_currentInrWithinRange);
+    console.log(_scenario);
+    console.log(_inrDiffAboveRange);
+    console.log(_inrDiffWithinRange);
+    console.log(_inrDiffBelowRange);
+    console.log(_daysWithinRangeSinceLastTest);
+    console.log(_percentageDaysWithinRangeSinceLastTest);
+    // console.log("% Days Within Range: ", _percentageDaysWithinRange);
+    // console.log("% Tests In Range: ", _percentageOfTestsInRange);
+
+    setDaysSinceLastTest(_daysSinceLastTest);
+    setInrDiff(_inrDiff);
+    setPreviousInrWithinRange(_previousInrWithinRange);
+    setCurrentInrWithinRange(_currentInrWithinRange);
+    setScenario(_scenario);
+    setInrDiffAboveRange(_inrDiffAboveRange);
+    setInrDiffWithinRange(_inrDiffWithinRange);
+    setInrDiffBelowRange(_inrDiffBelowRange);
+    setDaysWithinRangeSinceLastTest(_daysWithinRangeSinceLastTest);
+    setPercentageDaysWithinRangeSinceLastTest(
+      _percentageDaysWithinRangeSinceLastTest
+    );
+
+    // setPercentageDaysWithinRange(_percentageDaysWithinRange);
+    // setPercentageOfTestsInRange(_percentageOfTestsInRange);
+  }
+
+  useEffect(() => {
+    calculateCreatinineClearance(serumCreatinine);
+  }, [weight, serumCreatinine]);
+
   return (
     <div className="bttable">
       <div style={{ padding: "20px 50px", height: "80%" }}>
@@ -518,44 +765,50 @@ function BTTable() {
         </div>
 
         {anticoagulant !== "warfarin" && anticoagulant === "rivaroxaban" && (
-          <div className="otherDose">
-            <label>Dose: </label>
-            <div>
-              <input
-                type="checkbox"
-                checked={dose === "15mg once daily" ? true : false}
-                onChange={() => {
-                  setDose("15mg once daily");
-                }}
-              />
-              <p>15mg once daily</p>
+          <>
+            <div className="otherDose">
+              <label style={{ fontWeight: "bold" }}>
+                Dose <span style={{ paddingLeft: "5px" }}>:</span>{" "}
+              </label>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={dose === "15mg once daily" ? true : false}
+                  onChange={() => {
+                    setDose("15mg once daily");
+                  }}
+                />
+                <p>15mg once daily</p>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={dose === "15mg twice a day" ? true : false}
+                  onChange={() => {
+                    setDose("15mg twice a day");
+                  }}
+                />
+                <p>15mg twice a day</p>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={dose === "20mg twice a day" ? true : false}
+                  onChange={() => {
+                    setDose("20mg twice a day");
+                  }}
+                />
+                <p>20mg twice a day</p>
+              </div>
             </div>
-            <div>
-              <input
-                type="checkbox"
-                checked={dose === "15mg twice a day" ? true : false}
-                onChange={() => {
-                  setDose("15mg twice a day");
-                }}
-              />
-              <p>15mg twice a day</p>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                checked={dose === "20mg twice a day" ? true : false}
-                onChange={() => {
-                  setDose("20mg twice a day");
-                }}
-              />
-              <p>20mg twice a day</p>
-            </div>
-          </div>
+          </>
         )}
 
         {anticoagulant !== "warfarin" && anticoagulant !== "rivaroxaban" && (
           <div className="otherDose">
-            <label>Dose: </label>
+            <label style={{ fontWeight: "bold" }}>
+              Dose <span style={{ paddingLeft: "5px" }}>:</span>{" "}
+            </label>
             <div>
               <input
                 type="checkbox"
@@ -602,6 +855,7 @@ function BTTable() {
             toolbar={false}
             gridStyle={gridStyle}
             density="standard"
+            checkboxSelection={true}
           />
         )}
       </div>
@@ -628,16 +882,7 @@ function BTTable() {
             </button>
           </div>
 
-          <div
-            className="saveOrCancelBtBtn"
-            style={{
-              position: "absolute",
-              bottom: "25px",
-              // left: "50px",
-              right: "35px",
-              display: "flex",
-            }}
-          >
+          <div className="saveOrCancelBtBtn">
             <button className="saveBt" onClick={(e) => handleSubmitInrData(e)}>
               Save
             </button>
@@ -717,7 +962,7 @@ function BTTable() {
                   resetInrForm();
                 }}
               />
-              <h1>{openInrForm.action === "add" ? "Add" : "Edit"} INR</h1>
+              <h1>{openInrForm.action === "add" ? "New" : "Edit"} Record</h1>
               <div>
                 <label>Date: </label>
                 <input
@@ -890,16 +1135,7 @@ function BTTable() {
             </button>
           </div>
 
-          <div
-            className="saveOrCancelBtBtn"
-            style={{
-              position: "absolute",
-              bottom: "25px",
-              // left: "50px",
-              right: "35px",
-              display: "flex",
-            }}
-          >
+          <div className="saveOrCancelBtBtn">
             <button
               className="saveBt"
               onClick={(e) => handleSubmitCreatinineData(e)}
@@ -943,8 +1179,7 @@ function BTTable() {
                 }}
               />
               <h1>
-                {openCreatinineForm.action === "add" ? "Add" : "Edit"}{" "}
-                Creatinine Clearance
+                {openCreatinineForm.action === "add" ? "New" : "Edit"} Record
               </h1>
               <div>
                 <label>Date: </label>

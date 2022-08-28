@@ -31,7 +31,7 @@ function SearchPatient() {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "No.", width: 50 },
+    { field: "id", headerName: "No.", width: 80 },
     {
       field: "patientId",
       headerName: "Patient ID",
@@ -41,19 +41,16 @@ function SearchPatient() {
     {
       field: "name",
       headerName: "Patient's name",
-      minWidth: 250,
-      flex: 1,
+      flex: 2,
     },
     {
       field: "icNo",
       headerName: "I/C No. / Passport No.",
-      minWidth: 250,
       flex: 1,
     },
     {
       field: "phoneNo",
       headerName: "Mobile Phone No.",
-      minWidth: 250,
       flex: 1,
     },
   ];
@@ -125,6 +122,7 @@ function SearchPatient() {
         toolbar={false}
         gridStyle={gridStyle}
         density="comfortable"
+        checkboxSelection={true}
         // deletePatient={(data) => setSelectedPatients(data)}
       />
     </div>

@@ -7,9 +7,9 @@ import {
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
-} from "../context";
-import { setCurrentPatient, updateBloodThinner } from "../service";
-import { getCurrentDate, getCurrentTime } from "../utils";
+} from "../../context";
+import { setCurrentPatient, updateBloodThinner } from "../../service";
+import { getCurrentDate, getCurrentTime } from "../../utils";
 
 function BloodThinner() {
   const navigate = useNavigate();
@@ -36,6 +36,8 @@ function BloodThinner() {
   const [inrRange, setInrRange] = useState(
     patientState.bloodThinner.inrRange ? patientState.bloodThinner.inrRange : ""
   );
+  // to track the changes of anticoagulant
+  const [change, setChange] = useState(false);
 
   const dateTimeUpdated = patientState.bloodThinner.dateTimeUpdated
     ? patientState.bloodThinner.dateTimeUpdated
@@ -50,13 +52,25 @@ function BloodThinner() {
     inrRange: inrRange,
   };
 
-  async function handleUpdateBloodThinner() {
+  console.log("change", change);
+
+  async function handleSubmitBloodThinner() {
     // e.preventDefault();
+
+    if (change) {
+      bloodThinnerData = {
+        ...bloodThinnerData,
+        dose: "",
+        creatinineRecord: [],
+        inrRecord: [],
+      };
+    }
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateBloodThinner(bloodThinnerData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's medical condition successfully.");
+      setChange(false);
     } else {
       return;
     }
@@ -96,6 +110,7 @@ function BloodThinner() {
                 setDuration("");
                 setIndication("");
                 setInrRange("");
+                setChange(true);
               }}
             >
               Warfarin
@@ -107,6 +122,7 @@ function BloodThinner() {
                 setDuration("");
                 setIndication("");
                 setInrRange("");
+                setChange(true);
               }}
             >
               Dabigatran
@@ -118,6 +134,7 @@ function BloodThinner() {
                 setDuration("");
                 setIndication("");
                 setInrRange("");
+                setChange(true);
               }}
             >
               Apixaban
@@ -131,6 +148,7 @@ function BloodThinner() {
                 setDuration("");
                 setIndication("");
                 setInrRange("");
+                setChange(true);
               }}
             >
               Rivaroxaban
@@ -287,6 +305,7 @@ function BloodThinner() {
                               }
                               disabled={inrRange === "2-3" ? true : false}
                               onChange={(e) => setInrRange(e.target.value)}
+                              placeholder="e.g., 3-4"
                             />
                           </p>
                         </div>
@@ -437,7 +456,7 @@ function BloodThinner() {
         <div className="saveAndCancelButton bt">
           <button
             className="saveProfile"
-            onClick={() => handleUpdateBloodThinner()}
+            onClick={() => handleSubmitBloodThinner()}
           >
             Save
           </button>

@@ -11,16 +11,23 @@ import PatientProfile from "./PatientProfile";
 import MedicalCondition from "./MedicalCondition";
 import Allergy from "./Allergy";
 import HealthGoal from "./HealthGoal";
-import RiskScoring from "./RiskScoring";
-import StrokeRisk from "./StrokeRisk";
-import BleedingRisk from "./BleedingRisk";
-import WarfarinQuality from "./WarfarinQuality";
+import RiskScoring from "./RiskScoring/RiskScoring";
+import StrokeRisk from "./RiskScoring/StrokeRisk";
+import BleedingRisk from "./RiskScoring/BleedingRisk";
+import WarfarinQuality from "./RiskScoring/WarfarinQuality";
 import Loader from "../components/Loader";
 import Medication from "./Medication";
-import BloodThinner from "./BloodThinner";
-import BTTable from "./BTTable";
-import BTGraph from "./BTGraph";
+import BloodThinner from "./BloodThinner/BloodThinner";
+import BTTable from "./BloodThinner/BTTable";
+import BTGraph from "./BloodThinner/BTGraph";
 import Profile from "./Profile";
+import PatientMonitoring from "./PatientMonitoring/PatientMonitoring";
+import BPAndHeartRate from "./PatientMonitoring/BPAndHeartRate";
+import BloodSugarLevel from "./PatientMonitoring/BloodSugarLevel";
+import BodyWeight from "./PatientMonitoring/BodyWeight";
+import BleedingSymptom from "./PatientMonitoring/BleedingSymptom";
+import HealthDiaryRecord from "./PatientMonitoring/HealthDiaryRecord";
+import Notification from "./Notification";
 
 function Home() {
   // Global state
@@ -60,6 +67,7 @@ function Home() {
               path="/patientRegistration"
               element={<PatientRegistration />}
             />
+            <Route path="/notification" element={<Notification />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/patient/:patientId" element={<Patient />} />
             <Route
@@ -106,6 +114,30 @@ function Home() {
             <Route
               path="/patient/:patientId/bloodThinner/graph"
               element={<BTGraph />}
+            />
+            <Route
+              path="/patient/:patientId/patientMonitoring"
+              element={<PatientMonitoring />}
+            />
+            <Route
+              path="/patient/:patientId/patientMonitoring/bloodPressure&HeartRate"
+              element={<BPAndHeartRate />}
+            />
+            <Route
+              path="/patient/:patientId/patientMonitoring/bloodSugarLevel"
+              element={<BloodSugarLevel />}
+            />
+            <Route
+              path="/patient/:patientId/patientMonitoring/bodyWeight"
+              element={<BodyWeight />}
+            />
+            <Route
+              path="/patient/:patientId/patientMonitoring/bleedingSymptom"
+              element={<BleedingSymptom />}
+            />
+            <Route
+              path="/patient/:patientId/patientMonitoring/healthDiary"
+              element={<HealthDiaryRecord />}
             />
           </Routes>
         </div>

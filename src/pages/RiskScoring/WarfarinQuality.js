@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Checkbox from "../components/Checkbox";
+import Checkbox from "../../components/Checkbox";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useAuthState,
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
-} from "../context";
+} from "../../context";
 import {
   setCurrentPatient,
   updateBleedingRisk,
   updateStrokeRisk,
   updateWarfarinQuality,
-} from "../service";
-import { getCurrentDate, getCurrentTime } from "../utils";
+} from "../../service";
+import { getCurrentDate, getCurrentTime } from "../../utils";
 import { HiInformationCircle } from "react-icons/hi";
 
 function WarfarinQuality() {

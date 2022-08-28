@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Line, Chart } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { useNavigate, useParams } from "react-router-dom";
-import { usePageDispatch, usePatientState } from "../context";
+import { usePageDispatch, usePatientState } from "../../context";
 
 function BTGraph() {
   const navigate = useNavigate();

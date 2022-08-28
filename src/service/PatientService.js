@@ -149,12 +149,10 @@ export async function setCurrentPatient(dispatch, patientId) {
     let responseAllergy = await (
       await getDoc(doc(firestore, "allergy", patientId))
     ).data();
-    console.log("al", responseAllergy);
 
     let responseStrokeRisk = await (
       await getDoc(doc(firestore, "stroke_risk", patientId))
     ).data();
-    console.log("sr", responseStrokeRisk);
 
     let responseBleedingRisk = await (
       await getDoc(doc(firestore, "bleeding_risk", patientId))
@@ -174,6 +172,10 @@ export async function setCurrentPatient(dispatch, patientId) {
 
     let responseBloodThinner = await (
       await getDoc(doc(firestore, "blood_thinner", patientId))
+    ).data();
+
+    let responsePatientMonitoring = await (
+      await getDoc(doc(firestore, "self_monitor", patientId))
     ).data();
 
     let responseDefaultHealthGoal = await (
@@ -355,6 +357,26 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("bloodThinner", JSON.stringify({}));
+    }
+
+    // patient monitoring
+    if (responsePatientMonitoring) {
+      dispatch({
+        type: "SET_PATIENT_MONITORING",
+        payload: responsePatientMonitoring,
+      });
+
+      localStorage.setItem(
+        "patientMonitoring",
+        JSON.stringify(responsePatientMonitoring)
+      );
+    } else {
+      dispatch({
+        type: "SET_PATIENT_MONITORING",
+        payload: {},
+      });
+
+      localStorage.setItem("patientMonitoring", JSON.stringify({}));
     }
 
     // CONSTANT from db
@@ -629,6 +651,9 @@ export async function updateBloodThinner(bloodThinnerData, patientId) {
       indication: bloodThinnerData.indication,
       duration: bloodThinnerData.duration,
       inrRange: bloodThinnerData.inrRange,
+      dose: bloodThinnerData.dose,
+      creatinineRecord: bloodThinnerData.creatinineRecord,
+      inrRecord: bloodThinnerData.inrRecord,
     });
   } catch (error) {
     alert(error.message);
@@ -644,6 +669,9 @@ export async function updateInrRecord(inrRecordData, patientId) {
       nameUpdated: inrRecordData.nameUpdated,
       dateTimeUpdated: inrRecordData.dateTimeUpdated,
       inrRecord: inrRecordData.inrRecord,
+      percentageDaysWithinRange: inrRecordData.percentageDaysWithinRange,
+
+      percentageOfTestsInRange: inrRecordData.percentageOfTestsInRange,
     });
   } catch (error) {
     alert(error.message);

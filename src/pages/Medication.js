@@ -131,7 +131,7 @@ function Medication() {
       let medicineData = {
         id: medicineId,
         name: name,
-        dose: dose,
+        dose: parseInt(dose),
         frequency: frequency,
         note: note,
       };
@@ -141,7 +141,7 @@ function Medication() {
       let medicineData = {
         id: medicineId,
         name: name,
-        dose: dose,
+        dose: parseInt(dose),
         frequency: frequency,
         note: note,
       };
@@ -255,6 +255,7 @@ function Medication() {
           toolbar={false}
           gridStyle={gridStyle}
           density="standard"
+          checkboxSelection={true}
         />
 
         <div className={openForm.open ? "medBg" : ""}></div>
@@ -281,16 +282,7 @@ function Medication() {
           </button>
         </div>
 
-        <div
-          className="saveOrCancelMedBtn"
-          style={{
-            position: "absolute",
-            bottom: "25px",
-            // left: "50px",
-            right: "35px",
-            display: "flex",
-          }}
-        >
+        <div className="saveOrCancelMedBtn">
           <button
             className="saveMedication"
             onClick={(e) => handleSubmitMedication(e)}

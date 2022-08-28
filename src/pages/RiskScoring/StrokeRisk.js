@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Checkbox from "../components/Checkbox";
+import Checkbox from "../../components/Checkbox";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useAuthState,
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
-} from "../context";
-import { getCurrentDate, getCurrentTime } from "../utils";
-import { setCurrentPatient, updateStrokeRisk } from "../service";
+} from "../../context";
+import { getCurrentDate, getCurrentTime } from "../../utils";
+import { setCurrentPatient, updateStrokeRisk } from "../../service";
 
 function StrokeRisk() {
   const navigate = useNavigate();

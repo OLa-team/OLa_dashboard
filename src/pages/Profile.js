@@ -25,9 +25,6 @@ function Profile() {
   async function handleSubmitProfile(e) {
     e.preventDefault();
 
-    console.log(username);
-    console.log(icNo);
-    console.log(email);
     let hcpProfileData = {
       username: username,
       icNo: icNo,

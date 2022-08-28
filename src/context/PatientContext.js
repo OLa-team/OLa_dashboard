@@ -27,6 +27,9 @@ let md = localStorage.getItem("medication")
 let bt = localStorage.getItem("bloodThinner")
   ? JSON.parse(localStorage.getItem("bloodThinner"))
   : null;
+let pm = localStorage.getItem("patientMonitoring")
+  ? JSON.parse(localStorage.getItem("patientMonitoring"))
+  : null;
 let dhg = localStorage.getItem("defaultHealthGoal")
   ? JSON.parse(localStorage.getItem("defaultHealthGoal"))
   : null;
@@ -54,6 +57,7 @@ const initialState = {
   healthGoal: hg || {},
   medication: md || {},
   bloodThinner: bt || {},
+  patientMonitoring: pm || {},
   defaultHealthGoal: dhg || {},
   strokeRiskResultMessage: srrm || {},
   bleedingRiskResultMessage: brrm || {},
@@ -162,6 +166,12 @@ const PatientReducer = (initialState, action) => {
       return {
         ...initialState,
         bloodThinner: action.payload,
+      };
+
+    case "SET_PATIENT_MONITORING":
+      return {
+        ...initialState,
+        patientMonitoring: action.payload,
       };
 
     case "SET_DEFAULT_HEALTH_GOAL":

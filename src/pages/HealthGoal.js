@@ -22,12 +22,10 @@ function HealthGoal() {
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
 
-  let defaultGoals = Object.values(patientState.defaultHealthGoal)[1];
-  let optionalGoalList = Object.values(patientState.defaultHealthGoal)[0].map(
+  let defaultGoals = patientState.defaultHealthGoal.defaultGoal;
+  let optionalGoalList = patientState.defaultHealthGoal.optionalGoal.map(
     (goal) => ({ id: goal, value: goal })
   );
-
-  console.log("default", Object.values(patientState.defaultHealthGoal));
 
   const [newHealthGoal, setNewHealthGoal] = useState("");
   const [healthGoalList, setHealthGoalList] = useState(
@@ -132,7 +130,6 @@ function HealthGoal() {
               onChange={(e) => setNewHealthGoal(e.target.value)}
               onSelect={(item) => {
                 setNewHealthGoal(item.value);
-                console.log(item.value);
               }}
             />
 

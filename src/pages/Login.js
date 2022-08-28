@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../context";
 import { loginUser } from "../service";
 import ClipLoader from "react-spinners/ClipLoader";
-import { sendEmail } from "../utils";
+import emailjs from "emailjs-com";
+import { setCurrentHcp } from "../service/AuthService";
 
 function Login() {
   // State
@@ -33,11 +34,30 @@ function Login() {
       setSpamMessage(
         "(*Please check your spam or junk mail folder if you did not receive any verification email.)"
       );
+      setCurrentHcp();
     } catch (error) {
       setColor("red");
       setMessage("Please enter a valid email");
       console.log("No such hcp email, login error: ", error);
     }
+  }
+
+  function sendEmail(e) {
+    emailjs
+      .sendForm(
+        "service_6sjfn5k",
+        "template_cebkue4",
+        e.target,
+        "Zcvto6WUPOUtNW8KT"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
   }
 
   const override: CSSProperties = {

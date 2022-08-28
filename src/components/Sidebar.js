@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthDispatch } from "../context";
 import { usePageDispatch } from "../context/PageContext";
 import { logout } from "../service";
+import { setCurrentHcp } from "../service/AuthService";
 
 function Sidebar() {
   // State
@@ -23,6 +24,9 @@ function Sidebar() {
   // Dispatch
   const dispatch = useAuthDispatch();
   const pageDispatch = usePageDispatch();
+  const authDispatch = useAuthDispatch();
+
+  const hcpId = JSON.parse(localStorage.getItem("currentUser")).id;
 
   function reset() {
     setAc1(false);
@@ -118,6 +122,7 @@ function Sidebar() {
               type: "SET_CURRENT_PAGE",
               payload: "Notification",
             });
+            navigate("/dashboard/notification");
           }}
         >
           <SidebarItem
@@ -135,6 +140,7 @@ function Sidebar() {
               type: "SET_CURRENT_PAGE",
               payload: "Profile",
             });
+            setCurrentHcp(authDispatch, hcpId);
             navigate("/dashboard/profile");
           }}
         >

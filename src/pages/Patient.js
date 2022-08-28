@@ -1,6 +1,11 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import { FaClinicMedical, FaNotesMedical, FaTrash } from "react-icons/fa";
+import {
+  FaClinicMedical,
+  FaNotesMedical,
+  FaTrash,
+  FaStethoscope,
+} from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";
 import { GiMedicines, GiStairsGoal } from "react-icons/gi";
 import { MdBloodtype, MdNoFood } from "react-icons/md";
@@ -203,9 +208,18 @@ function Patient() {
           </Grid>
 
           <Grid item xs={3}>
-            <div className="patientModule">
-              <FaClinicMedical className="iconModule" />
-              <h2>Clinic Visit</h2>
+            <div
+              className="patientModule"
+              onClick={() => {
+                navigate(`patientMonitoring`);
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "Review Patient Monitoring",
+                });
+              }}
+            >
+              <FaStethoscope className="iconModule" />
+              <h2>Patient Monitoring</h2>
             </div>
           </Grid>
         </Grid>

@@ -3,7 +3,7 @@ import { GiPlainCircle } from "react-icons/gi";
 import { FiArrowRight } from "react-icons/fi";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
-import { usePageDispatch, usePatientState } from "../context";
+import { usePageDispatch, usePatientState } from "../../context";
 
 function RiskScoring() {
   const navigate = useNavigate();
@@ -11,7 +11,6 @@ function RiskScoring() {
 
   const pageDispatch = usePageDispatch();
   const patientState = usePatientState();
-  console.log(patientState);
 
   return (
     <div className="riskScoring">
