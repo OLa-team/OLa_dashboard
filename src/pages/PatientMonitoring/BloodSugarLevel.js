@@ -127,7 +127,7 @@ function BloodSugarLevel() {
   };
 
   return (
-    <div className="eachMonitoringPage">
+    <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
         <div
           style={{

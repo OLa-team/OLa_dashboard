@@ -52,8 +52,6 @@ function BloodThinner() {
     inrRange: inrRange,
   };
 
-  console.log("change", change);
-
   async function handleSubmitBloodThinner() {
     // e.preventDefault();
 

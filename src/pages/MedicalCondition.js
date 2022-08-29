@@ -74,7 +74,7 @@ function MedicalCondition() {
   }
 
   return (
-    <div className="medicalCondition">
+    <div className="wrapper">
       <div style={{ padding: "35px 70px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>Medical Condition</h1>

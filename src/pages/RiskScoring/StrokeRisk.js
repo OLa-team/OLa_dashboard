@@ -116,8 +116,6 @@ function StrokeRisk() {
     colorMsg: colorMsg,
   };
 
-  console.log(strokeRiskData);
-
   async function handleSubmitStrokeRiskTest(e) {
     e.preventDefault();
 
@@ -136,7 +134,7 @@ function StrokeRisk() {
   }
 
   return (
-    <div className="strokeRisk">
+    <div className="wrapper">
       <div style={{ padding: "30px 70px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>CHA₂DS₂-VASc test</h1>

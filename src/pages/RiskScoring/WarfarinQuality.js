@@ -136,7 +136,7 @@ function WarfarinQuality() {
   }
 
   return (
-    <div className="warfarinQuality">
+    <div className="wrapper">
       <div style={{ padding: "40px 70px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>SAMe-TT₂R₂ test</h1>

@@ -438,6 +438,10 @@ export async function setCurrentPatient(dispatch, patientId) {
 
 // fetch patient list
 export async function fetchPatientList(dispatch) {
+  dispatch({
+    type: "SET_LOADING_TRUE",
+  });
+
   try {
     let response = await getDocs(patientCollectionRef);
     let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -456,6 +460,10 @@ export async function fetchPatientList(dispatch) {
         payload: patientListData,
       });
     }
+
+    dispatch({
+      type: "SET_LOADING_FALSE",
+    });
   } catch (error) {
     throw new Error(`Error in set patient list: `, error);
   }

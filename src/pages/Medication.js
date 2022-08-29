@@ -199,7 +199,7 @@ function Medication() {
   }
 
   return (
-    <div className="medication">
+    <div className="wrapper">
       <div style={{ padding: "20px 50px", height: "80%" }}>
         <div
           style={{

@@ -786,7 +786,7 @@ input:-webkit-autofill:active {
 
 /* ---------------------------------------------------- */
 /* Patient Profile */
-.patientProfile {
+.wrapper {
   width: 95%;
   height: 80%;
   margin: auto;
@@ -883,17 +883,6 @@ input:-webkit-autofill:active {
 
 /* ---------------------------------------------------- */
 /* Medical Condition */
-.medicalCondition {
-  width: 95%;
-  height: 80%;
-  margin: auto;
-  opacity: 0.85;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: 5px 10px 8px #888888;
-  position: relative;
-}
-
 .medicalConditionForm {
   width: 100%;
 }
@@ -950,16 +939,6 @@ input:-webkit-autofill:active {
 /* ---------------------------------------------------------- */
 
 /* Allergy */
-.allergy {
-  width: 95%;
-  height: 80%;
-  margin: auto;
-  opacity: 0.85;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: 5px 10px 8px #888888;
-  position: relative;
-}
 
 .allergyForm {
   width: 100%;
@@ -1015,17 +994,6 @@ input:-webkit-autofill:active {
 /* ------------------------------------------------ */
 
 /* Health Goal */
-.healthGoal {
-  width: 95%;
-  height: 80%;
-  margin: auto;
-  opacity: 0.85;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: 5px 10px 8px #888888;
-  position: relative;
-}
-
 .healthGoalForm {
   margin-top: 30px;
   height: 62%;
@@ -1292,19 +1260,6 @@ input:-webkit-autofill:active {
 /* ------------------------------------------------ */
 
 /* Risk Scoring */
-.strokeRisk,
-.bleedingRisk,
-.warfarinQuality {
-  width: 95%;
-  height: 80%;
-  margin: auto;
-  opacity: 0.85;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: 5px 10px 8px #888888;
-  position: relative;
-}
-
 .strokeRiskForm {
   padding-top: 15px;
 }
@@ -1349,17 +1304,6 @@ input:-webkit-autofill:active {
 /* ------------------------------------------------ */
 
 /* Current medication */
-.medication {
-  width: 95%;
-  height: 80%;
-  margin: auto;
-  opacity: 0.85;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: 5px 10px 8px #888888;
-  position: relative;
-}
-
 .medicationLeftHeader {
   width: 450px;
   display: flex;
@@ -2085,17 +2029,6 @@ input:-webkit-autofill:active {
 
 .monitoringWrapper h1 {
   padding-bottom: 50px;
-}
-
-.eachMonitoringPage {
-  width: 95%;
-  height: 80%;
-  margin: auto;
-  opacity: 0.85;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: 5px 10px 8px #888888;
-  position: relative;
 }
 
 .eachMonitoringPage h2 {

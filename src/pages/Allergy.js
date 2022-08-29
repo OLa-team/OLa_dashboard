@@ -69,7 +69,7 @@ function Allergy() {
   }
 
   return (
-    <div className="allergy">
+    <div className="wrapper">
       <div style={{ padding: "50px 70px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>Allergy</h1>

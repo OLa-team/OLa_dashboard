@@ -137,7 +137,7 @@ function BleedingRisk() {
   }
 
   return (
-    <div className="bleedingRisk">
+    <div className="wrapper">
       <div style={{ padding: "30px 70px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>HAS-BLED test</h1>

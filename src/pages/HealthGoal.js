@@ -91,7 +91,7 @@ function HealthGoal() {
   }
 
   return (
-    <div className="healthGoal">
+    <div className="wrapper">
       <div style={{ padding: "50px 70px", height: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>My Health Goals</h1>

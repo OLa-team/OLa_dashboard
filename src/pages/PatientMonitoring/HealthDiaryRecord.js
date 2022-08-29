@@ -65,7 +65,7 @@ function HealthDiaryRecord() {
   ];
 
   return (
-    <div className="eachMonitoringPage">
+    <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
         <h2>
           <BsArrowLeft
