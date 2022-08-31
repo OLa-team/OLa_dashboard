@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logoWhite from "../../src/assets/logo-white.png";
 import { BsPencilSquare, BsPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuthDispatch } from "../context";
 import { usePageDispatch } from "../context/PageContext";
 import { logout } from "../service";
-import { setCurrentHcp } from "../service/AuthService";
 
 function Sidebar() {
   // State
@@ -26,7 +25,9 @@ function Sidebar() {
   const pageDispatch = usePageDispatch();
   const authDispatch = useAuthDispatch();
 
-  const hcpId = JSON.parse(localStorage.getItem("currentUser")).id;
+  const hcpId = localStorage.getItem("currentUser")
+    ? JSON.parse(localStorage.getItem("currentUser")).id
+    : "";
 
   function reset() {
     setAc1(false);
@@ -140,7 +141,6 @@ function Sidebar() {
               type: "SET_CURRENT_PAGE",
               payload: "Profile",
             });
-            setCurrentHcp(authDispatch, hcpId);
             navigate("/dashboard/profile");
           }}
         >

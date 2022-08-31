@@ -6,7 +6,6 @@ import { useAuthDispatch, useAuthState } from "../context";
 import { loginUser } from "../service";
 import ClipLoader from "react-spinners/ClipLoader";
 import emailjs from "emailjs-com";
-import { setCurrentHcp } from "../service/AuthService";
 
 function Login() {
   // State
@@ -34,7 +33,6 @@ function Login() {
       setSpamMessage(
         "(*Please check your spam or junk mail folder if you did not receive any verification email.)"
       );
-      setCurrentHcp();
     } catch (error) {
       setColor("red");
       setMessage("Please enter a valid email");

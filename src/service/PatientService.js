@@ -129,7 +129,6 @@ export async function createPatientAccount(newPatientData, patientId) {
 // set current patient using patientId
 export async function setCurrentPatient(dispatch, patientId) {
   if (localStorage.getItem("currentPatient")) {
-    console.log("Remove", localStorage.getItem("currentPatient"));
     localStorage.removeItem("currentPatient");
   }
 

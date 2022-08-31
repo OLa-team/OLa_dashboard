@@ -25,6 +25,8 @@ export async function loginUser(dispatch, email) {
         payload: hcpData,
       });
       localStorage.setItem("currentUser", JSON.stringify(hcpData));
+      console.log("hcpData", hcpData);
+
       return hcpData;
     }
 
@@ -76,18 +78,31 @@ export async function updateHcpProfile(hcpProfileData, hcpId) {
 
 // set hcp data
 export async function setCurrentHcp(dispatch, hcpId) {
+  if (localStorage.getItem("currentUser")) {
+    localStorage.removeItem("currentUser");
+  }
+
   try {
+    dispatch({
+      type: "SET_LOADING_TRUE",
+    });
+
     let response = await getDocs(hcpsCollectionRef);
     let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     let findHcpData = data.filter((hcp) => hcp.id === hcpId);
     let hcpData = findHcpData[0];
+    console.log("findHcpData", findHcpData);
 
     if (findHcpData.length === 1) {
       dispatch({
-        type: "LOGIN_SUCCESS",
+        type: "SET_CURRENT_HCP",
         payload: hcpData,
       });
       localStorage.setItem("currentUser", JSON.stringify(hcpData));
+
+      dispatch({
+        type: "SET_LOADING_FALSE",
+      });
     }
   } catch (error) {
     throw new Error(`Error in set current hcp: `, error);

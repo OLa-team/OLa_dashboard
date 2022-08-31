@@ -4,11 +4,10 @@ let user = localStorage.getItem("currentUser")
   ? JSON.parse(localStorage.getItem("currentUser"))
   : "";
 let token = localStorage.getItem("currentUser") ? user.id : "";
-console.log("user", user);
 
 // Initial state
 const initialState = {
-  userDetails: user,
+  userDetails: user || {},
   token: "" || token,
   loading: false,
   errorMessage: null,
@@ -26,7 +25,7 @@ const AuthReducer = (initialState, action) => {
     case "LOGIN_SUCCESS":
       return {
         ...initialState,
-        user: action.payload,
+        userDetails: action.payload,
         token: action.payload.id,
         loading: false,
       };
@@ -34,7 +33,7 @@ const AuthReducer = (initialState, action) => {
     case "LOGOUT":
       return {
         ...initialState,
-        user: "",
+        userDetails: "",
         token: "",
       };
 
@@ -43,6 +42,24 @@ const AuthReducer = (initialState, action) => {
         ...initialState,
         loading: false,
         errorMessage: action.error,
+      };
+
+    case "SET_CURRENT_HCP":
+      return {
+        ...initialState,
+        userDetails: action.payload,
+      };
+
+    case "SET_LOADING_TRUE":
+      return {
+        ...initialState,
+        loading: true,
+      };
+
+    case "SET_LOADING_FALSE":
+      return {
+        ...initialState,
+        loading: false,
       };
 
     default:

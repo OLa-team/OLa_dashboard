@@ -23,8 +23,13 @@ function Medication() {
   const userState = useAuthState();
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
-  const hasAllergy = patientState.allergy.hasAllergy;
   const patientId = params.patientId;
+  const hasAllergy = patientState.allergy
+    ? patientState.allergy.hasAllergy
+    : false;
+  const anticoagulant = patientState.bloodThinner
+    ? patientState.bloodThinner.anticoagulant
+    : "";
 
   const [name, setName] = useState("");
   const [dose, setDose] = useState("");
@@ -54,7 +59,7 @@ function Medication() {
   const frequencyList = ["OD", "BD", "TDS", "QID", "PRN"];
 
   const style = {
-    height: "75%",
+    height: "80%",
     width: "100%",
     margin: "auto",
   };
@@ -240,7 +245,8 @@ function Medication() {
                 navigate(`/dashboard/patient/${params.patientId}/bloodThinner`);
               }}
             >
-              Blood Thinner / Clot preventer
+              Blood Thinner / Clot preventer{" "}
+              {anticoagulant !== "" ? <GoPrimitiveDot /> : ""}
             </div>
           </div>
         </div>

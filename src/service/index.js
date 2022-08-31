@@ -3,6 +3,7 @@ import {
   logout,
   registerHcp,
   updateHcpProfile,
+  setCurrentHcp,
 } from "./AuthService";
 import {
   createPatientAccount,
@@ -29,6 +30,7 @@ export {
   logout,
   registerHcp,
   updateHcpProfile,
+  setCurrentHcp,
   createPatientAccount,
   fetchPatientList,
   filterPatientList,

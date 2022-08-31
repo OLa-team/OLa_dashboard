@@ -1,29 +1,32 @@
-import { async } from "@firebase/util";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profile from "../../src/assets/profile.jpg";
+import Loader from "../components/Loader";
 import { useAuthDispatch, useAuthState, usePatientState } from "../context";
-import { updateHcpProfile } from "../service";
-import { setCurrentHcp } from "../service/AuthService";
+import { setCurrentHcp, updateHcpProfile } from "../service";
 
 function Profile() {
   const userState = useAuthState();
   const userDispatch = useAuthDispatch();
+  const loading = userState.loading;
 
   const hcpId = userState.userDetails.id ? userState.userDetails.id : "";
   const [username, setUsername] = useState(
-    userState.userDetails.username ? userState.userDetails.username : ""
+    userState.userDetails ? userState.userDetails.username : ""
   );
   const [icNo, setIcNo] = useState(
-    userState.userDetails.icNo ? userState.userDetails.icNo : ""
+    userState.userDetails ? userState.userDetails.icNo : ""
   );
   const [email, setEmail] = useState(
-    userState.userDetails.email ? userState.userDetails.email : ""
+    userState.userDetails ? userState.userDetails.email : ""
   );
-  console.log(userState.userDetails);
-  console.log("icNo", icNo);
 
   async function handleSubmitProfile(e) {
     e.preventDefault();
+
+    if (username === "" || icNo === "" || email === "") {
+      alert("Please fill in all the info");
+      return;
+    }
 
     let hcpProfileData = {
       username: username,
@@ -40,9 +43,18 @@ function Profile() {
     }
   }
 
+  async function getUserData() {
+    await setCurrentHcp(userDispatch, hcpId);
+  }
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
   const [imgSrc, setImgSrc] = useState("");
   return (
     <div className="hcpProfile">
+      <Loader loading={loading} />
       <div className="leftHcpProfile">
         <div style={{ padding: "40px 20px" }}>
           <div className="profilePhoto">
@@ -80,6 +92,7 @@ function Profile() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter your name"
+                disabled
               />
             </div>
             <div className="profileInput">
@@ -89,6 +102,7 @@ function Profile() {
                 value={icNo}
                 onChange={(e) => setIcNo(e.target.value)}
                 placeholder="Enter your ic no"
+                disabled
               />
             </div>
             <div className="profileInput">
@@ -98,6 +112,7 @@ function Profile() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
+                disabled
               />
             </div>
             <button className="saveHcpProfile" type="submit">
