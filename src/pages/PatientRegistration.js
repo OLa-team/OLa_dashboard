@@ -3,8 +3,11 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { createPatientAccount } from "../service";
+import { usePatientDispatch } from "../context";
 
 function PatientRegistration() {
+  const patientDispatch = usePatientDispatch();
+
   // State
   const [patientName, setPatientName] = useState("");
   const [icNo, setIcNo] = useState("");
@@ -24,11 +27,12 @@ function PatientRegistration() {
     patientId: patientId,
   };
 
-  function submitPatientRegistration(e) {
+  async function submitPatientRegistration(e) {
     e.preventDefault();
 
     getPatients();
     setColor("red");
+    setMessage("");
     //  Check validation of phone number
     if (
       ((phoneNo.substring(0, 3) === "011" ||
@@ -75,10 +79,13 @@ function PatientRegistration() {
       }
     }
 
-    setColor("rgb(46, 183, 46)");
-    setMessage("Patient account is created");
-    createPatientAccount(newPatientData, patientId);
-    e.target.reset();
+    if (window.confirm("Are you sure to proceed?")) {
+      setColor("rgb(46, 183, 46)");
+      await createPatientAccount(newPatientData, patientDispatch);
+      e.target.reset();
+      setMessage("Patient account is created");
+    }
+    alert("Patient account is created successfully");
   }
 
   const getPatients = async () => {

@@ -1,4 +1,17 @@
-function getCurrentDate(date) {
+export function convertDateObjToDateInput(dateObj) {
+  if (dateObj === "") return "";
+
+  var today = new Date(dateObj);
+  var month =
+    today.getMonth() + 1 < 10
+      ? "0" + (today.getMonth() + 1)
+      : today.getMonth() + 1;
+  var currentDate = today.getFullYear() + "-" + month + "-" + today.getDate();
+
+  return currentDate;
+}
+
+export function getCurrentDate(date) {
   if (date === "") return "";
 
   var today = new Date(date);
@@ -8,7 +21,7 @@ function getCurrentDate(date) {
   return currentDate;
 }
 
-function getCurrentTime(date) {
+export function getCurrentTime(date) {
   if (date === "") return "";
 
   var today = new Date(date);
@@ -23,5 +36,3 @@ function getCurrentTime(date) {
 
   return currentTime;
 }
-
-export { getCurrentDate, getCurrentTime };

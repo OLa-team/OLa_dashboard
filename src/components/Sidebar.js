@@ -39,31 +39,28 @@ function Sidebar() {
   function handleLogout() {
     logout(dispatch);
     navigate("/login");
-    localStorage.removeItem("currentPageNumber");
+    localStorage.removeItem("currentSection");
   }
 
-  window.onload = () => {
-    console.log("reload");
-
-    if (localStorage.getItem("currentPageNumber")) {
-      console.log("run");
-      switch (JSON.parse(localStorage.getItem("currentPageNumber"))) {
-        case 1:
+  useEffect(() => {
+    if (localStorage.getItem("currentSection")) {
+      switch (JSON.parse(localStorage.getItem("currentSection"))) {
+        case "Search Section":
           reset();
           setAc1((prev) => !prev);
           return;
 
-        case 2:
+        case "Register Section":
           reset();
           setAc2((prev) => !prev);
           return;
 
-        case 3:
+        case "Notification Section":
           reset();
           setAc3((prev) => !prev);
           return;
 
-        case 4:
+        case "Profile Section":
           reset();
           setAc4((prev) => !prev);
           return;
@@ -72,7 +69,7 @@ function Sidebar() {
           break;
       }
     }
-  };
+  }, []);
 
   return (
     <div className="sidebar">
@@ -83,7 +80,10 @@ function Sidebar() {
           onClick={() => {
             reset();
             setAc1((prev) => !prev);
-            localStorage.setItem("currentPageNumber", JSON.stringify(1));
+            localStorage.setItem(
+              "currentSection",
+              JSON.stringify("Search Section")
+            );
             pageDispatch({
               type: "SET_CURRENT_PAGE",
               payload: "Patient List",
@@ -99,7 +99,10 @@ function Sidebar() {
           onClick={() => {
             reset();
             setAc2((prev) => !prev);
-            localStorage.setItem("currentPageNumber", JSON.stringify(2));
+            localStorage.setItem(
+              "currentSection",
+              JSON.stringify("Register Section")
+            );
             pageDispatch({
               type: "SET_CURRENT_PAGE",
               payload: "Patient Registration",
@@ -118,7 +121,10 @@ function Sidebar() {
           onClick={() => {
             reset();
             setAc3((prev) => !prev);
-            localStorage.setItem("currentPageNumber", JSON.stringify(3));
+            localStorage.setItem(
+              "currentSection",
+              JSON.stringify("Notification Section")
+            );
             pageDispatch({
               type: "SET_CURRENT_PAGE",
               payload: "Notification",
@@ -136,7 +142,10 @@ function Sidebar() {
           onClick={() => {
             reset();
             setAc4((prev) => !prev);
-            localStorage.setItem("currentPageNumber", JSON.stringify(4));
+            localStorage.setItem(
+              "currentSection",
+              JSON.stringify("Profile Section")
+            );
             pageDispatch({
               type: "SET_CURRENT_PAGE",
               payload: "Profile",

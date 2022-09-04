@@ -15,6 +15,13 @@ function BloodSugarLevel() {
   const patientId = params.patientId;
 
   const [displayMode, setDisplayMode] = useState("table");
+  const [openView, setOpenView] = useState(false);
+
+  const [date, setDate] = useState("");
+  const [timeTaken, setTimeTaken] = useState("");
+  const [bloodSugarLevel, setBloodSugarLevel] = useState(0);
+  const [device, setDevice] = useState("");
+  const [note, setNote] = useState("");
 
   // Table
   let i = 0;
@@ -60,14 +67,43 @@ function BloodSugarLevel() {
     {
       field: "device",
       headerName: "Device",
-      flex: 1,
+      flex: 1.5,
     },
+    // {
+    //   field: "note",
+    //   headerName: "Notes",
+    //   flex: 1,
+    // },
     {
-      field: "note",
-      headerName: "Notes",
+      field: "button",
+      headerName: "Action",
       flex: 1,
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <button
+              className="action"
+              onClick={() => openViewDetails(params.row)}
+            >
+              View Details
+            </button>
+          </div>
+        );
+      },
     },
   ];
+
+  function openViewDetails(row) {
+    setOpenView(true);
+    console.log("row", row);
+
+    setDate(row.date);
+    setTimeTaken(row.timeTaken);
+    setBloodSugarLevel(row.bloodSugarLevel);
+    setDevice(row.device);
+    setNote(row.note);
+  }
 
   // Graph
   const labels = patientState.patientMonitoring.sugarLevelRecord
@@ -129,68 +165,127 @@ function BloodSugarLevel() {
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2>
-            <BsArrowLeft
-              className="backToMonitoringMainPage"
-              onClick={() =>
-                navigate(
-                  `/dashboard/patient/${params.patientId}/patientMonitoring`
-                )
-              }
-            />
-            Blood Sugar Level
-          </h2>
-          <div className="displayMode">
-            <div>
-              <input
-                type="radio"
-                checked={displayMode === "table"}
-                onChange={() => {
-                  setDisplayMode("table");
-                }}
-              />
-              <label>Table</label>
-            </div>
-
-            <div>
-              <input
-                type="radio"
-                checked={displayMode === "graph"}
-                onChange={() => {
-                  setDisplayMode("graph");
-                }}
-              />
-              <label>Graph</label>
-            </div>
-          </div>
-        </div>
-
-        {displayMode === "table" ? (
+        {!openView ? (
           <>
-            <Table
-              style={style}
-              className="monitoringTable"
-              columns={columns}
-              data={tableData}
-              clickRowFunction={() => {}}
-              selectFunction={() => {}}
-              toolbar={false}
-              gridStyle={gridStyle}
-              density="standard"
-              checkboxSelection={false}
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h2>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() =>
+                    navigate(
+                      `/dashboard/patient/${params.patientId}/patientMonitoring`
+                    )
+                  }
+                />
+                Blood Sugar Level
+              </h2>
+              <div className="displayMode">
+                <div>
+                  <input
+                    type="radio"
+                    checked={displayMode === "table"}
+                    onChange={() => {
+                      setDisplayMode("table");
+                    }}
+                  />
+                  <label>Table</label>
+                </div>
+
+                <div>
+                  <input
+                    type="radio"
+                    checked={displayMode === "graph"}
+                    onChange={() => {
+                      setDisplayMode("graph");
+                    }}
+                  />
+                  <label>Graph</label>
+                </div>
+              </div>
+            </div>
+
+            {displayMode === "table" ? (
+              <>
+                <Table
+                  style={style}
+                  className="monitoringTable"
+                  columns={columns}
+                  data={tableData}
+                  clickRowFunction={() => {}}
+                  selectFunction={() => {}}
+                  toolbar={false}
+                  gridStyle={gridStyle}
+                  density="standard"
+                  checkboxSelection={false}
+                />
+              </>
+            ) : (
+              <>
+                <div className="monitoringGraph">
+                  <Line data={graphData} options={options} />
+                </div>
+              </>
+            )}
           </>
         ) : (
           <>
-            <div className="monitoringGraph">
-              <Line data={graphData} options={options} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h2>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() => setOpenView(false)}
+                />
+                Details
+              </h2>
+            </div>
+
+            <div className="patientMonitoringDetails">
+              <div>
+                <h3>
+                  Date <span>:</span>
+                </h3>
+                <p>{date}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Time Taken <span>:</span>
+                </h3>
+                <p>{timeTaken}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Blood Sugar Level (mmol/L) <span>:</span>
+                </h3>
+                <p>{bloodSugarLevel}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Device <span>:</span>
+                </h3>
+                <p>{device}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Notes <span>:</span>
+                </h3>
+                <p>{note}</p>
+              </div>
             </div>
           </>
         )}

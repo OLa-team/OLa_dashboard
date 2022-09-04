@@ -1275,7 +1275,7 @@ input:-webkit-autofill:active {
   padding-top: 30px !important;
 }
 
-.warfarinQuality .warfarinQualityForm {
+.warfarinQualityForm {
   padding-top: 25px !important;
 }
 
@@ -1869,7 +1869,7 @@ input:-webkit-autofill:active {
   /* z-index: 99999999999999; */
 }
 
-.editINRAction {
+.action {
   padding: 5px 25px;
   border-radius: 7px;
   font-size: 15px;
@@ -1881,7 +1881,7 @@ input:-webkit-autofill:active {
   transition: all 0.3s ease;
 }
 
-.editINRAction:hover {
+.action:hover {
   background-color: rgb(95, 160, 245);
 }
 
@@ -2069,4 +2069,119 @@ input:-webkit-autofill:active {
   height: 75%;
   margin-top: 20px;
   font-size: 20px;
+}
+
+.patientMonitoringDetails {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 70px 50px;
+  flex-wrap: wrap;
+}
+
+.patientMonitoringDetails div {
+  display: flex;
+  align-items: center;
+}
+
+.patientMonitoringDetails div h3 {
+  display: flex;
+  align-items: center;
+  width: 400px;
+  justify-content: space-between;
+  padding-right: 15px;
+  font-size: 23px;
+}
+
+.patientMonitoringDetails div p {
+  width: 70%;
+  font-size: 22px;
+}
+
+/* Table style */
+.notification .MuiDataGrid-columnHeader {
+  font-size: 23px;
+  padding: 0px 20px !important;
+  font-weight: 900;
+  /* background-color: rgb(248, 248, 248); */
+}
+
+/* .MuiDataGrid-virtualScroller {
+  overflow: hidden !important;
+} */
+
+.notification .MuiDataGrid-cell {
+  padding: 0px 20px !important;
+}
+
+.notification .MuiDataGrid-row {
+  transition: all 0.3s ease;
+  /* background-color: transparent !important; */
+}
+
+.notification .MuiDataGrid-row:hover {
+  /* background-color: rgb(248, 248, 248); */
+  transform: scale(1.01);
+}
+
+.notifDetails {
+  height: fit-content;
+  padding: 20px;
+}
+
+.notifDetails h1 {
+  padding-bottom: 35px;
+}
+
+.patientNotifDetails {
+  width: 60%;
+  margin: auto;
+}
+
+.patientNotifDetails .register-inputField input {
+  background-color: white;
+}
+
+.backToNotificationMainPage {
+  font-size: 40px;
+}
+
+.notifButton {
+  text-align: center;
+  /* display: flex;
+  align-items: center;
+  justify-content: space-between; */
+  /* width: 20%; */
+  margin: auto;
+}
+
+.notifButton button {
+  padding: 7px 18px;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.approveNotif {
+  background-color: lightgreen;
+  transition: all 0.3s ease;
+}
+
+.approveNotif:hover {
+  background-color: rgb(86, 232, 86);
+  color: white;
+}
+
+.rejectNotif {
+  background-color: rgb(255, 73, 73);
+  transition: all 0.3s ease;
+}
+
+.rejectNotif:hover {
+  background-color: red;
+  color: white;
 }

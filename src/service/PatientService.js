@@ -12,7 +12,12 @@ import { firestore } from "../firebase";
 const patientCollectionRef = collection(firestore, "patient");
 
 // register new patient
-export async function createPatientAccount(newPatientData, patientId) {
+export async function createPatientAccount(newPatientData, dispatch) {
+  dispatch({
+    type: "SET_LOADING_TRUE",
+  });
+
+  const patientId = newPatientData.patientId;
   try {
     await setDoc(doc(firestore, "patient", patientId), {
       name: newPatientData.name,
@@ -121,9 +126,21 @@ export async function createPatientAccount(newPatientData, patientId) {
       creatinineRecord: [],
       dose: "",
     });
+
+    await setDoc(doc(firestore, "self_monitor", patientId), {
+      bleedingSymptomRecord: [],
+      bloodPressureHeartRateRecord: [],
+      bodyWeightRecord: [],
+      healthDiaryRecord: [],
+      sugarLevelRecord: [],
+    });
   } catch (error) {
     throw new Error(`Error in register new patient: `, error);
   }
+
+  dispatch({
+    type: "SET_LOADING_FALSE",
+  });
 }
 
 // set current patient using patientId
@@ -713,6 +730,7 @@ export async function deletePatientById(id) {
   var bleedingRiskRef = doc(firestore, "bleeding_risk", id);
   var warfarinQualityRef = doc(firestore, "warfarin_quality", id);
   var medicationRef = doc(firestore, "medication", id);
+  var selfMonitorRef = doc(firestore, "self_monitor", id);
 
   const patientDocSnap = await getDoc(patientRef);
   const medicalConDocSnap = await getDoc(medicalConRef);
@@ -722,6 +740,7 @@ export async function deletePatientById(id) {
   const bleedingRiskDocSnap = await getDoc(bleedingRiskRef);
   const warfarinQualityDocSnap = await getDoc(warfarinQualityRef);
   const medicationDocSnap = await getDoc(medicationRef);
+  const selfMonitorDocSnap = await getDoc(selfMonitorRef);
 
   if (
     !patientDocSnap.exists() ||
@@ -731,7 +750,8 @@ export async function deletePatientById(id) {
     !strokeRiskDocSnap.exists() ||
     !bleedingRiskDocSnap.exists() ||
     !warfarinQualityDocSnap.exists() ||
-    !medicationDocSnap.exists()
+    !medicationDocSnap.exists() ||
+    !selfMonitorDocSnap.exists()
   ) {
     alert("Document does not exist");
     return;
@@ -747,9 +767,10 @@ export async function deletePatientById(id) {
     await deleteDoc(bleedingRiskRef);
     await deleteDoc(warfarinQualityRef);
     await deleteDoc(medicationRef);
+    await deleteDoc(selfMonitorRef);
   } catch (error) {
-    console.log("Error in delete patient by id", error);
-    return;
+    alert("Error in delete patient by id");
+    throw new Error("Error in delete patient by id", error);
   }
 }
 

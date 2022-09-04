@@ -57,10 +57,25 @@ function HealthDiaryRecord() {
       headerName: "Ward",
       flex: 1.5,
     },
+    // {
+    //   field: "note",
+    //   headerName: "Notes",
+    //   flex: 2,
+    // },
     {
-      field: "note",
-      headerName: "Notes",
-      flex: 2,
+      field: "button",
+      headerName: "Action",
+      flex: 0.7,
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <button className="action" onClick={() => {}}>
+              View Details
+            </button>
+          </div>
+        );
+      },
     },
   ];
 

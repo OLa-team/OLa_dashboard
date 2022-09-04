@@ -25,13 +25,14 @@ function Table({
         // autoPageSize={true}
         hideFooterPagination={true}
         hideFooter={true}
-        pageSize={pageSize}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        rowsPerPageOptions={[10, 20, 50]}
+        // pageSize={pageSize}
+        // onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        // rowsPerPageOptions={[10, 20, 50]}
+        // rowsPerPageOptions={1000}
         checkboxSelection={checkboxSelection}
         disableSelectionOnClick
         onRowClick={(row) => clickRowFunction(row)}
-        onCellClick={(cell) => console.log("cell", cell)}
+        // onCellClick={(cell) => console.log("cell", cell)}
         density={density}
         onSelectionModelChange={(ids) => selectFunction(ids, data)}
         components={{

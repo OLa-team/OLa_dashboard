@@ -5,10 +5,22 @@ import {
   usePatientState,
 } from "../context";
 import { useParams, useNavigate } from "react-router-dom";
-import { setCurrentPatient, updatePatientProfile } from "../service";
+import {
+  changeProfileDataNotification,
+  setCurrentPatient,
+  updatePatientProfile,
+} from "../service";
+import { convertDateObjToDateInput } from "../utils";
 
 function PatientProfile() {
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const patientDispatch = usePatientDispatch();
+  const pageDispatch = usePageDispatch();
+
   const patientState = usePatientState();
+  const patientId = params.patientId;
 
   const [name, setName] = useState(patientState.currentPatient.name);
   const [phoneNo, setPhoneNo] = useState(
@@ -17,7 +29,7 @@ function PatientProfile() {
   const [icNo, setIcNo] = useState(patientState.currentPatient.icNo);
   const [birthDate, setBirthDate] = useState(
     patientState.currentPatient.birthDate
-      ? patientState.currentPatient.birthDate
+      ? convertDateObjToDateInput(patientState.currentPatient.birthDate)
       : ""
   );
   const [age, setAge] = useState(
@@ -37,12 +49,6 @@ function PatientProfile() {
       : ""
   );
 
-  const params = useParams();
-  const navigate = useNavigate();
-
-  const patientDispatch = usePatientDispatch();
-  const pageDispatch = usePageDispatch();
-
   const maxYear = new Date().getFullYear() - 18;
 
   function calculateAge(date) {
@@ -53,30 +59,79 @@ function PatientProfile() {
     setAge(patientAge);
   }
 
-  console.log(
-    name,
-    phoneNo,
-    icNo,
-    birthDate,
-    age,
-    gender,
-    nextOfKin,
-    nextOfKinContact
-  );
+  function compareDataChanges() {
+    // Local data
+    const _name = patientState.currentPatient.name;
+    const _phoneNo = patientState.currentPatient.phoneNo.substring(2);
+    const _icNo = patientState.currentPatient.icNo;
+    const _birthDate = patientState.currentPatient.birthDate
+      ? convertDateObjToDateInput(patientState.currentPatient.birthDate)
+      : "";
+    const _age = patientState.currentPatient.age
+      ? patientState.currentPatient.age
+      : 0;
+    const _gender = patientState.currentPatient.gender
+      ? patientState.currentPatient.gender
+      : "";
+    const _nextOfKin = patientState.currentPatient.nextOfKin
+      ? patientState.currentPatient.nextOfKin
+      : "";
+    const _nextOfKinContact = patientState.currentPatient.nextOfKinContact
+      ? patientState.currentPatient.nextOfKinContact
+      : "";
 
-  const newData = {
-    patientId: params.patientId,
-    name: name,
-    phoneNo: phoneNo,
-    icNo: icNo,
-    birthDate: birthDate,
-    age: age,
-    gender: gender,
-    nextOfKin: nextOfKin,
-    nextOfKinContact: nextOfKinContact,
-  };
+    console.log("_name", _name);
+    console.log("_phoneNo", _phoneNo);
+    console.log("_icNo", _icNo);
+    console.log("_birthDate", _birthDate);
+    console.log("_age", _age);
+    console.log("_gender", _gender);
 
-  async function handleUpdatePatientData(newData) {
+    let changeDataObj = {};
+    if (name !== _name) {
+      changeDataObj.name = name;
+    }
+    if (phoneNo !== _phoneNo) {
+      changeDataObj.phoneNo = phoneNo;
+    }
+    if (icNo !== _icNo) {
+      changeDataObj.icNo = icNo;
+    }
+    if (birthDate !== _birthDate) {
+      changeDataObj.birthDate = birthDate;
+    }
+    if (age !== _age) {
+      changeDataObj.age = age;
+    }
+    if (gender !== _gender) {
+      changeDataObj.gender = gender;
+    }
+    if (nextOfKin !== _nextOfKin) {
+      changeDataObj.nextOfKin = nextOfKin;
+    }
+    if (nextOfKinContact !== _nextOfKinContact) {
+      changeDataObj.nextOfKinContact = nextOfKinContact;
+    }
+
+    console.log("changeDataObj", changeDataObj);
+    return changeDataObj;
+  }
+
+  async function handleUpdatePatientData() {
+    // const newData = {
+    //   patientId: params.patientId,
+    //   name: name,
+    //   phoneNo: phoneNo,
+    //   icNo: icNo,
+    //   birthDate: new Date(birthDate).getTime(),
+    //   age: age,
+    //   gender: gender,
+    //   nextOfKin: nextOfKin,
+    //   nextOfKinContact: nextOfKinContact,
+    // };
+
+    // console.log("newData", newData);
+
     if (window.confirm("Are you sure you want to continue?")) {
       if (
         ((phoneNo.substring(0, 3) === "011" ||
@@ -114,8 +169,7 @@ function PatientProfile() {
       const checkRepeatedNameForSamePhone = patientState.patientList
         .filter(
           (patient) =>
-            patient.phoneNo === phoneNo &&
-            patient.patientId !== newData.patientId
+            patient.phoneNo === phoneNo && patient.patientId !== patientId
         )
         .filter((p) => p.name.toLowerCase() === name.toLowerCase());
       if (checkRepeatedNameForSamePhone.length > 0) {
@@ -124,17 +178,24 @@ function PatientProfile() {
       }
 
       const checkRepeatedIc = patientState.patientList.filter(
-        (patient) =>
-          patient.icNo === icNo && patient.patientId !== newData.patientId
+        (patient) => patient.icNo === icNo && patient.patientId !== patientId
       );
       if (checkRepeatedIc.length > 0) {
         alert("The I/C No / Passport No. is already existed.");
         return;
       }
 
-      await updatePatientProfile(newData);
-      await setCurrentPatient(patientDispatch, newData.patientId);
-      alert("Update patient's profile successfully.");
+      // await updatePatientProfile(newData);
+      let changeDataObj = {
+        changeDataWeb: true,
+        changeData: compareDataChanges(),
+      };
+      console.log("cdo", changeDataObj);
+      await changeProfileDataNotification(changeDataObj, patientId);
+      await setCurrentPatient(patientDispatch, patientId);
+      alert(
+        "Notification has been sent to patient. Please wait for the patient to approve the changes."
+      );
     } else {
       return;
     }
@@ -149,7 +210,7 @@ function PatientProfile() {
           className="patientProfileForm"
           onSubmit={(e) => {
             e.preventDefault();
-            handleUpdatePatientData(newData);
+            handleUpdatePatientData();
           }}
         >
           <div className="patientInfo">

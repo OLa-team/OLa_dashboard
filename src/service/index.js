@@ -24,6 +24,11 @@ import {
   deleteAllSelectedPatients,
   setCurrentPatient,
 } from "./PatientService";
+import {
+  fetchAllNotification,
+  updatePatientRegistrationNotification,
+  changeProfileDataNotification,
+} from "./NotificationService";
 
 export {
   loginUser,
@@ -48,4 +53,7 @@ export {
   deletePatientById,
   deleteAllSelectedPatients,
   setCurrentPatient,
+  fetchAllNotification,
+  updatePatientRegistrationNotification,
+  changeProfileDataNotification,
 };

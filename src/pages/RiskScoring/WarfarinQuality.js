@@ -89,7 +89,6 @@ function WarfarinQuality() {
       }
     }
     setScore(currentScore);
-    console.log(currentScore);
 
     if (currentScore <= 2) {
       setResult(resultMessages.msg1);
@@ -137,7 +136,7 @@ function WarfarinQuality() {
 
   return (
     <div className="wrapper">
-      <div style={{ padding: "40px 70px" }}>
+      <div style={{ padding: "40px 70px", height: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>SAMe-TT₂R₂ test</h1>
           <div className="lastUpdatedBox">

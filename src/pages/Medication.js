@@ -83,26 +83,40 @@ function Medication() {
     {
       field: "name",
       headerName: "Name",
-      width: 350,
-      // flex: 1,
+      flex: 1,
     },
     {
       field: "dose",
       headerName: "Dose (in mg)",
-      width: 200,
-      // flex: 1,
+      flex: 1,
     },
     {
       field: "frequency",
       headerName: "Frequency",
-      width: 200,
-      // flex: 1,
+      flex: 1,
     },
     {
       field: "note",
       headerName: "Notes",
-      width: 200,
-      flex: 1,
+      flex: 2.5,
+    },
+    {
+      field: "button",
+      headerName: "Action",
+      flex: 0.7,
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <button
+              className="action"
+              onClick={() => selectMedicine(params.row)}
+            >
+              Edit
+            </button>
+          </div>
+        );
+      },
     },
   ];
 
@@ -180,11 +194,11 @@ function Medication() {
   }
 
   async function selectMedicine(row) {
-    setName(row.row.name);
-    setDose(row.row.dose);
-    setFrequency(row.row.frequency);
-    setNote(row.row.note);
-    setMedicineId(row.row.id);
+    setName(row.name);
+    setDose(row.dose);
+    setFrequency(row.frequency);
+    setNote(row.note);
+    setMedicineId(row.id);
 
     setOpenForm({
       open: true,
@@ -256,7 +270,7 @@ function Medication() {
           className="medicationTable"
           columns={columns}
           data={medicineList}
-          clickRowFunction={selectMedicine}
+          clickRowFunction={() => {}}
           selectFunction={setSelectedMedicineList}
           toolbar={false}
           gridStyle={gridStyle}

@@ -52,10 +52,25 @@ function BleedingSymptom() {
       headerName: "Bleeding Site",
       flex: 3,
     },
+    // {
+    //   field: "note",
+    //   headerName: "Notes",
+    //   flex: 3,
+    // },
     {
-      field: "note",
-      headerName: "Notes",
-      flex: 3,
+      field: "button",
+      headerName: "Action",
+      flex: 0.7,
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <button className="action" onClick={() => {}}>
+              View Details
+            </button>
+          </div>
+        );
+      },
     },
   ];
 
