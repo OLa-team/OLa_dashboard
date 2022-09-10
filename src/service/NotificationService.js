@@ -48,9 +48,6 @@ export async function updatePatientRegistrationNotification(
       error
     );
   }
-  dispatch({
-    type: "SET_LOADING_FALSE",
-  });
 }
 
 // notification when change patient profile data
