@@ -8,7 +8,9 @@ import SidebarItem from "./SidebarItem";
 import { useNavigate } from "react-router-dom";
 import { useAuthDispatch } from "../context";
 import { usePageDispatch } from "../context/PageContext";
-import { logout } from "../service";
+import { fetchAllNotification, logout } from "../service";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function Sidebar() {
   // State
@@ -16,6 +18,7 @@ function Sidebar() {
   const [ac2, setAc2] = useState(false);
   const [ac3, setAc3] = useState(false);
   const [ac4, setAc4] = useState(false);
+  const [hasNotification, setHasNotification] = useState(false);
 
   // Navigate
   const navigate = useNavigate();
@@ -71,6 +74,32 @@ function Sidebar() {
     }
   }, []);
 
+  const q = query(
+    collection(firestore, "notification"),
+    where("registrationWeb", "==", false)
+  );
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    if (querySnapshot.docs.length > 0) {
+      setHasNotification(true);
+    } else {
+      setHasNotification(false);
+    }
+  });
+
+  // async function getAllNotification() {
+  //   const notificationData = await fetchAllNotification();
+
+  //   notificationData.forEach((notif) => {
+  //     if (notif.registrationMobile && !notif.registrationWeb) {
+  //       setHasNotification(true);
+  //     }
+  //   });
+  // }
+
+  // useEffect(() => {
+  //   getAllNotification();
+  // }, []);
+
   return (
     <div className="sidebar">
       <img src={logoWhite} alt="logo-white.png" />
@@ -92,7 +121,12 @@ function Sidebar() {
           }}
           className="item-wrapper"
         >
-          <SidebarItem Icon={<BiSearch />} section="Search" active={ac1} />
+          <SidebarItem
+            Icon={<BiSearch />}
+            section="Search"
+            active={ac1}
+            alert={false}
+          />
         </div>
 
         <div
@@ -114,6 +148,7 @@ function Sidebar() {
             Icon={<BsPencilSquare />}
             section="Register"
             active={ac2}
+            alert={false}
           />
         </div>
 
@@ -136,6 +171,7 @@ function Sidebar() {
             Icon={<IoMdNotifications />}
             section="Notification"
             active={ac3}
+            alert={hasNotification}
           />
         </div>
         <div
@@ -153,7 +189,12 @@ function Sidebar() {
             navigate("/dashboard/profile");
           }}
         >
-          <SidebarItem Icon={<BsPersonFill />} section="Profile" active={ac4} />
+          <SidebarItem
+            Icon={<BsPersonFill />}
+            section="Profile"
+            active={ac4}
+            alert={false}
+          />
         </div>
         <div
           onClick={() => {

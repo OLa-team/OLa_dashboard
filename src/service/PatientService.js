@@ -693,9 +693,7 @@ export async function updateInrRecord(inrRecordData, patientId) {
       nameUpdated: inrRecordData.nameUpdated,
       dateTimeUpdated: inrRecordData.dateTimeUpdated,
       inrRecord: inrRecordData.inrRecord,
-      percentageDaysWithinRange: inrRecordData.percentageDaysWithinRange,
-
-      percentageOfTestsInRange: inrRecordData.percentageOfTestsInRange,
+      ttrResult: inrRecordData.ttrResult,
     });
   } catch (error) {
     alert(error.message);

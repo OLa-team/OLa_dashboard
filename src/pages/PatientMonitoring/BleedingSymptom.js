@@ -14,12 +14,16 @@ function BleedingSymptom() {
   const params = useParams();
   const patientId = params.patientId;
 
-  const [displayMode, setDisplayMode] = useState("table");
+  const [openView, setOpenView] = useState(false);
+
+  const [date, setDate] = useState("");
+  const [bleeding, setBleeding] = useState(0);
+  const [note, setNote] = useState("");
 
   // Table
   let i = 0;
-  const tableData = patientState.patientMonitoring.bleedingSymptomsRecord
-    ? patientState.patientMonitoring.bleedingSymptomsRecord.map((record) => ({
+  const tableData = patientState.patientMonitoring.bleedingSymptomRecord
+    ? patientState.patientMonitoring.bleedingSymptomRecord.map((record) => ({
         ...record,
         date: getCurrentDate(record.date),
         id: i++,
@@ -60,12 +64,15 @@ function BleedingSymptom() {
     {
       field: "button",
       headerName: "Action",
-      flex: 0.7,
+      flex: 1,
       sortable: false,
       renderCell: (params) => {
         return (
           <div style={{ width: "100%", textAlign: "center" }}>
-            <button className="action" onClick={() => {}}>
+            <button
+              className="action"
+              onClick={() => openViewDetails(params.row)}
+            >
               View Details
             </button>
           </div>
@@ -74,32 +81,86 @@ function BleedingSymptom() {
     },
   ];
 
+  function openViewDetails(row) {
+    setOpenView(true);
+    console.log("row", row);
+
+    setDate(row.date);
+    setBleeding(row.bleeding);
+    setNote(row.note);
+  }
+
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
-        <h2>
-          <BsArrowLeft
-            className="backToMonitoringMainPage"
-            onClick={() =>
-              navigate(
-                `/dashboard/patient/${params.patientId}/patientMonitoring`
-              )
-            }
-          />
-          Bleeding Symptom
-        </h2>
-        <Table
-          style={style}
-          className="monitoringTable"
-          columns={columns}
-          data={tableData}
-          clickRowFunction={() => {}}
-          selectFunction={() => {}}
-          toolbar={false}
-          gridStyle={gridStyle}
-          density="standard"
-          checkboxSelection={false}
-        />
+        {!openView ? (
+          <>
+            <h2>
+              <BsArrowLeft
+                className="backToMonitoringMainPage"
+                onClick={() =>
+                  navigate(
+                    `/dashboard/patient/${params.patientId}/patientMonitoring`
+                  )
+                }
+              />
+              Bleeding Symptom
+            </h2>
+            <Table
+              style={style}
+              className="monitoringTable"
+              columns={columns}
+              data={tableData}
+              clickRowFunction={() => {}}
+              selectFunction={() => {}}
+              toolbar={false}
+              gridStyle={gridStyle}
+              density="standard"
+              checkboxSelection={false}
+            />
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h1>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() => setOpenView(false)}
+                />
+                Details
+              </h1>
+            </div>
+
+            <div className="patientMonitoringDetails bleedingSymptomPage">
+              <div>
+                <h3>
+                  Date <span>:</span>
+                </h3>
+                <p>{date}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Bleeding Symptom <span>:</span>
+                </h3>
+                <p>{bleeding}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Notes <span>:</span>
+                </h3>
+                <p>{note}</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -252,7 +252,7 @@ function Medication() {
                 navigate(`/dashboard/patient/${params.patientId}/allergy`);
               }}
             >
-              Allergy {hasAllergy ? <GoPrimitiveDot /> : ""}
+              Allergy {hasAllergy && <GoPrimitiveDot className="alertDot" />}
             </div>
             <div
               onClick={() => {
@@ -260,7 +260,7 @@ function Medication() {
               }}
             >
               Blood Thinner / Clot preventer{" "}
-              {anticoagulant !== "" ? <GoPrimitiveDot /> : ""}
+              {anticoagulant !== "" && <GoPrimitiveDot className="alertDot" />}
             </div>
           </div>
         </div>

@@ -242,13 +242,13 @@ function BloodSugarLevel() {
                 alignItems: "center",
               }}
             >
-              <h2>
+              <h1>
                 <BsArrowLeft
                   className="backToMonitoringMainPage"
                   onClick={() => setOpenView(false)}
                 />
                 Details
-              </h2>
+              </h1>
             </div>
 
             <div className="patientMonitoringDetails">

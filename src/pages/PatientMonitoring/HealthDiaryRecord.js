@@ -14,7 +14,11 @@ function HealthDiaryRecord() {
   const params = useParams();
   const patientId = params.patientId;
 
-  const [displayMode, setDisplayMode] = useState("table");
+  const [openView, setOpenView] = useState(false);
+
+  const [date, setDate] = useState("");
+  const [hospital, setHospital] = useState(0);
+  const [note, setNote] = useState("");
 
   // Table
   let i = 0;
@@ -52,11 +56,11 @@ function HealthDiaryRecord() {
       headerName: "Hospital Admission",
       flex: 2.5,
     },
-    {
-      field: "ward",
-      headerName: "Ward",
-      flex: 1.5,
-    },
+    // {
+    //   field: "ward",
+    //   headerName: "Ward",
+    //   flex: 1.5,
+    // },
     // {
     //   field: "note",
     //   headerName: "Notes",
@@ -65,12 +69,15 @@ function HealthDiaryRecord() {
     {
       field: "button",
       headerName: "Action",
-      flex: 0.7,
+      flex: 1,
       sortable: false,
       renderCell: (params) => {
         return (
           <div style={{ width: "100%", textAlign: "center" }}>
-            <button className="action" onClick={() => {}}>
+            <button
+              className="action"
+              onClick={() => openViewDetails(params.row)}
+            >
               View Details
             </button>
           </div>
@@ -79,32 +86,86 @@ function HealthDiaryRecord() {
     },
   ];
 
+  function openViewDetails(row) {
+    setOpenView(true);
+    console.log("row", row);
+
+    setDate(row.date);
+    setHospital(row.hospital);
+    setNote(row.note);
+  }
+
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
-        <h2>
-          <BsArrowLeft
-            className="backToMonitoringMainPage"
-            onClick={() =>
-              navigate(
-                `/dashboard/patient/${params.patientId}/patientMonitoring`
-              )
-            }
-          />
-          Health Diary
-        </h2>
-        <Table
-          style={style}
-          className="monitoringTable"
-          columns={columns}
-          data={tableData}
-          clickRowFunction={() => {}}
-          selectFunction={() => {}}
-          toolbar={false}
-          gridStyle={gridStyle}
-          density="standard"
-          checkboxSelection={false}
-        />
+        {!openView ? (
+          <>
+            <h2>
+              <BsArrowLeft
+                className="backToMonitoringMainPage"
+                onClick={() =>
+                  navigate(
+                    `/dashboard/patient/${params.patientId}/patientMonitoring`
+                  )
+                }
+              />
+              Health Diary
+            </h2>
+            <Table
+              style={style}
+              className="monitoringTable"
+              columns={columns}
+              data={tableData}
+              clickRowFunction={() => {}}
+              selectFunction={() => {}}
+              toolbar={false}
+              gridStyle={gridStyle}
+              density="standard"
+              checkboxSelection={false}
+            />
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h1>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() => setOpenView(false)}
+                />
+                Details
+              </h1>
+            </div>
+
+            <div className="patientMonitoringDetails healthDiaryPage">
+              <div>
+                <h3>
+                  Date <span>:</span>
+                </h3>
+                <p>{date}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Hospital Admission <span>:</span>
+                </h3>
+                <p>{hospital}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Notes <span>:</span>
+                </h3>
+                <p>{note}</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

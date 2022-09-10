@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import { BsArrowLeft } from "react-icons/bs";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
 import { firestore } from "../firebase";
 import {
   createPatientAccount,
@@ -115,27 +115,49 @@ function Notification() {
         patientId: patientId,
       };
 
-      await updatePatientRegistrationNotification(patientId);
+      await updatePatientRegistrationNotification(patientId, patientDispatch);
       createPatientAccount(newPatientData, patientDispatch);
 
       setPage("table");
+      alert("Patient register successfully!");
       setPendingNotification(
         pendingNotification.filter((notif) => notif.id !== patientId)
       );
-
-      alert("Patient register successfully!");
+      patientDispatch({
+        type: "SET_LOADING_FALSE",
+      });
     }
   }
 
   async function rejectRegistration() {
     if (window.confirm("Are you sure to proceed?")) {
-      await updatePatientRegistrationNotification(patientId);
+      await updatePatientRegistrationNotification(patientId, patientDispatch);
       setPendingNotification(
         pendingNotification.filter((notif) => notif.id !== patientId)
       );
       setPage("table");
     }
   }
+
+  // const q = query(
+  //   collection(firestore, "notification"),
+  //   where("registrationWeb", "==", false)
+  // );
+  // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //   let pendingRequestList = [];
+  //   if (querySnapshot.docs.length > 0) {
+  //     // returnMapArray(querySnapshot);
+  //   }
+  // });
+
+  // function returnMapArray(snapShot) {
+  //   setPendingNotification(
+  //     snapShot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }))
+  //   );
+  // }
 
   async function getAllNotification() {
     const notificationData = await fetchAllNotification();

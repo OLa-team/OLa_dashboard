@@ -1332,13 +1332,20 @@ input:-webkit-autofill:active {
   color: white;
 }
 
-.medicationLeftHeader div svg {
+.alertDot {
   position: absolute;
   top: -13px;
   right: -7px;
   font-size: 27px;
   color: #ec2029;
   animation: blink 0.5s steps(1, end) infinite;
+}
+
+.alertDot.sidebarItem {
+  color: lightgreen !important;
+  position: relative;
+  top: -10px;
+  right: 0;
 }
 
 @keyframes blink {
@@ -1890,7 +1897,8 @@ input:-webkit-autofill:active {
   cursor: pointer;
 }
 
-.weeklyDoseData {
+.weeklyDoseData,
+.ttrResult {
   z-index: 99999999999999999;
   position: fixed;
   top: 50%;
@@ -1904,22 +1912,26 @@ input:-webkit-autofill:active {
   border: 1px solid #000;
 }
 
-.weeklyDoseData h3 {
+.weeklyDoseData h3,
+.ttrResult h3 {
   padding-bottom: 15px;
 }
 
-.weeklyDoseData div {
+.weeklyDoseData div,
+.ttrResult div {
   display: flex;
   justify-content: space-between;
 }
 
-.weeklyDoseData div svg {
+.weeklyDoseData div svg,
+.ttrResult div svg {
   font-size: 22px;
   cursor: pointer;
   font-weight: bold;
 }
 
-.weeklyDoseData label {
+.weeklyDoseData label,
+.ttrResult label {
   display: flex;
   justify-content: space-between;
   padding: 10px 3px;
@@ -2033,14 +2045,23 @@ input:-webkit-autofill:active {
   padding-bottom: 50px;
 }
 
+.eachMonitoringPage h1,
 .eachMonitoringPage h2 {
   display: flex;
   align-items: center;
 }
 
+.eachMonitoringPage h1 svg,
 .eachMonitoringPage h2 svg {
   padding-right: 25px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.eachMonitoringPage h1 svg:hover,
+.eachMonitoringPage h2 svg:hover {
+  transform: scale(1.05);
+  color: red;
 }
 
 .displayMode {
@@ -2072,17 +2093,25 @@ input:-webkit-autofill:active {
 }
 
 .patientMonitoringDetails {
-  height: 60%;
+  height: 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 70px 50px;
+  padding: 55px 50px;
   flex-wrap: wrap;
+}
+
+.bodyWeightPage,
+.bleedingSymptomPage,
+.healthDiaryPage {
+  height: 20% !important;
 }
 
 .patientMonitoringDetails div {
   display: flex;
   align-items: center;
+  background-color: red;
+  height: 0px;
 }
 
 .patientMonitoringDetails div h3 {

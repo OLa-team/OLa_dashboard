@@ -15,6 +15,14 @@ function BPAndHeartRate() {
   const patientId = params.patientId;
 
   const [displayMode, setDisplayMode] = useState("table");
+  const [openView, setOpenView] = useState(false);
+
+  const [date, setDate] = useState("");
+  const [bpSystolic, setBpSystolic] = useState(0);
+  const [bpDiastolic, setBpDiastolic] = useState(0);
+  const [heartRate, setHeartRate] = useState(0);
+  const [device, setDevice] = useState("");
+  const [note, setNote] = useState("");
 
   // Table
   let i = 0;
@@ -73,12 +81,15 @@ function BPAndHeartRate() {
     {
       field: "button",
       headerName: "Action",
-      flex: 0.7,
+      flex: 1,
       sortable: false,
       renderCell: (params) => {
         return (
           <div style={{ width: "100%", textAlign: "center" }}>
-            <button className="action" onClick={() => {}}>
+            <button
+              className="action"
+              onClick={() => openViewDetails(params.row)}
+            >
               View Details
             </button>
           </div>
@@ -86,6 +97,18 @@ function BPAndHeartRate() {
       },
     },
   ];
+
+  function openViewDetails(row) {
+    setOpenView(true);
+    console.log("row", row);
+
+    setDate(row.date);
+    setBpSystolic(row.bpSystolic);
+    setBpDiastolic(row.bpDiastolic);
+    setHeartRate(row.heartRate);
+    setDevice(row.device);
+    setNote(row.note);
+  }
 
   // Graph
   const labels = patientState.patientMonitoring.bloodPressureHeartRateRecord
@@ -174,68 +197,134 @@ function BPAndHeartRate() {
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2>
-            <BsArrowLeft
-              className="backToMonitoringMainPage"
-              onClick={() => {
-                navigate(
-                  `/dashboard/patient/${params.patientId}/patientMonitoring`
-                );
-              }}
-            />
-            Blood Pressure & Heart Rate
-          </h2>
-          <div className="displayMode">
-            <div>
-              <input
-                type="radio"
-                checked={displayMode === "table"}
-                onChange={() => {
-                  setDisplayMode("table");
-                }}
-              />
-              <label>Table</label>
-            </div>
-
-            <div>
-              <input
-                type="radio"
-                checked={displayMode === "graph"}
-                onChange={() => {
-                  setDisplayMode("graph");
-                }}
-              />
-              <label>Graph</label>
-            </div>
-          </div>
-        </div>
-
-        {displayMode === "table" ? (
+        {!openView ? (
           <>
-            <Table
-              style={style}
-              className="monitoringTable"
-              columns={columns}
-              data={tableData}
-              clickRowFunction={() => {}}
-              selectFunction={() => {}}
-              toolbar={false}
-              gridStyle={gridStyle}
-              density="standard"
-              checkboxSelection={false}
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h2>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() => {
+                    navigate(
+                      `/dashboard/patient/${params.patientId}/patientMonitoring`
+                    );
+                  }}
+                />
+                Blood Pressure & Heart Rate
+              </h2>
+              <div className="displayMode">
+                <div>
+                  <input
+                    type="radio"
+                    checked={displayMode === "table"}
+                    onChange={() => {
+                      setDisplayMode("table");
+                    }}
+                  />
+                  <label>Table</label>
+                </div>
+
+                <div>
+                  <input
+                    type="radio"
+                    checked={displayMode === "graph"}
+                    onChange={() => {
+                      setDisplayMode("graph");
+                    }}
+                  />
+                  <label>Graph</label>
+                </div>
+              </div>
+            </div>
+
+            {displayMode === "table" ? (
+              <>
+                <Table
+                  style={style}
+                  className="monitoringTable"
+                  columns={columns}
+                  data={tableData}
+                  clickRowFunction={() => {}}
+                  selectFunction={() => {}}
+                  toolbar={false}
+                  gridStyle={gridStyle}
+                  density="standard"
+                  checkboxSelection={false}
+                />
+              </>
+            ) : (
+              <>
+                <div className="monitoringGraph">
+                  <Line data={graphData} options={options} />
+                </div>
+              </>
+            )}
           </>
         ) : (
           <>
-            <div className="monitoringGraph">
-              <Line data={graphData} options={options} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h1>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() => setOpenView(false)}
+                />
+                Details
+              </h1>
+            </div>
+
+            <div className="patientMonitoringDetails">
+              <div>
+                <h3>
+                  Date <span>:</span>
+                </h3>
+                <p>{date}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Bp (systolic) (mmHg) <span>:</span>
+                </h3>
+                <p>{bpSystolic}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Bp (diastolic) (mmHg) <span>:</span>
+                </h3>
+                <p>{bpDiastolic}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Heart Rate (bpm) <span>:</span>
+                </h3>
+                <p>{heartRate}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Device <span>:</span>
+                </h3>
+                <p>{device}</p>
+              </div>
+
+              <div>
+                <h3>
+                  Notes <span>:</span>
+                </h3>
+                <p>{note}</p>
+              </div>
             </div>
           </>
         )}

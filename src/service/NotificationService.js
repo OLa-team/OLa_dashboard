@@ -21,8 +21,6 @@ export async function fetchAllNotification() {
       ...doc.data(),
     }));
 
-    console.log("data", data);
-
     return data;
   } catch (error) {
     alert(error.message);
@@ -31,8 +29,15 @@ export async function fetchAllNotification() {
 }
 
 // new patient registration notification from mobile
-export async function updatePatientRegistrationNotification(patientId) {
+export async function updatePatientRegistrationNotification(
+  patientId,
+  dispatch
+) {
   try {
+    dispatch({
+      type: "SET_LOADING_TRUE",
+    });
+
     await updateDoc(doc(firestore, "notification", patientId), {
       registrationWeb: true,
     });
@@ -43,6 +48,9 @@ export async function updatePatientRegistrationNotification(patientId) {
       error
     );
   }
+  dispatch({
+    type: "SET_LOADING_FALSE",
+  });
 }
 
 // notification when change patient profile data

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { GiPlainCircle } from "react-icons/gi";
 import { FiArrowRight } from "react-icons/fi";
+import { IoClose } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useAuthState,
@@ -36,8 +37,14 @@ function BloodThinner() {
   const [inrRange, setInrRange] = useState(
     patientState.bloodThinner.inrRange ? patientState.bloodThinner.inrRange : ""
   );
+
   // to track the changes of anticoagulant
   const [change, setChange] = useState(false);
+  const [openTtrResult, setOpenTtrResult] = useState(false);
+
+  const ttrResult = patientState.bloodThinner.ttrResult
+    ? patientState.bloodThinner.ttrResult
+    : null;
 
   const dateTimeUpdated = patientState.bloodThinner.dateTimeUpdated
     ? patientState.bloodThinner.dateTimeUpdated
@@ -72,6 +79,11 @@ function BloodThinner() {
     } else {
       return;
     }
+  }
+
+  function openTtrResultBox() {
+    console.log("TTR result", ttrResult);
+    setOpenTtrResult(true);
   }
 
   return (
@@ -311,13 +323,38 @@ function BloodThinner() {
                     </div>
 
                     <div className="ttrBtn">
-                      <button>TTR result</button>
+                      <button type="button" onClick={() => openTtrResultBox()}>
+                        TTR result
+                      </button>
                     </div>
                   </>
                 )}
               </>
             )}
           </div>
+
+          <div className={openTtrResult ? "btBg" : ""}></div>
+
+          {openTtrResult && (
+            <div className="ttrResult">
+              <div>
+                <h3>TTR Result </h3>
+                <IoClose
+                  onClick={() => {
+                    setOpenTtrResult(false);
+                  }}
+                />
+              </div>
+              <label>
+                % Days Within Range :{" "}
+                <p>{ttrResult.percentageDaysWithinRange.toFixed(1)}%</p>
+              </label>
+              <label>
+                % of Tests in Range :{" "}
+                <p>{ttrResult.percentageOfTestsInRange.toFixed(1)}%</p>
+              </label>
+            </div>
+          )}
 
           <div className="selectedClotPreventer">
             <h1>Selected Clot Preventer</h1>
