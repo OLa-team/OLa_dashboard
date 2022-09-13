@@ -8,7 +8,11 @@ import {
   usePatientState,
 } from "../../context";
 import { getCurrentDate, getCurrentTime } from "../../utils";
-import { setCurrentPatient, updateStrokeRisk } from "../../service";
+import {
+  setCurrentPatient,
+  updateNameVerified,
+  updateStrokeRisk,
+} from "../../service";
 
 function StrokeRisk() {
   const navigate = useNavigate();
@@ -127,9 +131,17 @@ function StrokeRisk() {
         payload: "Risk Scoring",
       });
       alert("Update patient's stroke risk successfully.");
-      navigate(`/dashboard/patient/${params.patientId}/riskScoring`);
-    } else {
-      return;
+    }
+  }
+
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "stroke_risk",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
     }
   }
 
@@ -145,6 +157,13 @@ function StrokeRisk() {
                 <span>:</span>
               </h4>
               <p>{patientState.strokeRisk.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last verified by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.strokeRisk.nameVerified}</p>
             </div>
             <div>
               <h4>
@@ -226,6 +245,13 @@ function StrokeRisk() {
           </div>
 
           <div className="saveAndCancelButton ">
+            <button
+              className="verifyBtn"
+              type="button"
+              onClick={() => verifyData()}
+            >
+              Verify
+            </button>
             <button className="saveProfile" type="submit">
               Save
             </button>
@@ -240,7 +266,7 @@ function StrokeRisk() {
                 });
               }}
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>

@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { setCurrentPatient, updateMedicalCondition } from "../service";
+import {
+  setCurrentPatient,
+  updateMedicalCondition,
+  updateNameVerified,
+} from "../service";
 import Checkbox from "../components/Checkbox";
 import {
   useAuthState,
@@ -45,31 +49,40 @@ function MedicalCondition() {
     ? patientState.medicalCondition.dateTimeUpdated
     : "";
 
-  const medicalConditionData = {
-    nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    hypertension: hypertension,
-    diabetes: diabetes,
-    hyperlipidemia: hyperlipidemia,
-    atrial: atrial,
-    heart: heart,
-    stroke: stroke,
-    vascular: vascular,
-    asthma: asthma,
-    copd: copd,
-    renal: renal,
-    liver: liver,
-  };
-
   async function handleUpdateMedicalCondition(e) {
     e.preventDefault();
+
+    const medicalConditionData = {
+      nameUpdated: userState.userDetails.username,
+      dateTimeUpdated: new Date().getTime(),
+      hypertension: hypertension,
+      diabetes: diabetes,
+      hyperlipidemia: hyperlipidemia,
+      atrial: atrial,
+      heart: heart,
+      stroke: stroke,
+      vascular: vascular,
+      asthma: asthma,
+      copd: copd,
+      renal: renal,
+      liver: liver,
+    };
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateMedicalCondition(medicalConditionData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's medical condition successfully.");
-    } else {
-      return;
+    }
+  }
+
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "medical_condition",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
     }
   }
 
@@ -85,6 +98,13 @@ function MedicalCondition() {
                 <span>:</span>
               </h4>
               <p>{patientState.medicalCondition.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last verified by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.medicalCondition.nameVerified}</p>
             </div>
             <div>
               <h4>
@@ -192,6 +212,13 @@ function MedicalCondition() {
           />
 
           <div className="saveAndCancelButton mc">
+            <button
+              className="verifyBtn"
+              type="button"
+              onClick={() => verifyData()}
+            >
+              Verify
+            </button>
             <button className="saveProfile" type="submit">
               Save
             </button>

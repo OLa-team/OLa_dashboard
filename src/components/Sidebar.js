@@ -51,21 +51,25 @@ function Sidebar() {
         case "Search Section":
           reset();
           setAc1((prev) => !prev);
+          navigate("/dashboard");
           return;
 
         case "Register Section":
           reset();
           setAc2((prev) => !prev);
+          navigate("/dashboard/patientRegistration");
           return;
 
         case "Notification Section":
           reset();
           setAc3((prev) => !prev);
+          navigate("/dashboard/notification");
           return;
 
         case "Profile Section":
           reset();
           setAc4((prev) => !prev);
+          navigate("/dashboard/profile");
           return;
 
         default:

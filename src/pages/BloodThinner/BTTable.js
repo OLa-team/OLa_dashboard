@@ -56,20 +56,18 @@ function BTTable() {
     action: "add",
   });
 
-  // const [ttrData, setTtrData] = useState({
-  //   daysSinceLastTest: 0,
-  //   inrDiff: 0,
-  //   previousInrWithinRange: "",
-  //   currentInrWithinRange: "",
-  //   scenario: "",
-  //   inrDiffAboveRange: 0,
-  //   inrDiffBelowRange: 0,
-  //   inrDiffWithinRange: 0,
-  //   daysWithinRangeSinceLastTest: 0,
-  //   percentageDaysWithinRangeSinceLastTest: 0,
-  // });
-
-  const [ttrData, setTtrData] = useState({});
+  const [ttrData, setTtrData] = useState({
+    daysSinceLastTest: 0,
+    inrDiff: 0,
+    previousInrWithinRange: "",
+    currentInrWithinRange: "",
+    scenario: "",
+    inrDiffAboveRange: 0,
+    inrDiffBelowRange: 0,
+    inrDiffWithinRange: 0,
+    daysWithinRangeSinceLastTest: 0,
+    percentageDaysWithinRangeSinceLastTest: 0,
+  });
 
   const [ttrResult, setTtrResult] = useState({
     percentageDaysWithinRange: 0,
@@ -133,7 +131,7 @@ function BTTable() {
 
   // Table styling
   const styleInrTable = {
-    height: "85%",
+    height: "83%",
     width: "100%",
     margin: "auto",
   };
@@ -247,9 +245,10 @@ function BTTable() {
     let totalDoseAmount = 0;
     arr.forEach((a) => (totalDoseAmount += a));
 
+    let newInrRecordData = null;
     if (openInrForm.action === "add") {
       const inrRecordId = uuid().slice(0, 5);
-      let inrRecordData = {
+      newInrRecordData = {
         id: inrRecordId,
         date: date,
         inr: parseFloat(inr),
@@ -259,10 +258,8 @@ function BTTable() {
         note: note,
         ttrData: ttrData,
       };
-
-      setInrRecordList((inrRecordList) => [...inrRecordList, inrRecordData]);
     } else {
-      let inrRecordData = {
+      newInrRecordData = {
         id: inrRecordId,
         date: date,
         inr: parseFloat(inr),
@@ -276,9 +273,8 @@ function BTTable() {
       setInrRecordList((inrRecordList) =>
         inrRecordList.filter((inr) => inr.id !== inrRecordId)
       );
-
-      setInrRecordList((inrRecordList) => [...inrRecordList, inrRecordData]);
     }
+    setInrRecordList((inrRecordList) => [...inrRecordList, newInrRecordData]);
 
     // sort
     setInrRecordList((inrRecordList) =>
@@ -324,7 +320,167 @@ function BTTable() {
     });
   }
 
-  console.log("ttrResult", ttrResult);
+  console.log(
+    (new Date("2022-10-01").getTime() - new Date("2022-09-23").getTime()) /
+      (1000 * 3600 * 24)
+  );
+
+  function calcultateTtrResult() {
+    console.log("list", inrRecordList);
+    var inrRangeArr = inrRange.trim().split("-");
+    var lowRange = parseInt(inrRangeArr[0].trim());
+    var highRange = parseInt(inrRangeArr[1].trim());
+
+    for (let i = 0; i < inrRecordList.length; i++) {
+      let previousRecord = i > 0 ? inrRecordList[i - 1] : null;
+      let currentRecord = inrRecordList[i];
+
+      currentRecord.ttrData = {
+        daysSinceLastTest: 0,
+        inrDiff: 0,
+        previousInrWithinRange: "",
+        currentInrWithinRange: "",
+        scenario: "",
+        inrDiffAboveRange: 0,
+        inrDiffBelowRange: 0,
+        inrDiffWithinRange: 0,
+        daysWithinRangeSinceLastTest: 0,
+        percentageDaysWithinRangeSinceLastTest: 0,
+      };
+
+      // first element, no previous record
+      if (i === 0 && previousRecord === null) {
+        if (currentRecord.inr < lowRange)
+          currentRecord.ttrData.currentInrWithinRange = "Below";
+        else if (currentRecord.inr > highRange)
+          currentRecord.ttrData.currentInrWithinRange = "Above";
+        else currentRecord.ttrData.currentInrWithinRange = "In Range";
+
+        // console.log("current", currentRecord);
+      } else {
+        console.log("previous", previousRecord);
+        console.log("current", currentRecord);
+        // Days Since Last Test
+        let diff =
+          new Date(currentRecord.date).getTime() -
+          new Date(previousRecord.date).getTime();
+        currentRecord.ttrData.daysSinceLastTest = Math.ceil(
+          diff / (1000 * 3600 * 24)
+        );
+        // INR Diff
+        currentRecord.ttrData.inrDiff =
+          Math.round((currentRecord.inr - previousRecord.inr) * 10) / 10;
+        // Previous INR Within Range
+        currentRecord.ttrData.previousInrWithinRange =
+          previousRecord.ttrData.currentInrWithinRange;
+        // Current INR Within Range
+        if (currentRecord.inr < lowRange)
+          currentRecord.ttrData.currentInrWithinRange = "Below";
+        else if (currentRecord.inr > highRange)
+          currentRecord.ttrData.currentInrWithinRange = "Above";
+        else currentRecord.ttrData.currentInrWithinRange = "In Range";
+        // Scenario
+        currentRecord.ttrData.scenario =
+          currentRecord.ttrData.previousInrWithinRange ===
+          currentRecord.ttrData.currentInrWithinRange
+            ? currentRecord.ttrData.previousInrWithinRange
+            : "Calculate";
+        // INR Diff Above Range
+        if (currentRecord.ttrData.scenario === "Above") {
+          currentRecord.ttrData.inrDiffAboveRange = Math.abs(
+            currentRecord.ttrData.inrDiff
+          );
+        } else if (currentRecord.ttrData.previousInrWithinRange === "Above") {
+          currentRecord.ttrData.inrDiffAboveRange = Math.abs(
+            previousRecord.inr - highRange
+          );
+        } else if (currentRecord.ttrData.currentInrWithinRange === "Above") {
+          currentRecord.ttrData.inrDiffAboveRange = Math.abs(
+            currentRecord.inr - highRange
+          );
+        } else {
+          currentRecord.ttrData.inrDiffAboveRange = 0;
+        }
+        // INR Diff Within Range
+        currentRecord.ttrData.inrDiffWithinRange = parseFloat(
+          (
+            Math.abs(currentRecord.ttrData.inrDiff) -
+            Math.abs(currentRecord.ttrData.inrDiffAboveRange) -
+            Math.abs(currentRecord.ttrData.inrDiffBelowRange)
+          ).toFixed(1)
+        );
+        // INR Diff Below Range
+        if (currentRecord.ttrData.scenario === "Below") {
+          currentRecord.ttrData.inrDiffBelowRange = Math.abs(
+            currentRecord.ttrData.inrDiff
+          );
+        } else if (currentRecord.ttrData.previousInrWithinRange === "Below") {
+          currentRecord.ttrData.inrDiffBelowRange = Math.abs(
+            previousRecord.inr - lowRange
+          );
+        } else if (currentRecord.ttrData.currentInrWithinRange === "Below") {
+          currentRecord.ttrData.inrDiffBelowRange = Math.abs(
+            currentRecord.inr - lowRange
+          );
+        } else {
+          currentRecord.ttrData.inrDiffBelowRange = 0;
+        }
+        // % Days Within Range since last test
+        if (currentRecord.ttrData.inrDiff === 0) {
+          if (currentRecord.ttrData.currentInrWithinRange === "In Range") {
+            currentRecord.ttrData.percentageDaysWithinRangeSinceLastTest = 1;
+          } else {
+            currentRecord.ttrData.percentageDaysWithinRangeSinceLastTest = 0;
+          }
+        } else {
+          currentRecord.ttrData.percentageDaysWithinRangeSinceLastTest =
+            parseFloat(
+              currentRecord.ttrData.inrDiffWithinRange /
+                Math.abs(currentRecord.ttrData.inrDiff)
+            );
+        }
+        // Days Within Range since last test
+        currentRecord.ttrData.daysWithinRangeSinceLastTest = parseFloat(
+          (
+            currentRecord.ttrData.percentageDaysWithinRangeSinceLastTest *
+            currentRecord.ttrData.daysSinceLastTest
+          ).toFixed(1)
+        );
+      }
+    }
+
+    let _daysWithinRange = 0;
+    let _totalDays = 0;
+    let _percentageDaysWithinRange = 0;
+
+    let _totalNumberOfTests = inrRecordList.length;
+    let _numberOfTestsInRange = 0;
+    let _percentageOfTestsInRange = 0;
+
+    inrRecordList.forEach((record) => {
+      _daysWithinRange += record.ttrData.daysWithinRangeSinceLastTest;
+      _totalDays += record.ttrData.daysSinceLastTest;
+
+      if (record.ttrData.currentInrWithinRange === "In Range") {
+        _numberOfTestsInRange += 1;
+      }
+    });
+    console.log("_daysWithinRange", _daysWithinRange);
+    console.log("_totalDays", _totalDays);
+    console.log("_numberOfTestsInRange", _numberOfTestsInRange);
+
+    _percentageDaysWithinRange = (_daysWithinRange / _totalDays) * 100;
+    _percentageOfTestsInRange =
+      (_numberOfTestsInRange / _totalNumberOfTests) * 100;
+
+    setTtrResult({
+      percentageDaysWithinRange: _percentageDaysWithinRange,
+      percentageOfTestsInRange: _percentageOfTestsInRange,
+    });
+  }
+
+  console.log("result list", inrRecordList);
+  console.log("result", ttrResult);
 
   function handleDeleteInrData() {
     for (let i = 0; i < selectedInr.length; i++) {
@@ -591,337 +747,6 @@ function BTTable() {
     setCreatinineClearance(Math.round(result));
   }
 
-  console.log("ttrData", ttrData);
-
-  useEffect(() => {
-    if (date !== "" && inr > 0) {
-      var inrRangeArr = inrRange.trim().split("-");
-      var lowRange = parseInt(inrRangeArr[0].trim());
-      var highRange = parseInt(inrRangeArr[1].trim());
-
-      console.log("low", lowRange, "high", highRange);
-
-      // let _daysSinceLastTest = 0;
-      // let _inrDiff = 0;
-      // let _previousInrWithinRange = "";
-      // let _currentInrWithinRange = "";
-      // let _scenario = "";
-      // let _inrDiffAboveRange = 0;
-      // let _inrDiffWithinRange = 0;
-      // let _inrDiffBelowRange = 0;
-      // let _daysWithinRangeSinceLastTest = 0;
-      // let _percentageDaysWithinRangeSinceLastTest = 0;
-
-      let currentRecord = {
-        daysSinceLastTest: 0,
-        inrDiff: 0,
-        previousInrWithinRange: "",
-        currentInrWithinRange: "",
-        scenario: "",
-        inrDiffAboveRange: 0,
-        inrDiffBelowRange: 0,
-        inrDiffWithinRange: 0,
-        daysWithinRangeSinceLastTest: 0,
-        percentageDaysWithinRangeSinceLastTest: 0,
-      };
-
-      const inrRecordDb = patientState.bloodThinner.inrRecord
-        ? patientState.bloodThinner.inrRecord
-        : [];
-
-      // if (inrRecordDb.length === 0) {
-      let index = inrRecordList.findIndex((record) => {
-        return record.id === inrRecordId;
-      });
-      if (inrRecordList.length === 0) {
-        if (inr < lowRange) currentRecord.currentInrWithinRange = "Below";
-        else if (inr > highRange) currentRecord.currentInrWithinRange = "Above";
-        else currentRecord.currentInrWithinRange = "In Range";
-      } else {
-        let previousRecord = null;
-        let nextRecord = null;
-
-        if (openInrForm.action === "edit") {
-          currentRecord = {
-            daysSinceLastTest: inrRecordList[index].ttrData.daysSinceLastTest,
-            inrDiff: inrRecordList[index].ttrData.inrDiff,
-            previousInrWithinRange:
-              inrRecordList[index].ttrData.previousInrWithinRange,
-            currentInrWithinRange:
-              inrRecordList[index].ttrData.currentInrWithinRange,
-            scenario: inrRecordList[index].ttrData.scenario,
-            inrDiffAboveRange: inrRecordList[index].ttrData.inrDiffAboveRange,
-            inrDiffBelowRange: inrRecordList[index].ttrData.inrDiffBelowRange,
-            inrDiffWithinRange: inrRecordList[index].ttrData.inrDiffWithinRange,
-            daysWithinRangeSinceLastTest:
-              inrRecordList[index].ttrData.daysWithinRangeSinceLastTest,
-            percentageDaysWithinRangeSinceLastTest:
-              inrRecordList[index].ttrData
-                .percentageDaysWithinRangeSinceLastTest,
-          };
-
-          if (index > 0) {
-            previousRecord = inrRecordList[index - 1];
-          }
-
-          if (inrRecordList.length - index > 1) {
-            nextRecord = inrRecordList[index + 1];
-          }
-
-          console.log("previousRecord", previousRecord);
-          console.log("nextRecord", nextRecord);
-        } else {
-          previousRecord = inrRecordList[inrRecordList.length - 1];
-        }
-
-        if (previousRecord !== null) {
-          // Days Since Last Test
-          let diff =
-            new Date(date).getTime() - new Date(previousRecord.date).getTime();
-          currentRecord.daysSinceLastTest = Math.ceil(
-            diff / (1000 * 3600 * 24)
-          );
-          // INR Diff
-          currentRecord.inrDiff =
-            Math.round((inr - previousRecord.inr) * 10) / 10;
-          // Previous INR Within Range
-          currentRecord.previousInrWithinRange =
-            previousRecord.ttrData.currentInrWithinRange;
-          // Current INR Within Range
-          if (inr < lowRange) currentRecord.currentInrWithinRange = "Below";
-          else if (inr > highRange)
-            currentRecord.currentInrWithinRange = "Above";
-          else currentRecord.currentInrWithinRange = "In Range";
-          // Scenario
-          currentRecord.scenario =
-            currentRecord.previousInrWithinRange ===
-            currentRecord.currentInrWithinRange
-              ? currentRecord.previousInrWithinRange
-              : "Calculate";
-          // INR Diff Above Range
-          if (currentRecord.scenario === "Above") {
-            currentRecord.inrDiffAboveRange = Math.abs(currentRecord.inrDiff);
-          } else if (currentRecord.previousInrWithinRange === "Above") {
-            currentRecord.inrDiffAboveRange = Math.abs(
-              previousRecord.inr - highRange
-            );
-          } else if (currentRecord.currentInrWithinRange === "Above") {
-            currentRecord.inrDiffAboveRange = Math.abs(inr - highRange);
-          } else {
-            currentRecord.inrDiffAboveRange = 0;
-          }
-          // INR Diff Within Range
-          currentRecord.inrDiffWithinRange = parseFloat(
-            (
-              Math.abs(currentRecord.inrDiff) -
-              Math.abs(currentRecord.inrDiffAboveRange) -
-              Math.abs(currentRecord.inrDiffBelowRange)
-            ).toFixed(1)
-          );
-          // INR Diff Below Range
-          if (currentRecord.scenario === "Below") {
-            currentRecord.inrDiffBelowRange = Math.abs(currentRecord.inrDiff);
-          } else if (currentRecord.previousInrWithinRange === "Below") {
-            currentRecord.inrDiffBelowRange = Math.abs(
-              previousRecord.inr - lowRange
-            );
-          } else if (currentRecord.currentInrWithinRange === "Below") {
-            currentRecord.inrDiffBelowRange = Math.abs(inr - lowRange);
-          } else {
-            currentRecord.inrDiffBelowRange = 0;
-          }
-          // % Days Within Range since last test
-          if (currentRecord.inrDiff === 0) {
-            if (currentRecord.currentInrWithinRange === "In Range") {
-              currentRecord.percentageDaysWithinRangeSinceLastTest = 1;
-            } else {
-              currentRecord.percentageDaysWithinRangeSinceLastTest = 0;
-            }
-          } else {
-            currentRecord.percentageDaysWithinRangeSinceLastTest = parseFloat(
-              currentRecord.inrDiffWithinRange / Math.abs(currentRecord.inrDiff)
-            );
-          }
-          // Days Within Range since last test
-          currentRecord.daysWithinRangeSinceLastTest = parseFloat(
-            (
-              currentRecord.percentageDaysWithinRangeSinceLastTest *
-              currentRecord.daysSinceLastTest
-            ).toFixed(1)
-          );
-        }
-
-        if (nextRecord !== null) {
-          // Days Since Last Test
-          let diff =
-            new Date(nextRecord.date).getTime() - new Date(date).getTime();
-          nextRecord.ttrData.daysSinceLastTest = Math.ceil(
-            diff / (1000 * 3600 * 24)
-          );
-          // INR Diff
-          nextRecord.ttrData.inrDiff =
-            Math.round((nextRecord.inr - inr) * 10) / 10;
-          // Previous INR Within Range
-          nextRecord.ttrData.previousInrWithinRange =
-            currentRecord.currentInrWithinRange;
-          // Current INR Within Range
-          if (nextRecord.inr < lowRange)
-            nextRecord.ttrData.currentInrWithinRange = "Below";
-          else if (nextRecord.inr > highRange)
-            nextRecord.ttrData.currentInrWithinRange = "Above";
-          else nextRecord.ttrData.currentInrWithinRange = "In Range";
-          // Scenario
-          nextRecord.ttrData.scenario =
-            nextRecord.ttrData.previousInrWithinRange ===
-            nextRecord.ttrData.currentInrWithinRange
-              ? nextRecord.ttrData.previousInrWithinRange
-              : "Calculate";
-          // INR Diff Above Range
-          if (nextRecord.ttrData.scenario === "Above") {
-            nextRecord.ttrData.inrDiffAboveRange = Math.abs(
-              nextRecord.ttrData.inrDiff
-            );
-          } else if (nextRecord.ttrData.previousInrWithinRange === "Above") {
-            nextRecord.ttrData.inrDiffAboveRange = Math.abs(inr - highRange);
-          } else if (nextRecord.ttrData.currentInrWithinRange === "Above") {
-            nextRecord.ttrData.inrDiffAboveRange = Math.abs(
-              nextRecord.inr - highRange
-            );
-          } else {
-            nextRecord.ttrData.inrDiffAboveRange = 0;
-          }
-          // INR Diff Within Range
-          nextRecord.ttrData.inrDiffWithinRange = parseFloat(
-            (
-              Math.abs(nextRecord.ttrData.inrDiff) -
-              Math.abs(nextRecord.ttrData.inrDiffAboveRange) -
-              Math.abs(nextRecord.ttrData.inrDiffBelowRange)
-            ).toFixed(1)
-          );
-          // INR Diff Below Range
-          if (nextRecord.ttrData.scenario === "Below") {
-            nextRecord.ttrData.inrDiffBelowRange = Math.abs(
-              nextRecord.ttrData.inrDiff
-            );
-          } else if (nextRecord.ttrData.previousInrWithinRange === "Below") {
-            nextRecord.ttrData.inrDiffBelowRange = Math.abs(inr - lowRange);
-          } else if (nextRecord.ttrData.currentInrWithinRange === "Below") {
-            nextRecord.ttrData.inrDiffBelowRange = Math.abs(
-              nextRecord.inr - lowRange
-            );
-          } else {
-            nextRecord.ttrData.inrDiffBelowRange = 0;
-          }
-          // % Days Within Range since last test
-          if (nextRecord.ttrData.inrDiff === 0) {
-            if (nextRecord.ttrData.currentInrWithinRange === "In Range") {
-              nextRecord.ttrData.percentageDaysWithinRangeSinceLastTest = 1;
-            } else {
-              nextRecord.ttrData.percentageDaysWithinRangeSinceLastTest = 0;
-            }
-          } else {
-            nextRecord.ttrData.percentageDaysWithinRangeSinceLastTest =
-              parseFloat(
-                nextRecord.ttrData.inrDiffWithinRange /
-                  Math.abs(nextRecord.ttrData.inrDiff)
-              );
-          }
-          // Days Within Range since last test
-          nextRecord.ttrData.daysWithinRangeSinceLastTest = parseFloat(
-            (
-              nextRecord.ttrData.percentageDaysWithinRangeSinceLastTest *
-              nextRecord.ttrData.daysSinceLastTest
-            ).toFixed(1)
-          );
-        }
-        console.log("after", nextRecord);
-      }
-      // } else {
-      //   let previousRecord;
-      //   if (inrRecordList.length === 0) {
-      //     previousRecord = inrRecordDb[inrRecordDb.length - 1];
-      //   } else {
-      //     if (openInrForm.action === "edit") {
-      //       previousRecord = inrRecordList[inrRecordList.length - 2];
-      //     } else {
-      //       previousRecord = inrRecordList[inrRecordList.length - 1];
-      //     }
-      //   }
-
-      //   // Days Since Last Test
-      //   let diff =
-      //     new Date(date).getTime() - new Date(previousRecord.date).getTime();
-      //   _daysSinceLastTest = Math.ceil(diff / (1000 * 3600 * 24));
-      //   // INR Diff
-      //   _inrDiff = Math.round((inr - previousRecord.inr) * 10) / 10;
-      //   // Previous INR Within Range
-      //   _previousInrWithinRange = previousRecord.ttrData.currentInrWithinRange;
-      //   // Current INR Within Range
-      //   if (inr < lowRange) _currentInrWithinRange = "Below";
-      //   else if (inr > highRange) _currentInrWithinRange = "Above";
-      //   else _currentInrWithinRange = "In Range";
-      //   // Scenario
-      //   _scenario =
-      //     _previousInrWithinRange === _currentInrWithinRange
-      //       ? _previousInrWithinRange
-      //       : "Calculate";
-      //   // INR Diff Above Range
-      //   if (_scenario === "Above") {
-      //     _inrDiffAboveRange = Math.abs(_inrDiff);
-      //   } else if (_previousInrWithinRange === "Above") {
-      //     _inrDiffAboveRange = Math.abs(previousRecord.inr - highRange);
-      //   } else if (_currentInrWithinRange === "Above") {
-      //     _inrDiffAboveRange = Math.abs(inr - highRange);
-      //   }
-      //   // INR Diff Within Range
-      //   _inrDiffWithinRange = parseFloat(
-      //     Math.abs(_inrDiff) -
-      //       Math.abs(_inrDiffAboveRange) -
-      //       Math.abs(_inrDiffBelowRange)
-      //   );
-      //   // INR Diff Below Range
-      //   if (_scenario === "Below") {
-      //     _inrDiffBelowRange = Math.abs(_inrDiff);
-      //   } else if (_previousInrWithinRange === "Below") {
-      //     _inrDiffBelowRange = Math.abs(previousRecord.inr - lowRange);
-      //   } else if (_currentInrWithinRange === "Below") {
-      //     _inrDiffBelowRange = Math.abs(inr - lowRange);
-      //   }
-      //   // % Days Within Range since last test
-      //   if (_inrDiff === 0) {
-      //     if (_currentInrWithinRange === "In Range") {
-      //       _percentageDaysWithinRangeSinceLastTest = 1;
-      //     } else {
-      //       _percentageDaysWithinRangeSinceLastTest = 0;
-      //     }
-      //   } else {
-      //     _percentageDaysWithinRangeSinceLastTest =
-      //       _inrDiffWithinRange / Math.abs(_inrDiff);
-      //   }
-      //   // Days Within Range since last test
-      //   _daysWithinRangeSinceLastTest =
-      //     _percentageDaysWithinRangeSinceLastTest * _daysSinceLastTest;
-      // }
-
-      // setTtrData({
-      //   daysSinceLastTest: _daysSinceLastTest,
-      //   inrDiff: _inrDiff,
-      //   previousInrWithinRange: _previousInrWithinRange,
-      //   currentInrWithinRange: _currentInrWithinRange,
-      //   scenario: _scenario,
-      //   inrDiffAboveRange: parseFloat(_inrDiffAboveRange),
-      //   inrDiffWithinRange: parseFloat(_inrDiffWithinRange),
-      //   inrDiffBelowRange: parseFloat(_inrDiffBelowRange),
-      //   daysWithinRangeSinceLastTest: parseFloat(_daysWithinRangeSinceLastTest),
-      //   percentageDaysWithinRangeSinceLastTest: parseFloat(
-      //     _percentageDaysWithinRangeSinceLastTest
-      //   ),
-      // });
-
-      setTtrData(currentRecord);
-    }
-  }, [date, inr]);
-
   useEffect(() => {
     calcultateTtrResult();
   }, [inrRecordList]);
@@ -935,6 +760,13 @@ function BTTable() {
             <div>
               <h4>
                 <span>Last updated by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.bloodThinner.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last verified by</span>
                 <span>:</span>
               </h4>
               <p>{patientState.bloodThinner.nameUpdated}</p>

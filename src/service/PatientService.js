@@ -24,7 +24,7 @@ export async function createPatientAccount(newPatientData, dispatch) {
       icNo: newPatientData.icNo,
       phoneNo: "+6" + newPatientData.phoneNo,
       patientId: newPatientData.patientId,
-      birthDate: "",
+      birthDate: 0,
       age: 0,
       gender: "",
       nextOfKin: "",
@@ -33,7 +33,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
 
     await setDoc(doc(firestore, "medical_condition", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
       hypertension: false,
       diabetes: false,
       hyperlipidemia: false,
@@ -49,7 +50,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
 
     await setDoc(doc(firestore, "allergy", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
       hasAllergy: false,
       food: [],
       medicine: [],
@@ -57,7 +59,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
 
     await setDoc(doc(firestore, "stroke_risk", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
       heartFailure: false,
       hypertension: false,
       age75: false,
@@ -73,7 +76,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
 
     await setDoc(doc(firestore, "bleeding_risk", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
       hypertension: false,
       renal: false,
       liver: false,
@@ -90,7 +94,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
 
     await setDoc(doc(firestore, "warfarin_quality", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
       sex: false,
       age: false,
       medHistory: false,
@@ -104,20 +109,22 @@ export async function createPatientAccount(newPatientData, dispatch) {
 
     await setDoc(doc(firestore, "health_goal", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      dateTimeUpdated: 0,
       healthGoalList: [],
       agreeToGoal: false,
     });
 
     await setDoc(doc(firestore, "medication", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
       medicine: [],
     });
 
     await setDoc(doc(firestore, "blood_thinner", patientId), {
       nameUpdated: "",
-      dateTimeUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
       anticoagulant: "",
       indication: {},
       duration: {},
@@ -714,6 +721,22 @@ export async function updateCreatinineRecord(creatinineRecordData, patientId) {
   } catch (error) {
     alert(error.message);
     console.log("Error in update creatinine record data", error);
+    return;
+  }
+}
+
+// update name verified for specific data
+export async function updateNameVerified(collection, patientId, nameVerified) {
+  try {
+    await updateDoc(doc(firestore, collection, patientId), {
+      nameVerified: nameVerified,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.log(
+      `Error in update name verified in ${collection} collection`,
+      error
+    );
     return;
   }
 }

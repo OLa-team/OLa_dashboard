@@ -10,6 +10,7 @@ import {
 import {
   setCurrentPatient,
   updateBleedingRisk,
+  updateNameVerified,
   updateStrokeRisk,
   updateWarfarinQuality,
 } from "../../service";
@@ -134,6 +135,17 @@ function WarfarinQuality() {
     }
   }
 
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "warfarin_quality",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
+    }
+  }
+
   return (
     <div className="wrapper">
       <div style={{ padding: "40px 70px", height: "100%" }}>
@@ -146,6 +158,13 @@ function WarfarinQuality() {
                 <span>:</span>
               </h4>
               <p>{patientState.warfarinQuality.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last verified by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.warfarinQuality.nameVerified}</p>
             </div>
             <div>
               <h4>
@@ -228,6 +247,13 @@ function WarfarinQuality() {
           </div>
 
           <div className="saveAndCancelButton ">
+            <button
+              className="verifyBtn"
+              type="button"
+              onClick={() => verifyData()}
+            >
+              Verify
+            </button>
             <button className="saveProfile" type="submit">
               Save
             </button>
@@ -242,7 +268,7 @@ function WarfarinQuality() {
                 });
               }}
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>

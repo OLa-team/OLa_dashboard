@@ -9,7 +9,11 @@ import {
   usePatientDispatch,
   usePatientState,
 } from "../../context";
-import { setCurrentPatient, updateBloodThinner } from "../../service";
+import {
+  setCurrentPatient,
+  updateBloodThinner,
+  updateNameVerified,
+} from "../../service";
 import { getCurrentDate, getCurrentTime } from "../../utils";
 
 function BloodThinner() {
@@ -86,6 +90,17 @@ function BloodThinner() {
     setOpenTtrResult(true);
   }
 
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "blood_thinner",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
+    }
+  }
+
   return (
     <div className="bloodThinner">
       <div style={{ padding: "30px 50px", height: "80%" }}>
@@ -100,6 +115,13 @@ function BloodThinner() {
             </div>
             <div>
               <h4>
+                <span>Last updated by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.bloodThinner.nameVerified}</p>
+            </div>
+            <div>
+              <h4>
                 <span>Last updated on</span>
                 <span>:</span>
               </h4>
@@ -110,6 +132,14 @@ function BloodThinner() {
             </div>
           </div>
         </div>
+
+        {anticoagulant === "warfarin" && (
+          <div className="ttrBtn">
+            <button type="button" onClick={() => openTtrResultBox()}>
+              TTR result
+            </button>
+          </div>
+        )}
 
         <form className="bloodThinnerForm">
           <div className="upperBloodThinner">
@@ -321,12 +351,6 @@ function BloodThinner() {
                         </div>
                       </div>
                     </div>
-
-                    <div className="ttrBtn">
-                      <button type="button" onClick={() => openTtrResultBox()}>
-                        TTR result
-                      </button>
-                    </div>
                   </>
                 )}
               </>
@@ -489,6 +513,13 @@ function BloodThinner() {
           </div>
         </form>
         <div className="saveAndCancelButton bt">
+          <button
+            className="verifyBtn"
+            type="button"
+            onClick={() => verifyData()}
+          >
+            Verify
+          </button>
           <button
             className="saveProfile"
             onClick={() => handleSubmitBloodThinner()}

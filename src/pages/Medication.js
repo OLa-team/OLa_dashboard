@@ -12,7 +12,10 @@ import {
   usePatientState,
 } from "../context";
 import { updateMedication } from "../service";
-import { setCurrentPatient } from "../service/PatientService";
+import {
+  setCurrentPatient,
+  updateNameVerified,
+} from "../service/PatientService";
 import { getCurrentDate, getCurrentTime } from "../utils";
 
 function Medication() {
@@ -210,11 +213,17 @@ function Medication() {
     const selectedIDs = new Set(ids);
     const selectedRowData = data.filter((row) => selectedIDs.has(row.id));
     setSelectedMedicine(selectedRowData);
+  }
 
-    // dispatch({
-    //   type: "SELECT_AND_SET_SELECTED_PATIENT_LIST_TO_DELETE",
-    //   payload: selectedRowData,
-    // });
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "medication",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
+    }
   }
 
   return (
@@ -233,6 +242,13 @@ function Medication() {
                 <span>:</span>
               </h4>
               <p>{patientState.medication.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last verified by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.medication.nameVerified}</p>
             </div>
             <div>
               <h4>
@@ -303,6 +319,13 @@ function Medication() {
         </div>
 
         <div className="saveOrCancelMedBtn">
+          <button
+            className="verifyBtn"
+            type="button"
+            onClick={() => verifyData()}
+          >
+            Verify
+          </button>
           <button
             className="saveMedication"
             onClick={(e) => handleSubmitMedication(e)}

@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { setCurrentPatient, updateAllergy } from "../service";
+import {
+  setCurrentPatient,
+  updateAllergy,
+  updateNameVerified,
+} from "../service";
 import {
   useAuthState,
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
 } from "../context";
-import { getCurrentDate, getCurrentTime } from "../utils";
+import { encryptData, getCurrentDate, getCurrentTime } from "../utils";
 
 function Allergy() {
   const pageDispatch = usePageDispatch();
@@ -68,6 +72,17 @@ function Allergy() {
     }
   }
 
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "allergy",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
+    }
+  }
+
   return (
     <div className="wrapper">
       <div style={{ padding: "50px 70px" }}>
@@ -80,6 +95,13 @@ function Allergy() {
                 <span>:</span>
               </h4>
               <p>{patientState.allergy.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last verified by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.allergy.nameVerified}</p>
             </div>
             <div>
               <h4>
@@ -146,6 +168,13 @@ function Allergy() {
           )}
 
           <div className="saveAndCancelButton">
+            <button
+              className="verifyBtn"
+              type="button"
+              onClick={() => verifyData()}
+            >
+              Verify
+            </button>
             <button className="saveProfile" type="submit">
               Save
             </button>

@@ -7,7 +7,11 @@ import {
   usePatientDispatch,
   usePatientState,
 } from "../../context";
-import { setCurrentPatient, updateBleedingRisk } from "../../service";
+import {
+  setCurrentPatient,
+  updateBleedingRisk,
+  updateNameVerified,
+} from "../../service";
 import { getCurrentDate, getCurrentTime } from "../../utils";
 
 function BleedingRisk() {
@@ -130,9 +134,17 @@ function BleedingRisk() {
         payload: "Risk Scoring",
       });
       alert("Update patient's bleeding risk successfully.");
-      navigate(`/dashboard/patient/${params.patientId}/riskScoring`);
-    } else {
-      return;
+    }
+  }
+
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "bleeding_risk",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
     }
   }
 
@@ -148,6 +160,13 @@ function BleedingRisk() {
                 <span>:</span>
               </h4>
               <p>{patientState.bleedingRisk.nameUpdated}</p>
+            </div>
+            <div>
+              <h4>
+                <span>Last verified by</span>
+                <span>:</span>
+              </h4>
+              <p>{patientState.bleedingRisk.nameVerified}</p>
             </div>
             <div>
               <h4>
@@ -236,6 +255,13 @@ function BleedingRisk() {
           </div>
 
           <div className="saveAndCancelButton ">
+            <button
+              className="verifyBtn"
+              type="button"
+              onClick={() => verifyData()}
+            >
+              Verify
+            </button>
             <button className="saveProfile" type="submit">
               Save
             </button>
@@ -250,7 +276,7 @@ function BleedingRisk() {
                 });
               }}
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>

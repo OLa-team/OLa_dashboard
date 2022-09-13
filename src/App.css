@@ -883,6 +883,15 @@ input:-webkit-autofill:active {
   background-color: #ec2029;
 }
 
+.verifyBtn {
+  background-color: #e3e3e3;
+  color: #000 !important;
+}
+
+.verifyBtn:hover {
+  color: white !important;
+}
+
 /* ---------------------------------------------------- */
 /* Medical Condition */
 .medicalConditionForm {
@@ -931,7 +940,7 @@ input:-webkit-autofill:active {
 
 .lastUpdatedBox div {
   display: flex;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .lastUpdatedBox div h4 {
@@ -1462,7 +1471,7 @@ input:-webkit-autofill:active {
 
 .medBackBtn,
 .btBackBtn {
-  background-color: rgb(207, 207, 207);
+  background-color: rgb(187, 187, 187);
   color: black !important;
   transition: all 0.3s ease;
 }
@@ -1707,16 +1716,20 @@ input:-webkit-autofill:active {
 }
 
 .ttrBtn {
-  padding-left: 15px;
-  padding-top: 15px;
+  position: absolute;
+  top: 62px;
+  right: 320px;
 }
 
 .ttrBtn button {
-  padding: 7px 15px;
-  border-radius: 15px;
-  color: white;
+  font-size: 15px !important;
+  padding: 7px 15px !important;
+  border-radius: 15px !important;
+  color: black;
   font-size: 15px;
-  background-color: #000;
+  background-color: #fff !important;
+  border: 2px solid #000;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -1736,9 +1749,10 @@ input:-webkit-autofill:active {
   position: fixed;
   top: 175px;
   right: 100px;
-  width: 250px;
+  width: 230px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .tableButton button {
