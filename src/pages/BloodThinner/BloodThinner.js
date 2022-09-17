@@ -115,7 +115,7 @@ function BloodThinner() {
             </div>
             <div>
               <h4>
-                <span>Last updated by</span>
+                <span>Last verified by</span>
                 <span>:</span>
               </h4>
               <p>{patientState.bloodThinner.nameVerified}</p>
@@ -492,6 +492,16 @@ function BloodThinner() {
           </div>
 
           <div className="tableButton">
+            <button
+              onClick={() => {
+                navigate(
+                  `/dashboard/patient/${params.patientId}/bloodThinner/hemoglobin`
+                );
+              }}
+              style={{ fontSize: "15px" }}
+            >
+              Hemoglobin
+            </button>
             <button
               onClick={() => {
                 navigate(

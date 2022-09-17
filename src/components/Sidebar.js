@@ -78,6 +78,7 @@ function Sidebar() {
     }
   }, []);
 
+  // get data instantly
   const q = query(
     collection(firestore, "notification"),
     where("registrationWeb", "==", false)
@@ -89,20 +90,6 @@ function Sidebar() {
       setHasNotification(false);
     }
   });
-
-  // async function getAllNotification() {
-  //   const notificationData = await fetchAllNotification();
-
-  //   notificationData.forEach((notif) => {
-  //     if (notif.registrationMobile && !notif.registrationWeb) {
-  //       setHasNotification(true);
-  //     }
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   getAllNotification();
-  // }, []);
 
   return (
     <div className="sidebar">

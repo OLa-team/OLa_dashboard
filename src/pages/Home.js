@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "../components/Sidebar";
-import { CgMenu } from "react-icons/cg";
-import { IoPersonCircle } from "react-icons/io5";
 import PatientRegistration from "./PatientRegistration";
 import SearchPatient from "./SearchPatient";
 import { Routes, Route } from "react-router-dom";
-import { useAuthState, usePageState, usePatientState } from "../context";
+import { usePatientState } from "../context";
 import Patient from "./Patient";
 import PatientProfile from "./PatientProfile";
 import MedicalCondition from "./MedicalCondition";
@@ -28,11 +26,10 @@ import BodyWeight from "./PatientMonitoring/BodyWeight";
 import BleedingSymptom from "./PatientMonitoring/BleedingSymptom";
 import HealthDiaryRecord from "./PatientMonitoring/HealthDiaryRecord";
 import Notification from "./Notification";
+import Hemoglobin from "./BloodThinner/Hemoglobin";
+import Header from "../components/Header";
 
 function Home() {
-  // Global state
-  const userState = useAuthState();
-  const pageState = usePageState();
   const { loading } = usePatientState();
 
   return (
@@ -42,22 +39,7 @@ function Home() {
 
       {/* Header */}
       <div className="rightSide">
-        <div className="header">
-          <div className="headerDetails">
-            <div className="leftDetail">
-              <CgMenu className="menu-icon" />
-              <h2>{pageState.currentPage}</h2>
-            </div>
-
-            <div className="rightDetail">
-              <IoPersonCircle className="profile-icon" />
-              <div className="userDetail">
-                <h4>{userState.userDetails.username}</h4>
-                <p>HCP</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Header />
 
         {/* Section */}
         <div className="section">
@@ -114,6 +96,10 @@ function Home() {
             <Route
               path="/patient/:patientId/bloodThinner/graph"
               element={<BTGraph />}
+            />
+            <Route
+              path="/patient/:patientId/bloodThinner/hemoglobin"
+              element={<Hemoglobin />}
             />
             <Route
               path="/patient/:patientId/patientMonitoring"

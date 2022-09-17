@@ -14,6 +14,7 @@ import {
   setCurrentPatient,
   updateCreatinineRecord,
   updateInrRecord,
+  updateNameVerified,
 } from "../../service/PatientService";
 import { getCurrentDate, getCurrentTime } from "../../utils";
 
@@ -74,27 +75,8 @@ function BTTable() {
     percentageOfTestsInRange: 0,
   });
 
-  // const [daysSinceLastTest, setDaysSinceLastTest] = useState(0);
-  // const [inrDiff, setInrDiff] = useState(0);
-  // const [previousInrWithinRange, setPreviousInrWithinRange] = useState("");
-  // const [currentInrWithinRange, setCurrentInrWithinRange] = useState("");
-  // const [scenario, setScenario] = useState("");
-  // const [inrDiffAboveRange, setInrDiffAboveRange] = useState(0);
-  // const [inrDiffWithinRange, setInrDiffWithinRange] = useState(0);
-  // const [inrDiffBelowRange, setInrDiffBelowRange] = useState(0);
-  // const [daysWithinRangeSinceLastTest, setDaysWithinRangeSinceLastTest] =
-  //   useState(0);
-  // const [
-  //   percentageDaysWithinRangeSinceLastTest,
-  //   setPercentageDaysWithinRangeSinceLastTest,
-  // ] = useState(0);
-
-  // const [daysWithinRange, setDaysWithinRange] = useState(0);
-  // const [totalDays, setTotalDays] = useState(0);
   const [percentageDaysWithinRange, setPercentageDaysWithinRange] = useState(0);
 
-  // const [totalNumberOfTests, setTotalNumberOfTests] = useState(0);
-  // const [numberOfTestsInRange, setNumberOfTestsInRange] = useState(0);
   const [percentageOfTestsInRange, setPercentageOfTestsInRange] = useState(0);
 
   // Creatinine Clearance data state
@@ -109,7 +91,7 @@ function BTTable() {
     : "";
   const [weight, setWeight] = useState(0);
   const [serumCreatinine, setSerumCreatinine] = useState(0);
-  const [creatinineClearance, setCreatinineClearance] = useState("");
+  const [creatinineClearance, setCreatinineClearance] = useState(0);
   const [creatinineRecordId, setCreatinineRecordId] = useState("");
   const [selectedCreatinine, setSelectedCreatinine] = useState();
   const [creatinineRecordList, setCreatinineRecordList] = useState(
@@ -137,7 +119,7 @@ function BTTable() {
   };
 
   const styleCCTable = {
-    height: "80%",
+    height: "77%",
     width: "100%",
     margin: "auto",
   };
@@ -287,43 +269,6 @@ function BTTable() {
     });
     resetInrForm();
   }
-
-  function calcultateTtrResult() {
-    let _daysWithinRange = 0;
-    let _totalDays = 0;
-    let _percentageDaysWithinRange = 0;
-
-    let _totalNumberOfTests = inrRecordList.length;
-    let _numberOfTestsInRange = 0;
-    let _percentageOfTestsInRange = 0;
-
-    inrRecordList.forEach((record) => {
-      console.log("1", record.ttrData);
-      _daysWithinRange += record.ttrData.daysWithinRangeSinceLastTest;
-      _totalDays += record.ttrData.daysSinceLastTest;
-
-      if (record.ttrData.currentInrWithinRange === "In Range") {
-        _numberOfTestsInRange += 1;
-      }
-    });
-    console.log("_daysWithinRange", _daysWithinRange);
-    console.log("_totalDays", _totalDays);
-    console.log("_numberOfTestsInRange", _numberOfTestsInRange);
-
-    _percentageDaysWithinRange = (_daysWithinRange / _totalDays) * 100;
-    _percentageOfTestsInRange =
-      (_numberOfTestsInRange / _totalNumberOfTests) * 100;
-
-    setTtrResult({
-      percentageDaysWithinRange: _percentageDaysWithinRange,
-      percentageOfTestsInRange: _percentageOfTestsInRange,
-    });
-  }
-
-  console.log(
-    (new Date("2022-10-01").getTime() - new Date("2022-09-23").getTime()) /
-      (1000 * 3600 * 24)
-  );
 
   function calcultateTtrResult() {
     console.log("list", inrRecordList);
@@ -590,11 +535,6 @@ function BTTable() {
       flex: 2.5,
     },
     {
-      field: "note",
-      headerName: "Notes",
-      flex: 1,
-    },
-    {
       field: "button",
       headerName: "Action",
       flex: 1,
@@ -603,7 +543,7 @@ function BTTable() {
         return (
           <div style={{ width: "100%", textAlign: "center" }}>
             <button
-              className="editINRAction"
+              className="action"
               onClick={() => selectCreatinineData(params.row)}
             >
               Edit
@@ -635,7 +575,7 @@ function BTTable() {
         creatinineClearance: creatinineClearance,
         note: note,
       };
-
+      console.log(creatinineRecordData);
       setCreatinineRecordList((creatinineRecordList) => [
         ...creatinineRecordList,
         creatinineRecordData,
@@ -650,6 +590,7 @@ function BTTable() {
         creatinineClearance: creatinineClearance,
         note: note,
       };
+      console.log(creatinineRecordData);
 
       setCreatinineRecordList((creatinineRecordList) =>
         creatinineRecordList.filter(
@@ -740,15 +681,33 @@ function BTTable() {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  function calculateCreatinineClearance(serumCreatinine) {
+  function calculateCreatinineClearance() {
     let genderFactor = gender === "male" ? 1.23 : 1.04;
-    let result = ((140 - age) * weight * genderFactor) / serumCreatinine;
-
+    let result =
+      ((140 - age) * parseFloat(weight) * genderFactor) /
+      parseFloat(serumCreatinine);
     setCreatinineClearance(Math.round(result));
   }
 
+  async function verifyData() {
+    if (window.confirm("Are you sure to verify?")) {
+      await updateNameVerified(
+        "blood_thinner",
+        patientId,
+        userState.userDetails.username
+      );
+      await setCurrentPatient(patientDispatch, patientId);
+    }
+  }
+
   useEffect(() => {
-    calcultateTtrResult();
+    calculateCreatinineClearance();
+  }, [weight, serumCreatinine]);
+
+  useEffect(() => {
+    if (anticoagulant === "warfarin") {
+      calcultateTtrResult();
+    }
   }, [inrRecordList]);
 
   return (
@@ -769,7 +728,7 @@ function BTTable() {
                 <span>Last verified by</span>
                 <span>:</span>
               </h4>
-              <p>{patientState.bloodThinner.nameUpdated}</p>
+              <p>{patientState.bloodThinner.nameVerified}</p>
             </div>
             <div>
               <h4>
@@ -904,6 +863,13 @@ function BTTable() {
           </div>
 
           <div className="saveOrCancelBtBtn">
+            <button
+              className="verifyBtn"
+              type="button"
+              onClick={() => verifyData()}
+            >
+              Verify
+            </button>
             <button className="saveBt" onClick={(e) => handleSubmitInrData(e)}>
               Save
             </button>
@@ -1158,6 +1124,13 @@ function BTTable() {
           </div>
 
           <div className="saveOrCancelBtBtn">
+            <button
+              className="verifyBtn"
+              type="button"
+              onClick={() => verifyData()}
+            >
+              Verify
+            </button>
             <button
               className="saveBt"
               onClick={(e) => handleSubmitCreatinineData(e)}

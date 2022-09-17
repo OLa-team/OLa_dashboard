@@ -17,6 +17,7 @@ import {
   updateNameVerified,
 } from "../service/PatientService";
 import { getCurrentDate, getCurrentTime } from "../utils";
+import DatalistInput from "react-datalist-input";
 
 function Medication() {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ function Medication() {
     "Isordil",
     "S/L GTN",
     "Metformin",
-  ];
+  ].map((medicine) => ({ id: medicine, value: medicine }));
 
   const frequencyList = ["OD", "BD", "TDS", "QID", "PRN"];
 
@@ -71,7 +72,7 @@ function Medication() {
     minHeight: "600",
     fontSize: "18px",
     fontWeight: "normal",
-    marginTop: "30px",
+    marginTop: "15px",
     width: "100%",
   };
 
@@ -127,14 +128,14 @@ function Medication() {
     ? patientState.medication.dateTimeUpdated
     : "";
 
-  let medicationData = {
-    nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    medicineList: medicineList,
-  };
-
   async function handleSubmitMedication(e) {
     e.preventDefault();
+
+    const medicationData = {
+      nameUpdated: userState.userDetails.username,
+      dateTimeUpdated: new Date().getTime(),
+      medicineList: medicineList,
+    };
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateMedication(medicationData, patientId);
@@ -148,19 +149,18 @@ function Medication() {
   async function handleAddOrEditMedication(e) {
     e.preventDefault();
 
+    let medicineData = null;
     if (openForm.action === "add") {
       const medicineId = uuid().slice(0, 5);
-      let medicineData = {
+      medicineData = {
         id: medicineId,
         name: name,
         dose: parseInt(dose),
         frequency: frequency,
         note: note,
       };
-
-      setMedicineList((medicine) => [...medicine, medicineData]);
     } else {
-      let medicineData = {
+      medicineData = {
         id: medicineId,
         name: name,
         dose: parseInt(dose),
@@ -171,9 +171,8 @@ function Medication() {
       setMedicineList((medicineList) =>
         medicineList.filter((medicine) => medicine.id !== medicineId)
       );
-
-      setMedicineList((medicineList) => [medicineData, ...medicineList]);
     }
+    setMedicineList((medicineList) => [medicineData, ...medicineList]);
 
     setOpenForm({
       open: false,
@@ -189,14 +188,12 @@ function Medication() {
   function handleDeleteMedication() {
     for (let i = 0; i < selectedMedicine.length; i++) {
       setMedicineList((medicineList) =>
-        medicineList.filter(
-          (med) => med.medicineId !== selectedMedicine[i].medicineId
-        )
+        medicineList.filter((med) => med.id !== selectedMedicine[i].id)
       );
     }
   }
 
-  async function selectMedicine(row) {
+  function selectMedicine(row) {
     setName(row.name);
     setDose(row.dose);
     setFrequency(row.frequency);
@@ -283,7 +280,6 @@ function Medication() {
 
         <Table
           style={style}
-          className="medicationTable"
           columns={columns}
           data={medicineList}
           clickRowFunction={() => {}}
@@ -367,8 +363,18 @@ function Medication() {
             />
             <h1>{openForm.action === "add" ? "Add" : "Edit"} Medication</h1>
             <div>
-              <label>Name: </label>
-              <select
+              <DatalistInput
+                label="Name:"
+                className="medicationDatalistInput"
+                value={name}
+                items={medicationNameList}
+                placeholder="Select a medicine"
+                onChange={(e) => setName(e.target.value)}
+                onSelect={(item) => {
+                  setName(item.value);
+                }}
+              />
+              {/* <select
                 name="name"
                 value={name}
                 onChange={(e) => {
@@ -382,7 +388,7 @@ function Medication() {
                     {med}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div>
               <label>Dose (in mg): </label>

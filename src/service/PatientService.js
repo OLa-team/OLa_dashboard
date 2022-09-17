@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase";
+import { encryptLocalData } from "../utils";
 
 const patientCollectionRef = collection(firestore, "patient");
 
@@ -46,6 +47,7 @@ export async function createPatientAccount(newPatientData, dispatch) {
       copd: false,
       renal: false,
       liver: false,
+      otherMedicalCondition: [],
     });
 
     await setDoc(doc(firestore, "allergy", patientId), {
@@ -141,6 +143,22 @@ export async function createPatientAccount(newPatientData, dispatch) {
       healthDiaryRecord: [],
       sugarLevelRecord: [],
     });
+
+    await setDoc(doc(firestore, "notification", patientId), {
+      changeData: {},
+      changeDataMobile: false,
+      changeDataWeb: false,
+      registration: {},
+      registrationMobile: false,
+      registrationWeb: false,
+    });
+
+    await setDoc(doc(firestore, "hemoglobin", patientId), {
+      nameUpdated: "",
+      nameVerified: "",
+      dateTimeUpdated: 0,
+      hemoglobinRecord: [],
+    });
   } catch (error) {
     throw new Error(`Error in register new patient: `, error);
   }
@@ -201,6 +219,10 @@ export async function setCurrentPatient(dispatch, patientId) {
       await getDoc(doc(firestore, "self_monitor", patientId))
     ).data();
 
+    let responseHemoglobin = await (
+      await getDoc(doc(firestore, "hemoglobin", patientId))
+    ).data();
+
     let responseDefaultHealthGoal = await (
       await getDoc(doc(firestore, "constant", "health_goal"))
     ).data();
@@ -224,7 +246,8 @@ export async function setCurrentPatient(dispatch, patientId) {
         payload: responsePatient,
       });
 
-      localStorage.setItem("currentPatient", JSON.stringify(responsePatient));
+      encryptLocalData(responsePatient, "currentPatient");
+      // localStorage.setItem("currentPatient", JSON.stringify(responsePatient));
     } else {
       dispatch({
         type: "SET_CURRENT_PATIENT",
@@ -232,6 +255,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("currentPatient", JSON.stringify({}));
+
+      alert("Error in fetching currentPatient data");
     }
 
     // medical condition
@@ -252,6 +277,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("medicalCondition", JSON.stringify({}));
+
+      alert("Error in fetching medicalCondition data");
     }
 
     // allergy
@@ -269,6 +296,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("allergy", JSON.stringify({}));
+
+      alert("Error in fetching allergy data");
     }
 
     // stroke risk
@@ -286,6 +315,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("strokeRisk", JSON.stringify({}));
+
+      alert("Error in fetching strokeRisk data");
     }
 
     // bleeding risk
@@ -306,6 +337,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("bleedingRisk", JSON.stringify({}));
+
+      alert("Error in fetching bleedingRisk data");
     }
 
     // warfarin quality
@@ -326,6 +359,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("warfarinQuality", JSON.stringify({}));
+
+      alert("Error in fetching warfarinQuality data");
     }
 
     // health goal
@@ -343,6 +378,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("healthGoal", JSON.stringify({}));
+
+      alert("Error in fetching healthGoal data");
     }
 
     // medication
@@ -360,6 +397,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("medication", JSON.stringify({}));
+
+      alert("Error in fetching medication data");
     }
 
     // blood thinner
@@ -380,6 +419,8 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("bloodThinner", JSON.stringify({}));
+
+      alert("Error in fetching bloodThinner data");
     }
 
     // patient monitoring
@@ -400,6 +441,27 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("patientMonitoring", JSON.stringify({}));
+
+      alert("Error in fetching patientMonitoring data");
+    }
+
+    // hemoglobin
+    if (responseHemoglobin) {
+      dispatch({
+        type: "SET_HEMOGLOBIN",
+        payload: responseHemoglobin,
+      });
+
+      localStorage.setItem("hemoglobin", JSON.stringify(responseHemoglobin));
+    } else {
+      dispatch({
+        type: "SET_HEMOGLOBIN",
+        payload: {},
+      });
+
+      localStorage.setItem("hemoglobin", JSON.stringify({}));
+
+      alert("Error in fetching hemoglobin data");
     }
 
     // CONSTANT from db
@@ -542,6 +604,7 @@ export async function updateMedicalCondition(medicalConditionData, patientId) {
       copd: medicalConditionData.copd,
       renal: medicalConditionData.renal,
       liver: medicalConditionData.liver,
+      otherMedicalCondition: medicalConditionData.otherMedicalCondition,
     });
   } catch (error) {
     alert(error.message);
@@ -721,6 +784,21 @@ export async function updateCreatinineRecord(creatinineRecordData, patientId) {
   } catch (error) {
     alert(error.message);
     console.log("Error in update creatinine record data", error);
+    return;
+  }
+}
+
+// update patient hemoglobin record data
+export async function updateHemoglobinRecord(hemoglobinData, patientId) {
+  try {
+    await updateDoc(doc(firestore, "hemoglobin", patientId), {
+      nameUpdated: hemoglobinData.nameUpdated,
+      dateTimeUpdated: hemoglobinData.dateTimeUpdated,
+      hemoglobinRecord: hemoglobinData.hemoglobinList,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.log("Error in update hemoglobin record data", error);
     return;
   }
 }

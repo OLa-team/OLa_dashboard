@@ -894,8 +894,31 @@ input:-webkit-autofill:active {
 
 /* ---------------------------------------------------- */
 /* Medical Condition */
+.addMedicalConditionInput {
+  padding: 5px 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  border: 1px solid black;
+  outline: none;
+  width: 300px;
+  margin-top: 5px;
+}
+
+.addMedicalConditionBtn {
+  margin-left: 10px;
+  padding: 7px 13px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  background-color: #000;
+  color: #fff;
+}
+
 .medicalConditionForm {
   width: 100%;
+  height: 60%;
+  overflow-y: scroll;
+  margin-top: 20px;
 }
 
 .checkbox-yesOrNo {
@@ -907,6 +930,7 @@ input:-webkit-autofill:active {
 
 .checkbox-yesOrNo h3 {
   width: 350px;
+  word-wrap: break-word;
   display: flex;
   justify-content: space-between;
   font-size: 18px;
@@ -1396,7 +1420,8 @@ input:-webkit-autofill:active {
 }
 
 .addAndDeleteMedicationButton,
-.addAndDeleteBtButton {
+.addAndDeleteBtButton,
+.addAndDeleteHemoglobinButton {
   position: absolute;
   bottom: 20px;
   /* right: 35px; */
@@ -1405,13 +1430,15 @@ input:-webkit-autofill:active {
 }
 
 .addAndDeleteMedicationButton svg,
-.addAndDeleteBtButton svg {
+.addAndDeleteBtButton svg,
+.addAndDeleteHemoglobinButton svg {
   padding-right: 5px;
   font-size: 17px;
 }
 
 .addAndDeleteMedicationButton button,
 .addAndDeleteBtButton button,
+.addAndDeleteHemoglobinButton button,
 .saveOrCancelMedBtn button,
 .saveOrCancelBtBtn button {
   padding: 6px 13px;
@@ -1430,66 +1457,77 @@ input:-webkit-autofill:active {
 }
 
 .addMedication,
-.addBt {
+.addBt,
+.addHb {
   background-color: rgb(68, 228, 68);
   transition: all 0.3s ease;
 }
 
 .addMedication:hover,
-.addBt:hover {
+.addBt:hover,
+.addHb:hover {
   border: 1px solid rgb(68, 228, 68);
   background-color: white;
   color: rgb(68, 228, 68);
 }
 
 .deleteMedication,
-.deleteBt {
+.deleteBt,
+.deleteHb {
   background-color: red;
   transition: all 0.3s ease;
 }
 
 .deleteMedication:hover,
-.deleteBt:hover {
+.deleteBt:hover,
+.deleteHb:hover {
   border: 1px solid red;
   background-color: white;
   color: red;
 }
 
 .saveMedication,
-.saveBt {
+.saveBt,
+.saveHb {
   padding: 0 23px !important;
   background-color: #000;
   transition: all 0.3s ease;
 }
 
 .saveMedication:hover,
-.saveBt:hover {
+.saveBt:hover,
+.saveHb:hover {
   border: 1px solid #000;
   background-color: white;
   color: #000;
 }
 
 .medBackBtn,
-.btBackBtn {
+.btBackBtn,
+.hbBackBtn {
   background-color: rgb(187, 187, 187);
   color: black !important;
   transition: all 0.3s ease;
 }
 
-.medBackBtn svg .btBackBtn svg {
+.medBackBtn svg,
+.btBackBtn svg,
+.hbBackBtn svg {
   font-size: 23px;
   padding-right: 5px;
 }
 
 .medBackBtn:hover,
-.btBackBtn:hover {
+.btBackBtn:hover,
+.hbBackBtn:hover {
   border: 1px solid lightgray;
   background-color: white;
   color: black !important;
   border: 1px solid #000;
 }
 
-.medicationForm {
+.medicationForm,
+.hemoglobinForm {
   position: fixed;
   top: 0;
   left: 0;
@@ -1500,13 +1538,16 @@ input:-webkit-autofill:active {
   transform: scale(0);
 }
 
-.medicationForm.popup {
+.medicationForm.popup,
+.hemoglobinForm.popup {
   transform: scale(1);
 }
 
-.addOrEditMedicationForm {
+.addOrEditMedicationForm,
+.addOrEditHemoglobinForm {
   width: fit-content;
-  height: fit-content;
+  height: 70%;
+  overflow-y: scroll;
   border-radius: 20px;
   position: absolute;
   top: 49%;
@@ -1533,23 +1574,34 @@ input:-webkit-autofill:active {
   transform: scale(1.2);
 }
 
-.addOrEditMedicationForm h1 {
+.medicationDatalistInput .react-datalist-input__listbox {
+  position: absolute;
+  top: 95px;
+  height: 250px;
+  overflow: scroll;
+}
+
+.addOrEditMedicationForm h1,
+.addOrEditHemoglobinForm h1 {
   padding: 5px 15px;
   text-align: center;
 }
 
-.addOrEditMedicationForm div {
+.addOrEditMedicationForm div,
+.addOrEditHemoglobinForm div {
   padding: 15px 0px;
   display: flex;
   flex-direction: column;
 }
 
-.addOrEditMedicationForm div label {
+.addOrEditMedicationForm div label,
+.addOrEditHemoglobinForm div label {
   font-size: 20px;
   padding-bottom: 10px;
 }
 
-.addOrEditMedicationForm div input {
+.addOrEditMedicationForm div input,
+.addOrEditHemoglobinForm div input {
   border: none;
   outline: none;
   width: 450px;
@@ -1559,10 +1611,11 @@ input:-webkit-autofill:active {
   border-radius: 10px;
 }
 
-.addOrEditMedicationForm div select {
+.addOrEditMedicationForm div select,
+.addOrEditHemoglobinForm div select {
   border: none;
   outline: none;
-  width: 100%;
+  width: 480px;
   background-color: rgb(240, 240, 240);
   padding: 8px 15px;
   font-size: 17px;
@@ -1570,7 +1623,8 @@ input:-webkit-autofill:active {
   cursor: pointer;
 }
 
-.addOrEditMedicationForm button {
+.addOrEditMedicationForm button,
+.addOrEditHemoglobinForm button {
   margin-top: 25px;
   width: 100%;
   padding: 6px 0px;
@@ -1584,7 +1638,8 @@ input:-webkit-autofill:active {
   transition: all 0.3s ease;
 }
 
-.addOrEditMedicationForm button:hover {
+.addOrEditMedicationForm button:hover,
+.addOrEditHemoglobinForm button:hover {
   background-color: white;
   color: red;
 }
@@ -1718,7 +1773,7 @@ input:-webkit-autofill:active {
 .ttrBtn {
   position: absolute;
   top: 62px;
-  right: 320px;
+  right: 500px;
 }
 
 .ttrBtn button {
@@ -1749,7 +1804,7 @@ input:-webkit-autofill:active {
   position: fixed;
   top: 175px;
   right: 100px;
-  width: 230px;
+  width: 400px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1801,7 +1856,7 @@ input:-webkit-autofill:active {
 .addOrEditBloodThinnerForm,
 .addOrEditCreatinineForm {
   width: fit-content;
-  height: fit-content;
+  height: 80%;
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 20px;
@@ -1815,10 +1870,6 @@ input:-webkit-autofill:active {
   opacity: 1;
   padding: 20px 30px;
   transition: all 0.5s ease;
-}
-
-.addOrEditBloodThinnerForm {
-  height: 80% !important;
 }
 
 .addOrEditBloodThinnerForm h1,

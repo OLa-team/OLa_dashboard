@@ -6,6 +6,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase";
+import { encryptLocalData } from "../utils";
 
 const hcpsCollectionRef = collection(firestore, "hcp");
 
@@ -24,8 +25,8 @@ export async function loginUser(dispatch, email) {
         type: "LOGIN_SUCCESS",
         payload: hcpData,
       });
-      localStorage.setItem("currentUser", JSON.stringify(hcpData));
-      console.log("hcpData", hcpData);
+      encryptLocalData(hcpData, "user");
+      // localStorage.setItem("currentUser", JSON.stringify(hcpData));
 
       return hcpData;
     }

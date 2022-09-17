@@ -13,6 +13,7 @@ import {
   usePatientState,
 } from "../context";
 import { getCurrentDate, getCurrentTime } from "../utils";
+import { IoClose } from "react-icons/io5";
 
 function MedicalCondition() {
   const params = useParams();
@@ -44,6 +45,10 @@ function MedicalCondition() {
   const [copd, setCOPD] = useState(map.copd ? map.copd : false);
   const [renal, setRenal] = useState(map.renal ? map.renal : false);
   const [liver, setLiver] = useState(map.liver ? map.liver : false);
+  const [newMedCon, setNewMedCon] = useState("");
+  const [otherMedConList, setOtherMedConList] = useState(
+    map.otherMedicalCondition ? map.otherMedicalCondition : []
+  );
 
   const dateTimeUpdated = patientState.medicalCondition.dateTimeUpdated
     ? patientState.medicalCondition.dateTimeUpdated
@@ -66,6 +71,7 @@ function MedicalCondition() {
       copd: copd,
       renal: renal,
       liver: liver,
+      otherMedicalCondition: otherMedConList,
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
@@ -86,11 +92,39 @@ function MedicalCondition() {
     }
   }
 
+  function addMedicalCondition() {
+    setOtherMedConList((list) => [...list, newMedCon]);
+    setNewMedCon("");
+  }
+
+  function deleteMedicalCondition(e) {
+    const deleteMedCon = e.target.getAttribute("name");
+
+    setOtherMedConList((list) => list.filter((med) => med !== deleteMedCon));
+  }
+
   return (
     <div className="wrapper">
-      <div style={{ padding: "35px 70px" }}>
+      <div style={{ padding: "35px 70px", height: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h1>Medical Condition</h1>
+          <div>
+            <h1>Medical Condition</h1>
+            <div style={{ display: "flex", alignItems: "baseline" }}>
+              <input
+                name="new medical condition"
+                placeholder="Other medical condition"
+                className="addMedicalConditionInput"
+                value={newMedCon}
+                onChange={(e) => setNewMedCon(e.target.value)}
+              />
+              <button
+                className="addMedicalConditionBtn"
+                onClick={() => addMedicalCondition()}
+              >
+                Add
+              </button>
+            </div>
+          </div>
           <div className="lastUpdatedBox">
             <div>
               <h4>
@@ -210,6 +244,22 @@ function MedicalCondition() {
             checkedNo={!liver ? true : false}
             onChangeNo={(e) => setLiver((prev) => (prev = false))}
           />
+
+          {otherMedConList.map((medCon) => (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Checkbox name={medCon} checkedYes={true} checkedNo={false} />
+              <IoClose
+                className="deleteMedConIcon"
+                name={medCon}
+                onClick={(e) => deleteMedicalCondition(e)}
+                style={{
+                  fontSize: "25px",
+                  paddingRight: "20px",
+                  cursor: "pointer",
+                }}
+              />
+            </div>
+          ))}
 
           <div className="saveAndCancelButton mc">
             <button

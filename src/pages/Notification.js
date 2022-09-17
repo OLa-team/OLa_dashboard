@@ -88,9 +88,9 @@ function Notification() {
       ? pendingNotification.map((notif) => ({
           id: notif.id,
           dateTime:
-            getCurrentDate(notif.registration.time) +
+            getCurrentTime(notif.registration.time) +
             " " +
-            getCurrentTime(notif.registration.time),
+            getCurrentDate(notif.registration.time),
           title: `${notif.registration.name} requests to register a new account.`,
           details: notif.registration,
         }))
@@ -204,27 +204,6 @@ function Notification() {
               style={{ cursor: "pointer" }}
             />
             <h1 style={{ textAlign: "center" }}>Registration Details</h1>
-
-            {/* <div className="patientNotifDetails">
-              <p>
-                <h3>
-                  Patient's name<span>:</span>{" "}
-                </h3>
-                {name}
-              </p>
-              <p>
-                <h3>
-                  Patient's phone number<span>:</span>
-                </h3>
-                {phoneNo}
-              </p>
-              <p>
-                <h3>
-                  Patient's IC / Passport Number<span>:</span>{" "}
-                </h3>
-                {icNo}
-              </p>
-            </div> */}
 
             <div className="patientNotifDetails">
               <div className="register-inputField">

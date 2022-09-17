@@ -39,10 +39,36 @@ export function getCurrentTime(date) {
   return currentTime;
 }
 
-export const encryptData = (data, salt) =>
+export function encryptLocalData(data, item) {
+  const salt = process.env.SALT || "6d090796-ecdf-11ea-adc1-0242ac112345";
+  const encryptedData = encryptData(data, salt);
+  console.log(`encrypt ${item}`, encryptedData);
+  localStorage.setItem(item, encryptedData);
+}
+
+export function decryptLocalData(item) {
+  let localData = localStorage.getItem(item)
+    ? localStorage.getItem(item)
+    : null;
+
+  if (!localData) {
+    alert("No data stored");
+  }
+
+  const salt = process.env.SALT || "6d090796-ecdf-11ea-adc1-0242ac112345";
+  const originalData = decryptData(localData, salt);
+  if (!originalData) {
+    alert("Data have been altered");
+  }
+  console.log(`decrypted local data ${item}`, originalData);
+
+  return originalData;
+}
+
+const encryptData = (data, salt) =>
   CryptoJS.AES.encrypt(JSON.stringify(data), salt).toString();
 
-export const decryptData = (ciphertext, salt) => {
+const decryptData = (ciphertext, salt) => {
   const bytes = CryptoJS.AES.decrypt(ciphertext, salt);
   try {
     return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));

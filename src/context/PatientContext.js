@@ -1,7 +1,8 @@
 import React, { useContext, useReducer } from "react";
+import { decryptLocalData } from "../utils";
 
 let cp = localStorage.getItem("currentPatient")
-  ? JSON.parse(localStorage.getItem("currentPatient"))
+  ? decryptLocalData("currentPatient")
   : null;
 let mc = localStorage.getItem("medicalCondition")
   ? JSON.parse(localStorage.getItem("medicalCondition"))
@@ -29,6 +30,9 @@ let bt = localStorage.getItem("bloodThinner")
   : null;
 let pm = localStorage.getItem("patientMonitoring")
   ? JSON.parse(localStorage.getItem("patientMonitoring"))
+  : null;
+let hemo = localStorage.getItem("hemoglobin")
+  ? JSON.parse(localStorage.getItem("hemoglobin"))
   : null;
 let dhg = localStorage.getItem("defaultHealthGoal")
   ? JSON.parse(localStorage.getItem("defaultHealthGoal"))
@@ -58,6 +62,7 @@ const initialState = {
   medication: md || {},
   bloodThinner: bt || {},
   patientMonitoring: pm || {},
+  hemoglobin: hemo || {},
   defaultHealthGoal: dhg || {},
   strokeRiskResultMessage: srrm || {},
   bleedingRiskResultMessage: brrm || {},
@@ -172,6 +177,12 @@ const PatientReducer = (initialState, action) => {
       return {
         ...initialState,
         patientMonitoring: action.payload,
+      };
+
+    case "SET_HEMOGLOBIN":
+      return {
+        ...initialState,
+        hemoglobin: action.payload,
       };
 
     case "SET_DEFAULT_HEALTH_GOAL":
