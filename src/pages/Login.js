@@ -99,10 +99,16 @@ function Login() {
                 size={20}
                 cssOverride={override}
               />
-              <p style={{ color: color, paddingTop: "10px" }}>
+              <p
+                style={{ color: color, paddingTop: "10px" }}
+                className="loginMsg"
+              >
                 {loading ? "" : message}
               </p>
-              <p style={{ color: color, paddingTop: "10px" }}>
+              <p
+                style={{ color: color, paddingTop: "10px" }}
+                className="loginMsg"
+              >
                 {loading ? "" : spamMessage}
               </p>
               <button type="submit">Login</button>

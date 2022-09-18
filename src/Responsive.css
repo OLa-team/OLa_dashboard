@@ -42,6 +42,27 @@
     /* background-color: black; */
   }
 
+  .loginPart p:nth-child(1) {
+    font-size: 35px;
+  }
+
+  .loginPart h1 {
+    font-size: 50px;
+  }
+
+  .loginPart p:nth-child(4) {
+    font-size: 15px;
+  }
+
+  .loginMsg {
+    font-size: 15px;
+  }
+
+  .loginPart button {
+    padding: 6px 20px;
+    font-size: 14px;
+  }
+
   /* Register */
   .registrationInput i {
     font-size: 17px;
