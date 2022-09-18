@@ -71,7 +71,7 @@ function Register() {
             <img src={logoRed} alt="logoRed.png" />
             <h2>Create an account</h2>
           </div>
-          <form onSubmit={(e) => signUp(e)}>
+          <form onSubmit={(e) => signUp(e)} className="signUpForm">
             <div className="registrationInput">
               <i className="fa fa-user icon">
                 <BsPersonFill />

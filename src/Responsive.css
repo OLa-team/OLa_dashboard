@@ -1,0 +1,50 @@
+@media screen and (max-width: 1100px) {
+  /* Login */
+  .logoPart {
+    display: none;
+  }
+
+  .loginPart {
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /* Login */
+  .loginPart {
+    margin-top: 40px;
+  }
+  .loginPart input {
+    width: 275px;
+    font-size: 15px;
+  }
+
+  /* Register */
+  .registerPart {
+    width: 80%;
+    font-size: 13px;
+  }
+
+  .registerPart input {
+    font-size: 13px;
+  }
+
+  .signUpBtn {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  /* Login */
+  .topBar {
+    flex-direction: column;
+    height: 125px;
+    /* background-color: black; */
+  }
+
+  /* Register */
+  .registrationInput i {
+    font-size: 17px;
+    padding: 3px 12px 0px 6px;
+  }
+}
