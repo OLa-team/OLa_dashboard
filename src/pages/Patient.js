@@ -13,12 +13,19 @@ import { CgDanger } from "react-icons/cg";
 // import { RiArrowGoBackFill } from "react-icons/ri";
 import { TiArrowBack } from "react-icons/ti";
 import { HiInformationCircle } from "react-icons/hi";
-import { usePageDispatch, usePatientState } from "../context";
+import {
+  usePageDispatch,
+  usePatientDispatch,
+  usePatientState,
+} from "../context";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { deletePatientById } from "../service";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function Patient() {
   const patientState = usePatientState();
+  const patientDispatch = usePatientDispatch();
   const pageDispatch = usePageDispatch();
 
   const navigate = useNavigate();
@@ -27,15 +34,39 @@ function Patient() {
 
   async function handleDeletePatient() {
     if (window.confirm("Are you sure you want to delete the patient?")) {
+      patientDispatch({
+        type: "SET_LOADING_TRUE",
+      });
+
       await deletePatientById(patientId);
-      navigate("/dashboard");
+      await checkDeletedPatientIsExisted();
+
       pageDispatch({
         type: "SET_CURRENT_PAGE",
         payload: "Patient List",
       });
-    } else {
-      return;
+
+      navigate("/dashboard");
+      alert("Delete patient successfully");
     }
+
+    patientDispatch({
+      type: "SET_LOADING_FALSE",
+    });
+  }
+
+  async function checkDeletedPatientIsExisted() {
+    let check = false;
+
+    do {
+      let response = await (
+        await getDoc(doc(firestore, "patient", patientId))
+      ).data();
+
+      if (response === undefined) {
+        check = true;
+      }
+    } while (!check);
   }
 
   return (

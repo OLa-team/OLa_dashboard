@@ -19,28 +19,29 @@ function PatientRegistration() {
   // db collection
   const patientCollectionRef = collection(firestore, "patient");
 
-  const patientId = uuid().slice(0, 15);
-  const newPatientData = {
-    name: patientName,
-    icNo: icNo,
-    phoneNo: phoneNo,
-    patientId: patientId,
-  };
-
   async function submitPatientRegistration(e) {
     e.preventDefault();
 
     getPatients();
     setColor("red");
     setMessage("");
+
+    // Make phone number in correct format
+    let validPhoneNo = phoneNo;
+    if (phoneNo.startsWith("0")) {
+      validPhoneNo = "+6" + validPhoneNo;
+    } else if (phoneNo.startsWith("6")) {
+      validPhoneNo = "+" + validPhoneNo;
+    }
+
     //  Check validation of phone number
     if (
-      ((phoneNo.substring(0, 3) === "011" ||
-        phoneNo.substring(0, 3) === "015") &&
-        phoneNo.length !== 11) ||
-      (phoneNo.substring(0, 3) !== "011" &&
-        phoneNo.substring(0, 3) !== "015" &&
-        phoneNo.length !== 10)
+      ((validPhoneNo.substring(2, 5) === "011" ||
+        validPhoneNo.substring(2, 5) === "015") &&
+        validPhoneNo.length !== 13) ||
+      (validPhoneNo.substring(2, 5) !== "011" &&
+        validPhoneNo.substring(2, 5) !== "015" &&
+        validPhoneNo.length !== 12)
     ) {
       setMessage("Please enter a valid phone number");
       return;
@@ -57,7 +58,7 @@ function PatientRegistration() {
 
     // Check repeated name under same phone number
     const repeatedPhoneNo = patients.filter(
-      (patient) => patient.phoneNo === "+6" + phoneNo
+      (patient) => patient.phoneNo === validPhoneNo
     );
 
     if (repeatedPhoneNo.length > 0) {
@@ -79,13 +80,23 @@ function PatientRegistration() {
       }
     }
 
+    console.log("valid phone number", validPhoneNo);
+    console.log("valid phone number", validPhoneNo.substring(2, 5));
+
     if (window.confirm("Are you sure to proceed?")) {
       setColor("rgb(46, 183, 46)");
+      const patientId = uuid().slice(0, 15);
+      const newPatientData = {
+        name: patientName,
+        icNo: icNo,
+        phoneNo: validPhoneNo,
+        patientId: patientId,
+      };
       await createPatientAccount(newPatientData, patientDispatch);
       e.target.reset();
       setMessage("Patient account is created");
+      alert("Patient account is created successfully");
     }
-    alert("Patient account is created successfully");
   }
 
   const getPatients = async () => {
@@ -120,8 +131,8 @@ function PatientRegistration() {
           <label>Mobile Phone No.</label>
           <input
             type="text"
-            placeholder="Enter phone number (e.g. 01X-XXXXXXX)"
-            onChange={(e) => setPhoneNo(e.target.value.trim().replace("-", ""))}
+            placeholder="Enter phone number (e.g. 01XXXXXXXX)"
+            onChange={(e) => setPhoneNo(e.target.value.trim())}
             name="phoneNo"
             required
           />

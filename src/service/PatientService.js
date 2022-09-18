@@ -23,7 +23,7 @@ export async function createPatientAccount(newPatientData, dispatch) {
     await setDoc(doc(firestore, "patient", patientId), {
       name: newPatientData.name,
       icNo: newPatientData.icNo,
-      phoneNo: "+6" + newPatientData.phoneNo,
+      phoneNo: newPatientData.phoneNo,
       patientId: newPatientData.patientId,
       birthDate: 0,
       age: 0,
@@ -128,12 +128,13 @@ export async function createPatientAccount(newPatientData, dispatch) {
       nameVerified: "",
       dateTimeUpdated: 0,
       anticoagulant: "",
-      indication: {},
-      duration: {},
-      inrRange: {},
+      indication: "",
+      duration: "",
+      inrRange: "",
       inrRecord: [],
       creatinineRecord: [],
       dose: "",
+      ttrResult: {},
     });
 
     await setDoc(doc(firestore, "self_monitor", patientId), {
@@ -148,9 +149,9 @@ export async function createPatientAccount(newPatientData, dispatch) {
       changeData: {},
       changeDataMobile: false,
       changeDataWeb: false,
-      registration: {},
-      registrationMobile: false,
-      registrationWeb: false,
+      // registration: {},
+      // registrationMobile: false,
+      // registrationWeb: true,
     });
 
     await setDoc(doc(firestore, "hemoglobin", patientId), {
@@ -158,6 +159,10 @@ export async function createPatientAccount(newPatientData, dispatch) {
       nameVerified: "",
       dateTimeUpdated: 0,
       hemoglobinRecord: [],
+    });
+
+    await setDoc(doc(firestore, "reminder", patientId), {
+      tasks: [],
     });
   } catch (error) {
     throw new Error(`Error in register new patient: `, error);
@@ -820,43 +825,49 @@ export async function updateNameVerified(collection, patientId, nameVerified) {
 }
 
 // delete patient by id
-export async function deletePatientById(id) {
-  var patientRef = doc(firestore, "patient", id);
-  var medicalConRef = doc(firestore, "medical_condition", id);
-  var allergyRef = doc(firestore, "allergy", id);
-  var healthGoalRef = doc(firestore, "health_goal", id);
-  var strokeRiskRef = doc(firestore, "stroke_risk", id);
-  var bleedingRiskRef = doc(firestore, "bleeding_risk", id);
-  var warfarinQualityRef = doc(firestore, "warfarin_quality", id);
-  var medicationRef = doc(firestore, "medication", id);
-  var selfMonitorRef = doc(firestore, "self_monitor", id);
-
-  const patientDocSnap = await getDoc(patientRef);
-  const medicalConDocSnap = await getDoc(medicalConRef);
-  const allergyDocSnap = await getDoc(allergyRef);
-  const healthGoalDocSnap = await getDoc(healthGoalRef);
-  const strokeRiskDocSnap = await getDoc(strokeRiskRef);
-  const bleedingRiskDocSnap = await getDoc(bleedingRiskRef);
-  const warfarinQualityDocSnap = await getDoc(warfarinQualityRef);
-  const medicationDocSnap = await getDoc(medicationRef);
-  const selfMonitorDocSnap = await getDoc(selfMonitorRef);
-
-  if (
-    !patientDocSnap.exists() ||
-    !medicalConDocSnap.exists() ||
-    !allergyDocSnap.exists() ||
-    !healthGoalDocSnap.exists() ||
-    !strokeRiskDocSnap.exists() ||
-    !bleedingRiskDocSnap.exists() ||
-    !warfarinQualityDocSnap.exists() ||
-    !medicationDocSnap.exists() ||
-    !selfMonitorDocSnap.exists()
-  ) {
-    alert("Document does not exist");
-    return;
-  }
-
+export async function deletePatientById(id, dispatch) {
   try {
+    var patientRef = doc(firestore, "patient", id);
+    var medicalConRef = doc(firestore, "medical_condition", id);
+    var allergyRef = doc(firestore, "allergy", id);
+    var healthGoalRef = doc(firestore, "health_goal", id);
+    var strokeRiskRef = doc(firestore, "stroke_risk", id);
+    var bleedingRiskRef = doc(firestore, "bleeding_risk", id);
+    var warfarinQualityRef = doc(firestore, "warfarin_quality", id);
+    var medicationRef = doc(firestore, "medication", id);
+    var selfMonitorRef = doc(firestore, "self_monitor", id);
+    var hemoglobinRef = doc(firestore, "hemoglobin", id);
+    var notificationRef = doc(firestore, "notification", id);
+
+    const patientDocSnap = await getDoc(patientRef);
+    const medicalConDocSnap = await getDoc(medicalConRef);
+    const allergyDocSnap = await getDoc(allergyRef);
+    const healthGoalDocSnap = await getDoc(healthGoalRef);
+    const strokeRiskDocSnap = await getDoc(strokeRiskRef);
+    const bleedingRiskDocSnap = await getDoc(bleedingRiskRef);
+    const warfarinQualityDocSnap = await getDoc(warfarinQualityRef);
+    const medicationDocSnap = await getDoc(medicationRef);
+    const selfMonitorDocSnap = await getDoc(selfMonitorRef);
+    const hemoglobinDocSnap = await getDoc(hemoglobinRef);
+    const notificationDocSnap = await getDoc(notificationRef);
+
+    if (
+      !patientDocSnap.exists() ||
+      !medicalConDocSnap.exists() ||
+      !allergyDocSnap.exists() ||
+      !healthGoalDocSnap.exists() ||
+      !strokeRiskDocSnap.exists() ||
+      !bleedingRiskDocSnap.exists() ||
+      !warfarinQualityDocSnap.exists() ||
+      !medicationDocSnap.exists() ||
+      !selfMonitorDocSnap.exists() ||
+      !hemoglobinDocSnap.exists() ||
+      !notificationDocSnap.exists()
+    ) {
+      alert("Document does not exist");
+      return;
+    }
+
     // delete ref
     await deleteDoc(patientRef);
     await deleteDoc(medicalConRef);
@@ -867,6 +878,8 @@ export async function deletePatientById(id) {
     await deleteDoc(warfarinQualityRef);
     await deleteDoc(medicationRef);
     await deleteDoc(selfMonitorRef);
+    await deleteDoc(hemoglobinRef);
+    await deleteDoc(notificationRef);
   } catch (error) {
     alert("Error in delete patient by id");
     throw new Error("Error in delete patient by id", error);
@@ -874,9 +887,9 @@ export async function deletePatientById(id) {
 }
 
 // Delete all selected patient
-export function deleteAllSelectedPatients(dispatch, patientList) {
-  patientList.forEach((patient) => {
-    deletePatientById(patient.patientId);
+export async function deleteAllSelectedPatients(dispatch, patientList) {
+  await patientList.forEach((patient) => {
+    deletePatientById(patient.patientId, dispatch);
   });
 
   dispatch({

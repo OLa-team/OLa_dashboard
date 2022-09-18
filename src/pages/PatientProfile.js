@@ -23,9 +23,7 @@ function PatientProfile() {
   const patientId = params.patientId;
 
   const [name, setName] = useState(patientState.currentPatient.name);
-  const [phoneNo, setPhoneNo] = useState(
-    patientState.currentPatient.phoneNo.substring(2)
-  );
+  const [phoneNo, setPhoneNo] = useState(patientState.currentPatient.phoneNo);
   const [icNo, setIcNo] = useState(patientState.currentPatient.icNo);
   const [birthDate, setBirthDate] = useState(
     patientState.currentPatient.birthDate
@@ -133,17 +131,26 @@ function PatientProfile() {
     // console.log("newData", newData);
 
     if (window.confirm("Are you sure you want to continue?")) {
+      // Make phone number in correct format
+      let validPhoneNo = phoneNo;
+      if (phoneNo.startsWith("0")) {
+        validPhoneNo = "+6" + validPhoneNo;
+      } else if (phoneNo.startsWith("6")) {
+        validPhoneNo = "+" + validPhoneNo;
+      }
+
       if (
-        ((phoneNo.substring(0, 3) === "011" ||
-          phoneNo.substring(0, 3) === "015") &&
-          phoneNo.length !== 11) ||
-        (phoneNo.substring(0, 3) !== "011" &&
-          phoneNo.substring(0, 3) !== "015" &&
-          phoneNo.length !== 10)
+        ((validPhoneNo.substring(2, 5) === "011" ||
+          validPhoneNo.substring(2, 5) === "015") &&
+          validPhoneNo.length !== 13) ||
+        (validPhoneNo.substring(2, 5) !== "011" &&
+          validPhoneNo.substring(2, 5) !== "015" &&
+          validPhoneNo.length !== 12)
       ) {
         alert("The phone number is invalid. Please try again.");
         return;
       }
+      setPhoneNo(validPhoneNo);
 
       if (
         (icNo.charAt(0) === "A" && icNo.length !== 9) ||
@@ -153,18 +160,27 @@ function PatientProfile() {
         return;
       }
 
+      // Make next of kin phone number in correct format
+      let validNextOfKinContact = nextOfKinContact;
+      if (nextOfKinContact.startsWith("0")) {
+        validNextOfKinContact = "+6" + validNextOfKinContact;
+      } else if (nextOfKinContact.startsWith("6")) {
+        validNextOfKinContact = "+" + validNextOfKinContact;
+      }
+
       if (
-        nextOfKinContact !== "" &&
-        (((nextOfKinContact.substring(0, 3) === "011" ||
-          nextOfKinContact.substring(0, 3) === "015") &&
-          nextOfKinContact.length !== 11) ||
-          (nextOfKinContact.substring(0, 3) !== "011" &&
-            nextOfKinContact.substring(0, 3) !== "015" &&
-            nextOfKinContact.length !== 10))
+        validNextOfKinContact !== "" &&
+        (((validNextOfKinContact.substring(2, 5) === "011" ||
+          validNextOfKinContact.substring(2, 5) === "015") &&
+          validNextOfKinContact.length !== 13) ||
+          (validNextOfKinContact.substring(2, 5) !== "011" &&
+            validNextOfKinContact.substring(2, 5) !== "015" &&
+            validNextOfKinContact.length !== 12))
       ) {
         alert("The phone number of next of kin is invalid. Please try again.");
         return;
       }
+      setNextOfKinContact(validNextOfKinContact);
 
       const checkRepeatedNameForSamePhone = patientState.patientList
         .filter(

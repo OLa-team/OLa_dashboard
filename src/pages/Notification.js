@@ -136,6 +136,9 @@ function Notification() {
         pendingNotification.filter((notif) => notif.id !== patientId)
       );
       setPage("table");
+      patientDispatch({
+        type: "SET_LOADING_FALSE",
+      });
     }
   }
 

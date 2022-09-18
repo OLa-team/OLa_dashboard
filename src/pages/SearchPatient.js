@@ -1,8 +1,10 @@
+import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import Table from "../components/Table";
 import { usePatientDispatch, usePatientState } from "../context";
+import { firestore } from "../firebase";
 import {
   deleteAllSelectedPatients,
   fetchPatientList,
@@ -20,7 +22,6 @@ function SearchPatient() {
 
   // State
   const [searchResult, setSearchResult] = useState("");
-  const [selectedPatients, setSelectedPatients] = useState([]);
 
   const style = { height: "90%", width: "95%", margin: "auto" };
 
@@ -74,17 +75,43 @@ function SearchPatient() {
     navigate(`/dashboard/patient/${row.row.patientId}`);
   }
 
-  function deletePatient() {
+  async function deletePatient() {
     if (patientState.selectedPatientList.length === 0) {
       alert("Please select patient before deleting.");
       return;
     }
     if (window.confirm("Are you sure you want to delete the patient(s)?")) {
-      deleteAllSelectedPatients(dispatch, patientState.selectedPatientList);
-    } else {
-      return;
+      await deleteAllSelectedPatients(
+        dispatch,
+        patientState.selectedPatientList
+      );
+      await checkDeletedPatientIsExisted();
+      alert("Deleted the patient(s) successfully");
+      dispatch({
+        type: "SET_LOADING_FALSE",
+      });
     }
-    alert("Deleted the patient(s) successfully");
+  }
+
+  async function checkDeletedPatientIsExisted() {
+    const list = patientState.selectedPatientList;
+    let check = false;
+
+    dispatch({
+      type: "SET_LOADING_TRUE",
+    });
+    do {
+      for (let i = 0; i < list.length; i++) {
+        let response = await (
+          await getDoc(doc(firestore, "patient", list[i].patientId))
+        ).data();
+
+        if (response === undefined) {
+          check = true;
+          return;
+        }
+      }
+    } while (!check);
   }
 
   useEffect(() => {
