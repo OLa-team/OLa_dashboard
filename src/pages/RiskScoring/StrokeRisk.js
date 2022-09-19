@@ -126,10 +126,6 @@ function StrokeRisk() {
     if (window.confirm("Are you sure you want to continue?")) {
       await updateStrokeRisk(strokeRiskData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
-      pageDispatch({
-        type: "SET_CURRENT_PAGE",
-        payload: "Risk Scoring",
-      });
       alert("Update patient's stroke risk successfully.");
     }
   }

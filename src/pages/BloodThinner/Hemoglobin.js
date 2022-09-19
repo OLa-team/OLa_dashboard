@@ -294,7 +294,7 @@ function Hemoglobin() {
                   <span>Last verified by</span>
                   <span>:</span>
                 </h4>
-                <p>{patientState.medication.nameVerified}</p>
+                <p>{patientState.hemoglobin.nameVerified}</p>
               </div>
               <div>
                 <h4>

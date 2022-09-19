@@ -129,10 +129,6 @@ function BleedingRisk() {
     if (window.confirm("Are you sure you want to continue?")) {
       await updateBleedingRisk(bleedingRiskData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
-      pageDispatch({
-        type: "SET_CURRENT_PAGE",
-        payload: "Risk Scoring",
-      });
       alert("Update patient's bleeding risk successfully.");
     }
   }

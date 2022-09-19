@@ -371,11 +371,26 @@ function BloodThinner() {
               </div>
               <label>
                 % Days Within Range :{" "}
-                <p>{ttrResult.percentageDaysWithinRange.toFixed(1)}%</p>
+                <p>
+                  {ttrResult.percentageDaysWithinRange
+                    ? ttrResult.percentageDaysWithinRange === NaN
+                      ? 0
+                      : ttrResult.percentageDaysWithinRange
+                    : 0}
+                  {/* {ttrResult.percentageDaysWithinRange
+                    ? ttrResult.percentageDaysWithinRange.toFixed(1)
+                    : 0} */}
+                  %
+                </p>
               </label>
               <label>
                 % of Tests in Range :{" "}
-                <p>{ttrResult.percentageOfTestsInRange.toFixed(1)}%</p>
+                <p>
+                  {ttrResult.percentageOfTestsInRange
+                    ? ttrResult.percentageOfTestsInRange.toFixed(1)
+                    : 0}
+                  %
+                </p>
               </label>
             </div>
           )}

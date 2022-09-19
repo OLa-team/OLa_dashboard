@@ -124,12 +124,7 @@ function WarfarinQuality() {
     if (window.confirm("Are you sure you want to continue?")) {
       await updateWarfarinQuality(warfarinQualityData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
-      pageDispatch({
-        type: "SET_CURRENT_PAGE",
-        payload: "Risk Scoring",
-      });
       alert("Update patient's warfarin quality successfully.");
-      navigate(`/dashboard/patient/${params.patientId}/riskScoring`);
     } else {
       return;
     }
