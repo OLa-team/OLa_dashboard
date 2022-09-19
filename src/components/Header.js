@@ -13,12 +13,12 @@ function Header() {
     console.log("width", windowWidth < 1100);
   };
 
-  // function openSiderbar() {
-  //   if (windowWidth < 1100) {
-  //     alert(windowWidth);
-  //     console.log(document.getElementsByClassName("sidebar").style.width);
-  //   }
-  // }
+  function openSiderbar() {
+    // if (windowWidth < 1100) {
+    //   alert(windowWidth);
+    //   console.log(document.getElementsByClassName("sidebar").style.width);
+    // }
+  }
 
   return (
     <div className="header">
