@@ -7,6 +7,11 @@
   .loginPart {
     margin: auto;
   }
+
+  /* Home */
+  .sidebar {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -55,7 +60,8 @@
   }
 
   .loginMsg {
-    font-size: 15px;
+    font-size: 14px;
+    color: black !important;
   }
 
   .loginPart button {

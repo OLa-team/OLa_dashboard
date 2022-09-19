@@ -99,7 +99,6 @@ function Notification() {
   function viewNotificationDetails(row) {
     setPage("details");
 
-    console.log("row", row);
     setName(row.details.name);
     setPhoneNo(row.details.phoneNo);
     setIcNo(row.details.icNo);
@@ -142,28 +141,23 @@ function Notification() {
     }
   }
 
-  // const q = query(
-  //   collection(firestore, "notification"),
-  //   where("registrationWeb", "==", false)
-  // );
-  // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //   let pendingRequestList = [];
-  //   if (querySnapshot.docs.length > 0) {
-  //     // returnMapArray(querySnapshot);
-  //   }
-  // });
+  const q = query(
+    collection(firestore, "notification"),
+    where("registrationWeb", "==", false)
+  );
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    let pendingRequestList = [];
+    if (querySnapshot.docs.length > 0) {
+      returnMapArray(querySnapshot);
+    }
+  });
 
-  // function returnMapArray(snapShot) {
-  //   setPendingNotification(
-  //     snapShot.docs.map((doc) => ({
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     }))
-  //   );
-  // }
+  function returnMapArray(snapShot) {
+    const notificationData = snapShot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-  async function getAllNotification() {
-    const notificationData = await fetchAllNotification();
     let pendingRequestList = [];
 
     notificationData.forEach((notif) => {
@@ -175,11 +169,30 @@ function Notification() {
     if (pendingRequestList.length > 0) {
       setPendingNotification(pendingRequestList);
     }
+
+    if (pendingRequestList.length === 0) {
+      setPendingNotification([]);
+    }
   }
 
-  useEffect(() => {
-    getAllNotification();
-  }, []);
+  // async function getAllNotification() {
+  //   const notificationData = await fetchAllNotification();
+  //   let pendingRequestList = [];
+
+  //   notificationData.forEach((notif) => {
+  //     if (notif.registrationMobile && !notif.registrationWeb) {
+  //       pendingRequestList.push(notif);
+  //     }
+  //   });
+
+  //   if (pendingRequestList.length > 0) {
+  //     setPendingNotification(pendingRequestList);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getAllNotification();
+  // }, []);
 
   return (
     <div className="wrapper notification">
