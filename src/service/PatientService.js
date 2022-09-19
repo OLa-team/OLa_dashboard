@@ -835,9 +835,11 @@ export async function deletePatientById(id, dispatch) {
     var bleedingRiskRef = doc(firestore, "bleeding_risk", id);
     var warfarinQualityRef = doc(firestore, "warfarin_quality", id);
     var medicationRef = doc(firestore, "medication", id);
+    var bloodThinnerRef = doc(firestore, "blood_thinner", id);
     var selfMonitorRef = doc(firestore, "self_monitor", id);
     var hemoglobinRef = doc(firestore, "hemoglobin", id);
     var notificationRef = doc(firestore, "notification", id);
+    var reminderRef = doc(firestore, "reminder", id);
 
     const patientDocSnap = await getDoc(patientRef);
     const medicalConDocSnap = await getDoc(medicalConRef);
@@ -847,9 +849,11 @@ export async function deletePatientById(id, dispatch) {
     const bleedingRiskDocSnap = await getDoc(bleedingRiskRef);
     const warfarinQualityDocSnap = await getDoc(warfarinQualityRef);
     const medicationDocSnap = await getDoc(medicationRef);
+    const bloodThinnerDocSnap = await getDoc(bloodThinnerRef);
     const selfMonitorDocSnap = await getDoc(selfMonitorRef);
     const hemoglobinDocSnap = await getDoc(hemoglobinRef);
     const notificationDocSnap = await getDoc(notificationRef);
+    const reminderDocSnap = await getDoc(reminderRef);
 
     if (
       !patientDocSnap.exists() ||
@@ -860,9 +864,11 @@ export async function deletePatientById(id, dispatch) {
       !bleedingRiskDocSnap.exists() ||
       !warfarinQualityDocSnap.exists() ||
       !medicationDocSnap.exists() ||
+      !bloodThinnerDocSnap.exists() ||
       !selfMonitorDocSnap.exists() ||
       !hemoglobinDocSnap.exists() ||
-      !notificationDocSnap.exists()
+      !notificationDocSnap.exists() ||
+      !reminderDocSnap.exists()
     ) {
       alert("Document does not exist");
       return;
@@ -877,9 +883,11 @@ export async function deletePatientById(id, dispatch) {
     await deleteDoc(bleedingRiskRef);
     await deleteDoc(warfarinQualityRef);
     await deleteDoc(medicationRef);
+    await deleteDoc(bloodThinnerRef);
     await deleteDoc(selfMonitorRef);
     await deleteDoc(hemoglobinRef);
     await deleteDoc(notificationRef);
+    await deleteDoc(reminderRef);
   } catch (error) {
     alert("Error in delete patient by id");
     throw new Error("Error in delete patient by id", error);
