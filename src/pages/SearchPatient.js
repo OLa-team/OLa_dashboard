@@ -119,7 +119,9 @@ function SearchPatient() {
   }, []);
 
   useEffect(() => {
-    filterPatientList(dispatch, patientState.patientList, searchResult);
+    if (patientState.patientList.length > 0 && searchResult !== "") {
+      filterPatientList(dispatch, patientState.patientList, searchResult);
+    }
   }, [searchResult]);
 
   return (
