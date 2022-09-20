@@ -115,7 +115,8 @@ function PatientProfile() {
     return changeDataObj;
   }
 
-  async function handleUpdatePatientData() {
+  async function handleUpdatePatientData(e) {
+    e.preventDefault();
     // const newData = {
     //   patientId: params.patientId,
     //   name: name,
@@ -224,10 +225,7 @@ function PatientProfile() {
 
         <form
           className="patientProfileForm"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleUpdatePatientData();
-          }}
+          onSubmit={(e) => handleUpdatePatientData(e)}
         >
           <div className="patientInfo">
             <h3>
