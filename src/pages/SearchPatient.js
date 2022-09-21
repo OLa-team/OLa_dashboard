@@ -148,7 +148,7 @@ function SearchPatient() {
         columns={columns}
         clickRowFunction={selectPatient}
         selectFunction={setSelectedPatientList}
-        toolbar={false}
+        toolbar={true}
         gridStyle={gridStyle}
         density="comfortable"
         checkboxSelection={true}

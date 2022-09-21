@@ -102,7 +102,7 @@ function BloodThinner() {
   }
 
   return (
-    <div className="bloodThinner">
+    <div className="wrapper">
       <div style={{ padding: "30px 50px", height: "80%" }}>
         <div>
           <div className="lastUpdatedBox">

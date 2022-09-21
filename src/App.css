@@ -1684,7 +1684,7 @@ input:-webkit-autofill:active {
   position: relative;
 }
 
-.bloodThinner .lastUpdatedBox {
+.lastUpdatedBox {
   width: fit-content;
 }
 

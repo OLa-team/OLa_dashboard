@@ -28,6 +28,15 @@ function Profile() {
       return;
     }
 
+    // Check validation of ic number
+    if (
+      (icNo.charAt(0) === "A" && icNo.length !== 9) ||
+      (icNo.charAt(0) !== "A" && icNo.length !== 12)
+    ) {
+      alert("Please enter a valid I/C No. or Passport No.");
+      return;
+    }
+
     let hcpProfileData = {
       username: username,
       icNo: icNo,
@@ -102,7 +111,7 @@ function Profile() {
                 value={icNo}
                 onChange={(e) => setIcNo(e.target.value)}
                 placeholder="Enter your ic no"
-                disabled
+                // disabled
               />
             </div>
             <div className="profileInput">
@@ -112,7 +121,7 @@ function Profile() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                disabled
+                // disabled
               />
             </div>
             <button className="saveHcpProfile" type="submit">

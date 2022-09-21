@@ -259,7 +259,9 @@ function Hemoglobin() {
       <div style={{ padding: "30px 50px", height: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <h1 style={{ paddingRight: "10px" }}>Hemoglobin</h1>
+            <h1 style={{ paddingRight: "10px" }}>
+              Hemoglobin record {changeView}
+            </h1>
             <button
               style={{
                 padding: "7px 17px",
