@@ -38,6 +38,20 @@ function BloodThinner() {
   const [duration, setDuration] = useState(
     patientState.bloodThinner.duration ? patientState.bloodThinner.duration : ""
   );
+  // const [initiationDose, setInitiationDose] = useState(
+  //   patientState.bloodThinner.initiationDose
+  //     ? patientState.bloodThinner.initiationDose
+  //     : 0
+  // );
+  const [dose1, setDose1] = useState(
+    patientState.bloodThinner.dose1 ? patientState.bloodThinner.dose1 : 0
+  );
+  const [dose2, setDose2] = useState(
+    patientState.bloodThinner.dose2 ? patientState.bloodThinner.dose2 : 0
+  );
+  const [dose3, setDose3] = useState(
+    patientState.bloodThinner.dose3 ? patientState.bloodThinner.dose3 : 0
+  );
   const [inrRange, setInrRange] = useState(
     patientState.bloodThinner.inrRange ? patientState.bloodThinner.inrRange : ""
   );
@@ -54,17 +68,19 @@ function BloodThinner() {
     ? patientState.bloodThinner.dateTimeUpdated
     : "";
 
-  let bloodThinnerData = {
-    nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    anticoagulant: anticoagulant,
-    indication: indication,
-    duration: duration,
-    inrRange: inrRange,
-  };
-
   async function handleSubmitBloodThinner() {
     // e.preventDefault();
+    let bloodThinnerData = {
+      nameUpdated: userState.userDetails.username,
+      dateTimeUpdated: new Date().getTime(),
+      anticoagulant: anticoagulant,
+      indication: indication,
+      duration: duration,
+      dose1: dose1,
+      dose2: dose2,
+      dose3: dose3,
+      inrRange: inrRange,
+    };
 
     if (change) {
       bloodThinnerData = {
@@ -133,13 +149,13 @@ function BloodThinner() {
           </div>
         </div>
 
-        {anticoagulant === "warfarin" && (
+        {/* {anticoagulant === "warfarin" && (
           <div className="ttrBtn">
             <button type="button" onClick={() => openTtrResultBox()}>
               TTR result
             </button>
           </div>
-        )}
+        )} */}
 
         <form className="bloodThinnerForm">
           <div className="upperBloodThinner">
@@ -198,6 +214,15 @@ function BloodThinner() {
           <div className="lowerBloodThinner">
             {anticoagulant !== "" && (
               <>
+                {anticoagulant === "warfarin" && (
+                  <div className="checkboxBloodThinner">
+                    <div className="ttrBtn">
+                      <button type="button" onClick={() => openTtrResultBox()}>
+                        TTR result
+                      </button>
+                    </div>
+                  </div>
+                )}
                 <div className="checkboxBloodThinner">
                   <h3>
                     <span>Indication</span>
@@ -312,6 +337,33 @@ function BloodThinner() {
                   <>
                     <div className="checkboxBloodThinner">
                       <h3>
+                        <span>Initiation Dose</span>
+                        <span>:</span>
+                      </h3>
+                      <div className="choiceWrapper">
+                        <div>
+                          <input
+                            type="number"
+                            value={dose1}
+                            onChange={(e) => setDose1(e.target.value)}
+                          />
+                          /
+                          <input
+                            type="number"
+                            value={dose2}
+                            onChange={(e) => setDose2(e.target.value)}
+                          />
+                          /
+                          <input
+                            type="number"
+                            value={dose3}
+                            onChange={(e) => setDose3(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="checkboxBloodThinner">
+                      <h3>
                         <span>INR Target Range</span>
                         <span>:</span>
                       </h3>
@@ -375,7 +427,7 @@ function BloodThinner() {
                   {ttrResult.percentageDaysWithinRange
                     ? ttrResult.percentageDaysWithinRange === NaN
                       ? 0
-                      : ttrResult.percentageDaysWithinRange
+                      : ttrResult.percentageDaysWithinRange.toFixed(1)
                     : 0}
                   {/* {ttrResult.percentageDaysWithinRange
                     ? ttrResult.percentageDaysWithinRange.toFixed(1)
@@ -396,7 +448,7 @@ function BloodThinner() {
           )}
 
           <div className="selectedClotPreventer">
-            <h1>Selected Clot Preventer</h1>
+            <h1>Risk Stratification</h1>
 
             <div className="riskScoringTools">
               <div

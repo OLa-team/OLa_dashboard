@@ -1723,7 +1723,7 @@ input:-webkit-autofill:active {
 }
 
 .lowerBloodThinner {
-  margin-top: 5%;
+  margin-top: 20px;
 }
 
 .checkboxBloodThinner {
@@ -1731,6 +1731,7 @@ input:-webkit-autofill:active {
   /* justify-content: space-between; */
   align-items: center;
   padding: 20px;
+  position: relative;
 }
 
 .checkboxBloodThinner h3 {
@@ -1751,6 +1752,16 @@ input:-webkit-autofill:active {
 .choiceWrapper div {
   display: flex;
   align-items: center;
+}
+
+.choiceWrapper div input[type="number"] {
+  padding: 3px 10px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  width: 30px;
+  text-align: center;
 }
 
 .checkboxBloodThinner div input[type="checkbox"] {
@@ -1775,9 +1786,9 @@ input:-webkit-autofill:active {
 }
 
 .ttrBtn {
-  position: absolute;
-  top: 62px;
-  right: 500px;
+  /* position: absolute;
+  top: -30px;
+  left: 75px; */
 }
 
 .ttrBtn button {
@@ -1790,6 +1801,11 @@ input:-webkit-autofill:active {
   border: 2px solid #000;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ttrBtn button:hover {
+  transform: scale(1.05);
 }
 
 .selectedClotPreventer {
