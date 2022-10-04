@@ -22,7 +22,7 @@ function WarfarinQuality() {
   const params = useParams();
 
   const pageDispatch = usePageDispatch();
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
@@ -104,24 +104,24 @@ function WarfarinQuality() {
     ? patientState.warfarinQuality.dateTimeUpdated
     : "";
 
-  let warfarinQualityData = {
-    nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    sex: sex,
-    age: age,
-    medHistory: medHistory,
-    treatment: treatment,
-    tobacco: tobacco,
-    race: race,
-    score: score,
-    result: result,
-    colorMsg: colorMsg,
-  };
-
   async function handleSubmitWarfarinQuality(e) {
     e.preventDefault();
 
     if (window.confirm("Are you sure you want to continue?")) {
+      let warfarinQualityData = {
+        nameUpdated: currentUserState.userDetails.username,
+        dateTimeUpdated: new Date().getTime(),
+        nameVerified: "",
+        sex: sex,
+        age: age,
+        medHistory: medHistory,
+        treatment: treatment,
+        tobacco: tobacco,
+        race: race,
+        score: score,
+        result: result,
+        colorMsg: colorMsg,
+      };
       await updateWarfarinQuality(warfarinQualityData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's warfarin quality successfully.");
@@ -135,7 +135,7 @@ function WarfarinQuality() {
       await updateNameVerified(
         "warfarin_quality",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }

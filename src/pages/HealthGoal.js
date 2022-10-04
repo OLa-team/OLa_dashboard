@@ -17,7 +17,7 @@ function HealthGoal() {
   const params = useParams();
 
   const pageDispatch = usePageDispatch();
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
@@ -67,7 +67,7 @@ function HealthGoal() {
     : "";
 
   let healthGoalData = {
-    nameUpdated: userState.userDetails.username,
+    nameUpdated: currentUserState.userDetails.username,
     dateTimeUpdated: new Date().getTime(),
     healthGoalList: healthGoalList,
     agreeToGoal: agreeToGoal,
@@ -176,14 +176,18 @@ function HealthGoal() {
             })}
           </div>
 
-          <div className="agreeToHealthGoal">
-            <input
-              type="checkbox"
-              checked={agreeToGoal}
-              onChange={(prev) => setAgreeToGoal((prev) => !prev)}
-            />
-            <p>I agree to follow my health goals</p>
-          </div>
+          {agreeToGoal && (
+            <div className="agreeToHealthGoal">
+              <TiTick
+                style={{
+                  color: "red",
+                  marginRight: "10px",
+                  fontSize: "30px",
+                }}
+              />
+              <p>Patient agree to follow the health goals</p>
+            </div>
+          )}
 
           <div className="saveAndCancelButton ">
             <button className="saveProfile" type="submit">

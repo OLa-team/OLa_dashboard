@@ -5,6 +5,7 @@ import {
   usePatientDispatch,
 } from "./PatientContext";
 import { PageProvider, usePageState, usePageDispatch } from "./PageContext";
+import { UserProvider, useUserState, useUserDispatch } from "./UserContext";
 
 export {
   AuthProvider,
@@ -16,4 +17,7 @@ export {
   PageProvider,
   usePageState,
   usePageDispatch,
+  UserProvider,
+  useUserState,
+  useUserDispatch,
 };

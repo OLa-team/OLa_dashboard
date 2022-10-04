@@ -25,7 +25,7 @@ function BTTable() {
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
 
   // INR data state
   const [date, setDate] = useState("");
@@ -144,12 +144,12 @@ function BTTable() {
     {
       field: "date",
       headerName: "Date",
-      flex: 0.7,
+      flex: 0.9,
     },
     {
       field: "inr",
-      headerName: "INR",
-      flex: 0.5,
+      headerName: "INR reading",
+      flex: 0.8,
     },
     {
       field: "weeklyDoses",
@@ -185,17 +185,17 @@ function BTTable() {
     {
       field: "duration",
       headerName: "Duration",
-      flex: 1,
+      flex: 0.8,
     },
     {
       field: "note",
       headerName: "Notes",
-      flex: 1.5,
+      flex: 2.5,
     },
     {
       field: "button",
       headerName: "Action",
-      flex: 0.5,
+      flex: 0.7,
       sortable: false,
       renderCell: (params) => {
         return (
@@ -467,7 +467,7 @@ function BTTable() {
     e.preventDefault();
 
     let inrRecordData = {
-      nameUpdated: userState.userDetails.username,
+      nameUpdated: currentUserState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
       inrRecord: inrRecordList,
       ttrResult: ttrResult,
@@ -654,7 +654,7 @@ function BTTable() {
     }
 
     let creatinineRecordData = {
-      nameUpdated: userState.userDetails.username,
+      nameUpdated: currentUserState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
       creatinineRecord: creatinineRecordList,
       dose: dose,
@@ -694,7 +694,7 @@ function BTTable() {
       await updateNameVerified(
         "blood_thinner",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }
@@ -711,7 +711,7 @@ function BTTable() {
   }, [inrRecordList]);
 
   return (
-    <div className="bttable">
+    <div className="wrapper">
       <div style={{ padding: "20px 50px", height: "80%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1>{capitalizeFirstLetter(anticoagulant)} record table</h1>
@@ -891,7 +891,7 @@ function BTTable() {
           {openWeeklyDose && (
             <div className="weeklyDoseData">
               <div>
-                <h3>Weekly Dose: </h3>
+                <h3>New Weekly Dose: </h3>
                 <IoClose
                   onClick={() => {
                     setOpenWeeklyDose(false);
@@ -951,36 +951,71 @@ function BTTable() {
                 }}
               />
               <h1>{openInrForm.action === "add" ? "New" : "Edit"} Record</h1>
-              <div>
-                <label>Date: </label>
-                <input
-                  type="date"
-                  placeholder="Enter date"
-                  value={date}
-                  onChange={(e) => {
-                    setDate(e.target.value);
-                  }}
-                  required
-                />
-              </div>
-              <div>
-                <label>INR: </label>
-                <input
-                  type="number"
-                  name="inr"
-                  placeholder="Enter inr range"
-                  value={inr}
-                  onChange={(e) => {
-                    setInr(e.target.value);
-                  }}
-                  required
-                />
-              </div>
-              <div>
-                <div>
-                  <label>Weekly Dose: </label>
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ width: "100%" }}>
+                  <div className="btInputWrapper">
+                    <label>Date: </label>
+                    <input
+                      type="date"
+                      placeholder="Enter date"
+                      value={date}
+                      onChange={(e) => {
+                        setDate(e.target.value);
+                      }}
+                      required
+                    />
+                  </div>
+                  <div className="btInputWrapper">
+                    <label>INR reading: </label>
+                    <input
+                      type="number"
+                      name="inr"
+                      placeholder="Enter inr reading"
+                      value={inr}
+                      onChange={(e) => {
+                        setInr(e.target.value);
+                      }}
+                      required
+                    />
+                  </div>
+                  <div className="btInputWrapper">
+                    <label>Duration: </label>
+                    <input
+                      type="text"
+                      name="duration"
+                      placeholder="Enter duration"
+                      value={duration}
+                      onChange={(e) => {
+                        setDuration(e.target.value);
+                      }}
+                      required
+                    />
+                  </div>
+                  <div className="btInputWrapper">
+                    <label>Notes: </label>
+                    <textarea
+                      type="text"
+                      name="note"
+                      className="noteInput"
+                      placeholder="'i.e.: missed dose, bleeding episode, meds stopped/ withheld, drug interaction"
+                      value={note}
+                      onChange={(e) => {
+                        setNote(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div style={{ width: "700px", paddingLeft: "10px" }}>
+                  <label>New Weekly Dose: </label>
                   <div className="weeklyDoseRow">
-                    <div>
+                    <div className="btInputWrapper">
                       <label>Sunday:</label>
                       <span>
                         <input
@@ -991,7 +1026,7 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
-                    <div>
+                    <div className="btInputWrapper">
                       <label>Monday:</label>
                       <span>
                         <input
@@ -1004,7 +1039,7 @@ function BTTable() {
                     </div>
                   </div>
                   <div className="weeklyDoseRow">
-                    <div>
+                    <div className="btInputWrapper">
                       <label>Tuesday:</label>
                       <span>
                         <input
@@ -1015,7 +1050,7 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
-                    <div>
+                    <div className="btInputWrapper">
                       <label>Wednesday:</label>
                       <span>
                         <input
@@ -1028,7 +1063,7 @@ function BTTable() {
                     </div>
                   </div>
                   <div className="weeklyDoseRow">
-                    <div>
+                    <div className="btInputWrapper">
                       <label>Thursday:</label>
                       <span>
                         <input
@@ -1039,7 +1074,7 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
-                    <div>
+                    <div className="btInputWrapper">
                       <label>Friday:</label>
                       <span>
                         <input
@@ -1052,7 +1087,7 @@ function BTTable() {
                     </div>
                   </div>
                   <div className="weeklyDoseRow">
-                    <div>
+                    <div className="btInputWrapper">
                       <label>Saturday:</label>
                       <span>
                         <input
@@ -1065,32 +1100,6 @@ function BTTable() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <label>Duration: </label>
-                <input
-                  type="text"
-                  name="duration"
-                  placeholder="Enter duration"
-                  value={duration}
-                  onChange={(e) => {
-                    setDuration(e.target.value);
-                  }}
-                  required
-                />
-              </div>
-              <div>
-                <label>Notes: </label>
-                <textarea
-                  type="text"
-                  name="note"
-                  className="noteInput"
-                  placeholder="Any remarks"
-                  value={note}
-                  onChange={(e) => {
-                    setNote(e.target.value);
-                  }}
-                />
               </div>
 
               <button type="submit">

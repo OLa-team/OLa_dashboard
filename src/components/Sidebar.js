@@ -5,9 +5,10 @@ import { BsPencilSquare, BsPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { IoMdNotifications } from "react-icons/io";
 import { IoLogOutSharp } from "react-icons/io5";
+import { HiUsers } from "react-icons/hi";
 import SidebarItem from "./SidebarItem";
 import { useNavigate } from "react-router-dom";
-import { useAuthDispatch } from "../context";
+import { useAuthDispatch, useAuthState } from "../context";
 import { usePageDispatch } from "../context/PageContext";
 import { fetchAllNotification, logout } from "../service";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -19,15 +20,20 @@ function Sidebar() {
   const [ac2, setAc2] = useState(false);
   const [ac3, setAc3] = useState(false);
   const [ac4, setAc4] = useState(false);
+  const [ac5, setAc5] = useState(false);
   const [hasNotification, setHasNotification] = useState(false);
 
   // Navigate
   const navigate = useNavigate();
 
   // Dispatch
-  const dispatch = useAuthDispatch();
   const pageDispatch = usePageDispatch();
   const authDispatch = useAuthDispatch();
+
+  const currentUserState = useAuthState();
+
+  const isUserAdmin = currentUserState.userDetails.isAdmin;
+  const isUserHcp = currentUserState.userDetails.isHcp;
 
   const hcpId = localStorage.getItem("currentUser")
     ? JSON.parse(localStorage.getItem("currentUser")).id
@@ -38,10 +44,11 @@ function Sidebar() {
     setAc2(false);
     setAc3(false);
     setAc4(false);
+    setAc5(false);
   }
 
   function handleLogout() {
-    logout(dispatch);
+    logout(authDispatch);
     navigate("/login");
     localStorage.removeItem("currentSection");
   }
@@ -71,6 +78,12 @@ function Sidebar() {
           reset();
           setAc4((prev) => !prev);
           navigate("/dashboard/profile");
+          return;
+
+        case "User List Section":
+          reset();
+          setAc5((prev) => !prev);
+          navigate("/dashboard/users");
           return;
 
         default:
@@ -132,14 +145,14 @@ function Sidebar() {
             );
             pageDispatch({
               type: "SET_CURRENT_PAGE",
-              payload: "Patient Registration",
+              payload: "Registration",
             });
             navigate("/dashboard/patientRegistration");
           }}
         >
           <SidebarItem
             Icon={<BsPencilSquare />}
-            section="Register"
+            section={isUserAdmin ? "Register Users" : "Register Patient"}
             active={ac2}
             alert={false}
           />
@@ -184,11 +197,37 @@ function Sidebar() {
         >
           <SidebarItem
             Icon={<BsPersonFill />}
-            section="Profile"
+            section="User Profile"
             active={ac4}
             alert={false}
           />
         </div>
+
+        {isUserAdmin && (
+          <div
+            onClick={() => {
+              reset();
+              setAc5((prev) => !prev);
+              localStorage.setItem(
+                "currentSection",
+                JSON.stringify("User List Section")
+              );
+              pageDispatch({
+                type: "SET_CURRENT_PAGE",
+                payload: "User List",
+              });
+              navigate("/dashboard/users");
+            }}
+          >
+            <SidebarItem
+              Icon={<HiUsers />}
+              section="Admin & HCP"
+              active={ac5}
+              alert={false}
+            />
+          </div>
+        )}
+
         <div
           onClick={() => {
             if (window.confirm("Are you sure you want to log out?")) {

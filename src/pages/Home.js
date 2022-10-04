@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import PatientRegistration from "./PatientRegistration";
 import SearchPatient from "./SearchPatient";
 import { Routes, Route } from "react-router-dom";
-import { usePatientState } from "../context";
+import { usePageState, usePatientState } from "../context";
 import Patient from "./Patient";
 import PatientProfile from "./PatientProfile";
 import MedicalCondition from "./MedicalCondition";
@@ -28,9 +28,11 @@ import HealthDiaryRecord from "./PatientMonitoring/HealthDiaryRecord";
 import Notification from "./Notification";
 import Hemoglobin from "./BloodThinner/Hemoglobin";
 import Header from "../components/Header";
+import UserList from "./UserList";
 
 function Home() {
-  const { loading } = usePatientState();
+  const patientLoading = usePatientState().loading;
+  const pageLoading = usePageState().loading;
 
   return (
     <div className="bgHome">
@@ -51,6 +53,7 @@ function Home() {
             />
             <Route path="/notification" element={<Notification />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/users" element={<UserList />} />
             <Route path="/patient/:patientId" element={<Patient />} />
             <Route
               path="/patient/:patientId/patientProfile"
@@ -128,7 +131,7 @@ function Home() {
           </Routes>
         </div>
       </div>
-      <Loader loading={loading} />
+      <Loader loading={patientLoading ? patientLoading : pageLoading} />
     </div>
   );
 }

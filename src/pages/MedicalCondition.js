@@ -22,7 +22,7 @@ function MedicalCondition() {
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const pageDispatch = usePageDispatch();
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientId = params.patientId;
 
   const map = patientState.medicalCondition
@@ -58,8 +58,9 @@ function MedicalCondition() {
     e.preventDefault();
 
     const medicalConditionData = {
-      nameUpdated: userState.userDetails.username,
+      nameUpdated: currentUserState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
+      nameVerified: "",
       hypertension: hypertension,
       diabetes: diabetes,
       hyperlipidemia: hyperlipidemia,
@@ -86,7 +87,7 @@ function MedicalCondition() {
       await updateNameVerified(
         "medical_condition",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }

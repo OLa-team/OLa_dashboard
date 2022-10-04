@@ -7,6 +7,7 @@ const page = localStorage.getItem("currentPage")
 // Initial state
 const initialState = {
   currentPage: page,
+  loading: false,
 };
 
 // Page reducer
@@ -17,6 +18,18 @@ const PageReducer = (initialState, action) => {
       return {
         ...initialState,
         currentPage: JSON.parse(localStorage.getItem("currentPage")),
+      };
+
+    case "SET_LOADING_TRUE":
+      return {
+        ...initialState,
+        loading: true,
+      };
+
+    case "SET_LOADING_FALSE":
+      return {
+        ...initialState,
+        loading: false,
       };
 
     default:

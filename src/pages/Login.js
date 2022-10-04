@@ -25,7 +25,7 @@ function Login() {
     // async request to the server
     try {
       let response = await loginUser(dispatch, email);
-      if (response.length > 1) return;
+      if (response.length === 0 || response.length > 1) return;
 
       sendEmail(e);
       e.target.reset();
@@ -73,9 +73,9 @@ function Login() {
           </div>
 
           <div className="rightTopBar">
-            <Link to="/register" className="toSignUp">
+            {/* <Link to="/register" className="toSignUp">
               Create an account
-            </Link>
+            </Link> */}
           </div>
         </div>
 

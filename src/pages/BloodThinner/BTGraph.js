@@ -78,7 +78,7 @@ function BTGraph() {
   };
 
   return (
-    <div className="btGraph">
+    <div className="wrapper">
       <div style={{ padding: "30px 70px", height: "80%" }}>
         <h1>
           {anticoagulant === "warfarin" ? "INR" : "Creatinine Clearance"} Trend

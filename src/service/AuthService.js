@@ -8,27 +8,29 @@ import {
 import { firestore } from "../firebase";
 import { encryptLocalData } from "../utils";
 
-const hcpsCollectionRef = collection(firestore, "hcp");
+const usersCollectionRef = collection(firestore, "user");
+// const hcpsCollectionRef = collection(firestore, "hcp");
+// const adminsCollectionRef = collection(firestore, "admin");
 
 // Login
 export async function loginUser(dispatch, email) {
   try {
     dispatch({ type: "REQUEST_LOGIN" });
 
-    let response = await getDocs(hcpsCollectionRef);
-    let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    let findHcpData = data.filter((hcp) => hcp.email === email);
-    let hcpData = findHcpData[0];
+    var response = await getDocs(usersCollectionRef);
+    var data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    let findUserData = data.filter((hcp) => hcp.email === email);
 
-    if (findHcpData.length === 1) {
+    if (findUserData.length === 1) {
+      let userData = findUserData[0];
       dispatch({
         type: "LOGIN_SUCCESS",
-        payload: hcpData,
+        payload: userData,
       });
-      encryptLocalData(hcpData, "user");
-      // localStorage.setItem("currentUser", JSON.stringify(hcpData));
+      encryptLocalData(userData, "user");
+      // localStorage.setItem("currentUser", JSON.stringify(userData));
 
-      return hcpData;
+      return userData;
     }
 
     dispatch({ type: "LOGIN_ERROR", error: data.errors[0] });
@@ -51,61 +53,4 @@ export async function logout(dispatch) {
   localStorage.removeItem("strokeRisk");
   localStorage.removeItem("bleedingRisk");
   localStorage.removeItem("warfarinQuality");
-}
-
-// Register
-export async function registerHcp(email, username) {
-  try {
-    await addDoc(hcpsCollectionRef, { email: email, username: username });
-  } catch (error) {
-    throw new Error(`Error in register new hcp: `, error);
-  }
-}
-
-// update hcp profile
-export async function updateHcpProfile(hcpProfileData, hcpId) {
-  try {
-    await updateDoc(doc(firestore, "hcp", hcpId), {
-      username: hcpProfileData.username,
-      icNo: hcpProfileData.icNo,
-      email: hcpProfileData.email,
-    });
-  } catch (error) {
-    alert(error.message);
-    console.log("Error in update hcp profile data", error);
-    return;
-  }
-}
-
-// set hcp data
-export async function setCurrentHcp(dispatch, hcpId) {
-  if (localStorage.getItem("currentUser")) {
-    localStorage.removeItem("currentUser");
-  }
-
-  try {
-    dispatch({
-      type: "SET_LOADING_TRUE",
-    });
-
-    let response = await getDocs(hcpsCollectionRef);
-    let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    let findHcpData = data.filter((hcp) => hcp.id === hcpId);
-    let hcpData = findHcpData[0];
-    console.log("findHcpData", findHcpData);
-
-    if (findHcpData.length === 1) {
-      dispatch({
-        type: "SET_CURRENT_HCP",
-        payload: hcpData,
-      });
-      localStorage.setItem("currentUser", JSON.stringify(hcpData));
-
-      dispatch({
-        type: "SET_LOADING_FALSE",
-      });
-    }
-  } catch (error) {
-    throw new Error(`Error in set current hcp: `, error);
-  }
 }

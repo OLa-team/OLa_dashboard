@@ -318,7 +318,7 @@
 
 .sidebar {
   /* width: 15%; */
-  width: 285px;
+  width: 320px;
   height: 100vh;
   background-color: #ec2029;
   /* border-top-right-radius: 20px; */
@@ -342,13 +342,14 @@
 }
 
 .item {
-  padding: 15px 0px 15px 40px;
+  padding: 15px 0px 15px 30px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   color: white;
   font-size: 22px;
   cursor: pointer;
+  text-align: left;
   /* background-color: white; */
 }
 
@@ -428,6 +429,26 @@
 
 /* ---------------------------------------------------- */
 /* Patient Registration */
+.registrationCatWrapper {
+  padding: 40px 70px;
+  margin: auto;
+  width: 60%;
+  height: 70%;
+  text-align: center;
+}
+
+.registrationCatWrapper .gridContainer {
+  height: 100%;
+  position: relative;
+  align-items: center;
+  text-align: center;
+}
+
+.registrationCatWrapper .gridItem {
+  height: 50%;
+  text-align: center;
+}
+
 .patientRegistration {
   width: 500px;
   height: 500px;
@@ -444,6 +465,12 @@
   transform: translate(-50%, -50%);
 }
 
+.patientRegistration .backArrow {
+  position: absolute;
+  top: 35px;
+  left: 40px;
+}
+
 .patientRegistration h2 {
   font-size: 30px;
 }
@@ -458,7 +485,7 @@
 }
 
 .register-inputField {
-  margin-bottom: 40px;
+  margin-bottom: 35px;
 }
 
 .register-inputField label {
@@ -494,6 +521,12 @@ input:-webkit-autofill:active {
   outline: none;
   font-size: 17px;
   cursor: pointer;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+.patientRegistrationForm button:hover {
+  background-color: #e7424b;
 }
 
 /* ---------------------------------------------------- */
@@ -605,6 +638,10 @@ input:-webkit-autofill:active {
   margin-bottom: 15px;
 }
 
+.leftBar {
+  display: flex;
+}
+
 .searchBar {
   width: 250px;
   height: 32px;
@@ -623,13 +660,26 @@ input:-webkit-autofill:active {
   height: 100%;
   border: none;
   outline: none;
-  font-size: 15px;
+  font-size: 17px;
   background-color: transparent;
 }
 
 .searchBar .searchIcon {
   font-size: 22px;
   cursor: pointer;
+}
+
+.filterRoleOption {
+  width: 250px;
+  height: 40px;
+  font-size: 17px;
+  background-color: transparent;
+  padding: 3px 20px;
+  border-radius: 15px;
+  border: 0.5px solid #000;
+  margin-left: 10px;
+  cursor: pointer;
+  outline: none;
 }
 
 .bar button {
@@ -756,7 +806,8 @@ input:-webkit-autofill:active {
 }
 
 .patientModule,
-.monitoringModule {
+.monitoringModule,
+.registrationModule {
   background-color: white;
   height: 100%;
   text-align: center;
@@ -775,8 +826,15 @@ input:-webkit-autofill:active {
   margin-bottom: 15px;
 }
 
+.patientModule img.iconModule {
+  width: 50px;
+  height: 50px;
+  color: #000;
+}
+
 .patientModule:hover,
-.monitoringModule:hover {
+.monitoringModule:hover,
+.registrationModule:hover {
   transform: scale(1.05);
   color: #ec2029;
 }
@@ -1049,10 +1107,15 @@ input:-webkit-autofill:active {
   border-radius: 15px;
   border: none;
   outline: none;
-  background-color: lightgreen;
   color: white;
   cursor: pointer;
   height: fit-content;
+  background-color: rgb(50, 232, 50);
+  transition: all 0.3s ease;
+}
+
+.addHealthGoal button:hover {
+  background-color: lightgreen;
 }
 
 .react-datalist-input__container {
@@ -1344,7 +1407,7 @@ input:-webkit-autofill:active {
 
 /* Current medication */
 .medicationLeftHeader {
-  width: 450px;
+  width: 500px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -1362,11 +1425,19 @@ input:-webkit-autofill:active {
   display: flex;
   align-items: center;
   text-align: center;
+  height: 30px;
 }
 
 .medicationLeftHeader div:hover {
   background-color: black;
   color: white;
+}
+
+.medicationLeftHeader img.iconModule {
+  width: 20px;
+  height: 20px;
+  padding-right: 10px;
+  margin-top: 15px;
 }
 
 .alertDot {
@@ -1550,7 +1621,7 @@ input:-webkit-autofill:active {
 .addOrEditMedicationForm,
 .addOrEditHemoglobinForm {
   width: fit-content;
-  height: 70%;
+  height: fit-content;
   overflow-y: scroll;
   border-radius: 20px;
   position: absolute;
@@ -1593,7 +1664,7 @@ input:-webkit-autofill:active {
 
 .addOrEditMedicationForm div,
 .addOrEditHemoglobinForm div {
-  padding: 15px 0px;
+  padding: 13px 0px;
   display: flex;
   flex-direction: column;
 }
@@ -1651,12 +1722,13 @@ input:-webkit-autofill:active {
 .noteInput {
   border: none;
   outline: none;
-  width: 450px;
+  width: 90%;
+  height: 100px;
   background-color: rgb(240, 240, 240);
   padding: 8px 15px;
   font-size: 17px;
   border-radius: 10px;
-  resize: none;
+  resize: vertical;
 }
 
 .medBg {
@@ -1759,7 +1831,7 @@ input:-webkit-autofill:active {
   border-radius: 5px;
   outline: none;
   border: none;
-  font-size: 14px;
+  font-size: 18px;
   width: 30px;
   text-align: center;
 }
@@ -1865,7 +1937,9 @@ input:-webkit-autofill:active {
   height: 100vh;
   transition: all 0.3s ease;
   transform: scale(0);
-  z-index: 999999999999999999999999;
+  z-index: 9999999999;
+  /* background-color: white; */
+  /* opacity: 1; */
 }
 
 .bloodThinnerTableForm.popup,
@@ -1875,10 +1949,8 @@ input:-webkit-autofill:active {
 
 .addOrEditBloodThinnerForm,
 .addOrEditCreatinineForm {
-  width: fit-content;
-  height: 80%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  width: 65%;
+  height: fit-content;
   border-radius: 20px;
   position: absolute;
   top: 50%;
@@ -1887,35 +1959,41 @@ input:-webkit-autofill:active {
   box-shadow: 5px 10px 18px #888888;
   border: none;
   background-color: rgb(250, 250, 250);
-  opacity: 1;
+  /* opacity: 1; */
   padding: 20px 30px;
   transition: all 0.5s ease;
+}
+
+.addOrEditCreatinineForm {
+  width: 30%;
+  height: fit-content;
 }
 
 .addOrEditBloodThinnerForm h1,
 .addOrEditCreatinineForm h1 {
   padding: 5px 15px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-.addOrEditBloodThinnerForm div,
+.btInputWrapper,
 .addOrEditCreatinineForm div {
   padding: 8px 0px;
   display: flex;
   flex-direction: column;
 }
 
-.addOrEditBloodThinnerForm div label,
+.btInputWrapper label,
 .addOrEditCreatinineForm div label {
   font-size: 17px;
   padding-bottom: 10px;
 }
 
-.addOrEditBloodThinnerForm div input,
+.btInputWrapper input,
 .addOrEditCreatinineForm div input {
   border: none;
   outline: none;
-  width: 450px;
+  width: 90%;
   background-color: rgb(240, 240, 240);
   padding: 8px 15px;
   font-size: 17px;
@@ -1956,9 +2034,8 @@ input:-webkit-autofill:active {
   position: fixed;
   top: 0;
   right: 0;
-  background-color: white;
+  background-color: lightgray;
   opacity: 0.8;
-  /* z-index: 99999999999999; */
 }
 
 .action {
@@ -2024,9 +2101,15 @@ input:-webkit-autofill:active {
 }
 
 .weeklyDoseRow {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row !important;
+}
+
+.weeklyDoseRow div {
+  width: 200px;
+  margin-right: 30px;
 }
 
 .weeklyDoseRow label {
@@ -2298,4 +2381,22 @@ input:-webkit-autofill:active {
 .rejectNotif:hover {
   background-color: red;
   color: white;
+}
+
+.MuiDataGrid-row,
+.MuiDataGrid-root .MuiDataGrid-cell,
+.rendering-zone {
+  max-height: none !important;
+}
+
+.MuiDataGrid-root .MuiDataGrid-window {
+  position: relative !important;
+}
+
+.MuiDataGrid-root .MuiDataGrid-viewport {
+  max-height: none !important;
+}
+
+.MuiDataGrid-root {
+  /* height: auto !important; */
 }

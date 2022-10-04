@@ -19,7 +19,7 @@ function BleedingRisk() {
   const params = useParams();
 
   const pageDispatch = usePageDispatch();
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
@@ -106,27 +106,27 @@ function BleedingRisk() {
     ? patientState.bleedingRisk.dateTimeUpdated
     : "";
 
-  let bleedingRiskData = {
-    nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    hypertension: hypertension,
-    renal: renal,
-    liver: liver,
-    stroke: stroke,
-    bleeding: bleeding,
-    inr: inr,
-    age65: age65,
-    drugs: drugs,
-    alcohol: alcohol,
-    score: score,
-    result: result,
-    colorMsg: colorMsg,
-  };
-
   async function handleSubmitBleedingRiskTest(e) {
     e.preventDefault();
 
     if (window.confirm("Are you sure you want to continue?")) {
+      let bleedingRiskData = {
+        nameUpdated: currentUserState.userDetails.username,
+        dateTimeUpdated: new Date().getTime(),
+        nameVerified: "",
+        hypertension: hypertension,
+        renal: renal,
+        liver: liver,
+        stroke: stroke,
+        bleeding: bleeding,
+        inr: inr,
+        age65: age65,
+        drugs: drugs,
+        alcohol: alcohol,
+        score: score,
+        result: result,
+        colorMsg: colorMsg,
+      };
       await updateBleedingRisk(bleedingRiskData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's bleeding risk successfully.");
@@ -138,7 +138,7 @@ function BleedingRisk() {
       await updateNameVerified(
         "bleeding_risk",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }

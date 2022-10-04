@@ -18,13 +18,14 @@ import {
 } from "../service/PatientService";
 import { getCurrentDate, getCurrentTime } from "../utils";
 import DatalistInput from "react-datalist-input";
+import allergyLogo from "../../src/assets/allergy.png";
 
 function Medication() {
   const navigate = useNavigate();
   const params = useParams();
 
   const pageDispatch = usePageDispatch();
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
@@ -60,7 +61,10 @@ function Medication() {
     "Metformin",
   ].map((medicine) => ({ id: medicine, value: medicine }));
 
-  const frequencyList = ["OD", "BD", "TDS", "QID", "PRN"];
+  const frequencyList = ["OD", "BD", "TDS", "QID", "PRN"].map((frequency) => ({
+    id: frequency,
+    value: frequency,
+  }));
 
   const style = {
     height: "80%",
@@ -132,8 +136,9 @@ function Medication() {
     e.preventDefault();
 
     const medicationData = {
-      nameUpdated: userState.userDetails.username,
+      nameUpdated: currentUserState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
+      nameVerified: "",
       medicineList: medicineList,
     };
 
@@ -217,7 +222,7 @@ function Medication() {
       await updateNameVerified(
         "medication",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }
@@ -265,6 +270,7 @@ function Medication() {
                 navigate(`/dashboard/patient/${params.patientId}/allergy`);
               }}
             >
+              <img src={allergyLogo} className="iconModule" />
               Allergy {hasAllergy && <GoPrimitiveDot className="alertDot" />}
             </div>
             <div
@@ -404,8 +410,19 @@ function Medication() {
               />
             </div>
             <div>
-              <label>Frequency: </label>
-              <select
+              {/* <label>Frequency: </label> */}
+              <DatalistInput
+                label="Frequency:"
+                className="medicationDatalistInput"
+                value={frequency}
+                items={frequencyList}
+                placeholder="Select frequency"
+                onChange={(e) => setFrequency(e.target.value)}
+                onSelect={(item) => {
+                  setFrequency(item.value);
+                }}
+              />
+              {/* <select
                 name="frequency"
                 value={frequency}
                 onChange={(e) => {
@@ -419,7 +436,7 @@ function Medication() {
                     {fre}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div>
               <label>Notes: </label>

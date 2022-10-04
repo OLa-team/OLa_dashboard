@@ -21,7 +21,7 @@ function Hemoglobin() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
@@ -172,7 +172,7 @@ function Hemoglobin() {
     e.preventDefault();
 
     const hemoglobinData = {
-      nameUpdated: userState.userDetails.username,
+      nameUpdated: currentUserState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
       hemoglobinList: hemoglobinList,
     };
@@ -191,7 +191,7 @@ function Hemoglobin() {
       await updateNameVerified(
         "hemoglobin",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }

@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CgMenu } from "react-icons/cg";
 import { IoPersonCircle } from "react-icons/io5";
 import { useAuthState, usePageState } from "../context";
 
 function Header() {
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const pageState = usePageState();
+
+  const isUserAdmin = currentUserState.userDetails.isAdmin;
+  const isUserHcp = currentUserState.userDetails.isHcp;
+  const role = useState(
+    isUserAdmin && isUserHcp ? "Admin & HCP" : isUserAdmin ? "Admin" : "HCP"
+  );
 
   var windowWidth;
   window.onresize = window.onload = function () {
@@ -31,8 +37,8 @@ function Header() {
         <div className="rightDetail">
           <IoPersonCircle className="profile-icon" />
           <div className="userDetail">
-            <h4>{userState.userDetails.username}</h4>
-            <p>HCP</p>
+            <h4>{currentUserState.userDetails.username}</h4>
+            <p>{role}</p>
           </div>
         </div>
       </div>

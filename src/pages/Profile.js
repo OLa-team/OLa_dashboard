@@ -2,22 +2,30 @@ import React, { useEffect, useState } from "react";
 import profile from "../../src/assets/profile.jpg";
 import Loader from "../components/Loader";
 import { useAuthDispatch, useAuthState, usePatientState } from "../context";
-import { setCurrentHcp, updateHcpProfile } from "../service";
+import { setCurrentAdminOrHcp, updateAdminOrHcpProfile } from "../service";
 
 function Profile() {
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const userDispatch = useAuthDispatch();
-  const loading = userState.loading;
+  const loading = currentUserState.loading;
 
-  const hcpId = userState.userDetails.id ? userState.userDetails.id : "";
+  const isUserAdmin = currentUserState.userDetails.isAdmin;
+  const isUserHcp = currentUserState.userDetails.isHcp;
+  const role = useState(
+    isUserAdmin && isUserHcp ? "Admin & HCP" : isUserAdmin ? "Admin" : "HCP"
+  );
+
+  const hcpId = currentUserState.userDetails.id
+    ? currentUserState.userDetails.id
+    : "";
   const [username, setUsername] = useState(
-    userState.userDetails ? userState.userDetails.username : ""
+    currentUserState.userDetails ? currentUserState.userDetails.username : ""
   );
   const [icNo, setIcNo] = useState(
-    userState.userDetails ? userState.userDetails.icNo : ""
+    currentUserState.userDetails ? currentUserState.userDetails.icNo : ""
   );
   const [email, setEmail] = useState(
-    userState.userDetails ? userState.userDetails.email : ""
+    currentUserState.userDetails ? currentUserState.userDetails.email : ""
   );
 
   async function handleSubmitProfile(e) {
@@ -44,8 +52,8 @@ function Profile() {
     };
 
     if (window.confirm("Are you confirm to proceed?")) {
-      await updateHcpProfile(hcpProfileData, hcpId);
-      await setCurrentHcp(userDispatch, hcpId);
+      await updateAdminOrHcpProfile(hcpProfileData, hcpId);
+      await setCurrentAdminOrHcp(userDispatch, hcpId);
       alert("Update HCP profile successfully!");
     } else {
       return;
@@ -53,7 +61,7 @@ function Profile() {
   }
 
   async function getUserData() {
-    await setCurrentHcp(userDispatch, hcpId);
+    await setCurrentAdminOrHcp(userDispatch, hcpId);
   }
 
   useEffect(() => {
@@ -80,7 +88,7 @@ function Profile() {
           /> */}
           {/* <p>{imgSrc}</p> */}
           <h2>{username}</h2>
-          <p>HCP</p>
+          <p>{role}</p>
         </div>
       </div>
 

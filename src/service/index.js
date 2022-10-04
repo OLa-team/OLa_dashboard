@@ -1,10 +1,4 @@
-import {
-  loginUser,
-  logout,
-  registerHcp,
-  updateHcpProfile,
-  setCurrentHcp,
-} from "./AuthService";
+import { loginUser, logout } from "./AuthService";
 import {
   createPatientAccount,
   fetchPatientList,
@@ -31,13 +25,20 @@ import {
   updatePatientRegistrationNotification,
   changeProfileDataNotification,
 } from "./NotificationService";
+import {
+  registerAdminOrHcp,
+  updateAdminOrHcpProfile,
+  filterUserList,
+  filterUserListByRole,
+  setCurrentAdminOrHcp,
+  fetchUserList,
+  deleteUser,
+  deleteAllSelectedUsers,
+} from "./UserService";
 
 export {
   loginUser,
   logout,
-  registerHcp,
-  updateHcpProfile,
-  setCurrentHcp,
   createPatientAccount,
   fetchPatientList,
   filterPatientList,
@@ -60,4 +61,12 @@ export {
   fetchAllNotification,
   updatePatientRegistrationNotification,
   changeProfileDataNotification,
+  registerAdminOrHcp,
+  updateAdminOrHcpProfile,
+  filterUserList,
+  filterUserListByRole,
+  setCurrentAdminOrHcp,
+  fetchUserList,
+  deleteUser,
+  deleteAllSelectedUsers,
 };

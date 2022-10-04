@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import Table from "../components/Table";
-import { usePatientDispatch, usePatientState } from "../context";
+import {
+  usePageDispatch,
+  usePatientDispatch,
+  usePatientState,
+} from "../context";
 import { firestore } from "../firebase";
 import {
   deleteAllSelectedPatients,
@@ -17,7 +21,8 @@ function SearchPatient() {
   const patientState = usePatientState();
 
   // Dispatch
-  const dispatch = usePatientDispatch();
+  const patientDispatch = usePatientDispatch();
+  const pageDispatch = usePageDispatch();
   const navigate = useNavigate();
 
   // State
@@ -60,18 +65,18 @@ function SearchPatient() {
     const selectedIDs = new Set(ids);
     const selectedRowData = data.filter((row) => selectedIDs.has(row.id));
 
-    dispatch({
+    patientDispatch({
       type: "SELECT_AND_SET_SELECTED_PATIENT_LIST_TO_DELETE",
       payload: selectedRowData,
     });
   }
 
   async function getPatientList() {
-    await fetchPatientList(dispatch);
+    await fetchPatientList(patientDispatch, pageDispatch);
   }
 
   async function selectPatient(row) {
-    await setCurrentPatient(dispatch, row.row.patientId);
+    await setCurrentPatient(patientDispatch, row.row.patientId);
     navigate(`/dashboard/patient/${row.row.patientId}`);
   }
 
@@ -82,12 +87,13 @@ function SearchPatient() {
     }
     if (window.confirm("Are you sure you want to delete the patient(s)?")) {
       await deleteAllSelectedPatients(
-        dispatch,
+        patientDispatch,
         patientState.selectedPatientList
       );
       await checkDeletedPatientIsExisted();
+      getPatientList();
       alert("Deleted the patient(s) successfully");
-      dispatch({
+      patientDispatch({
         type: "SET_LOADING_FALSE",
       });
     }
@@ -97,7 +103,7 @@ function SearchPatient() {
     const list = patientState.selectedPatientList;
     let check = false;
 
-    dispatch({
+    patientDispatch({
       type: "SET_LOADING_TRUE",
     });
     do {
@@ -120,7 +126,11 @@ function SearchPatient() {
 
   useEffect(() => {
     if (patientState.patientList.length > 0 && searchResult !== "") {
-      filterPatientList(dispatch, patientState.patientList, searchResult);
+      filterPatientList(
+        patientDispatch,
+        patientState.patientList,
+        searchResult
+      );
     }
   }, [searchResult]);
 

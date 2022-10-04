@@ -55,6 +55,7 @@ export async function createPatientAccount(newPatientData, dispatch) {
       nameVerified: "",
       dateTimeUpdated: 0,
       hasAllergy: false,
+      allergyStatus: "unknown",
       food: [],
       medicine: [],
     });
@@ -130,6 +131,9 @@ export async function createPatientAccount(newPatientData, dispatch) {
       anticoagulant: "",
       indication: "",
       duration: "",
+      dose1: "",
+      dose2: "",
+      dose3: "",
       inrRange: "",
       inrRecord: [],
       creatinineRecord: [],
@@ -527,8 +531,8 @@ export async function setCurrentPatient(dispatch, patientId) {
 }
 
 // fetch patient list
-export async function fetchPatientList(dispatch) {
-  dispatch({
+export async function fetchPatientList(patientDispatch, pageDispatch) {
+  pageDispatch({
     type: "SET_LOADING_TRUE",
   });
 
@@ -545,13 +549,13 @@ export async function fetchPatientList(dispatch) {
     }));
 
     if (patientListData.length >= 0) {
-      dispatch({
+      patientDispatch({
         type: "SET_PATIENT_LIST",
         payload: patientListData,
       });
     }
 
-    dispatch({
+    pageDispatch({
       type: "SET_LOADING_FALSE",
     });
   } catch (error) {
@@ -598,6 +602,7 @@ export async function updateMedicalCondition(medicalConditionData, patientId) {
     await updateDoc(doc(firestore, "medical_condition", patientId), {
       nameUpdated: medicalConditionData.nameUpdated,
       dateTimeUpdated: medicalConditionData.dateTimeUpdated,
+      nameVerified: medicalConditionData.nameVerified,
       hypertension: medicalConditionData.hypertension,
       diabetes: medicalConditionData.diabetes,
       hyperlipidemia: medicalConditionData.hyperlipidemia,
@@ -624,6 +629,8 @@ export async function updateAllergy(allergyData, patientId) {
     await updateDoc(doc(firestore, "allergy", patientId), {
       nameUpdated: allergyData.nameUpdated,
       dateTimeUpdated: allergyData.dateTimeUpdated,
+      nameVerified: allergyData.nameVerified,
+      allergyStatus: allergyData.allergyStatus,
       hasAllergy: allergyData.hasAllergy,
       food: allergyData.food,
       medicine: allergyData.medicine,
@@ -641,6 +648,7 @@ export async function updateStrokeRisk(strokeRiskData, patientId) {
     await updateDoc(doc(firestore, "stroke_risk", patientId), {
       nameUpdated: strokeRiskData.nameUpdated,
       dateTimeUpdated: strokeRiskData.dateTimeUpdated,
+      nameVerified: strokeRiskData.nameVerified,
       heartFailure: strokeRiskData.heartFailure,
       hypertension: strokeRiskData.hypertension,
       age75: strokeRiskData.age75,
@@ -666,6 +674,7 @@ export async function updateBleedingRisk(bleedingRiskData, patientId) {
     await updateDoc(doc(firestore, "bleeding_risk", patientId), {
       nameUpdated: bleedingRiskData.nameUpdated,
       dateTimeUpdated: bleedingRiskData.dateTimeUpdated,
+      nameVerified: bleedingRiskData.nameVerified,
       hypertension: bleedingRiskData.hypertension,
       renal: bleedingRiskData.renal,
       liver: bleedingRiskData.liver,
@@ -692,6 +701,7 @@ export async function updateWarfarinQuality(warfarinQualityData, patientId) {
     await updateDoc(doc(firestore, "warfarin_quality", patientId), {
       nameUpdated: warfarinQualityData.nameUpdated,
       dateTimeUpdated: warfarinQualityData.dateTimeUpdated,
+      nameVerified: warfarinQualityData.nameVerified,
       sex: warfarinQualityData.sex,
       age: warfarinQualityData.age,
       medHistory: warfarinQualityData.medHistory,
@@ -731,6 +741,7 @@ export async function updateMedication(medicationData, patientId) {
     await updateDoc(doc(firestore, "medication", patientId), {
       nameUpdated: medicationData.nameUpdated,
       dateTimeUpdated: medicationData.dateTimeUpdated,
+      nameVerified: medicationData.nameVerified,
       medicine: medicationData.medicineList,
     });
   } catch (error) {
@@ -741,22 +752,42 @@ export async function updateMedication(medicationData, patientId) {
 }
 
 // update patient blood thinner data
-export async function updateBloodThinner(bloodThinnerData, patientId) {
+export async function updateBloodThinner(
+  bloodThinnerData,
+  patientId,
+  isChangeAnticoagulant
+) {
   try {
-    await updateDoc(doc(firestore, "blood_thinner", patientId), {
-      nameUpdated: bloodThinnerData.nameUpdated,
-      dateTimeUpdated: bloodThinnerData.dateTimeUpdated,
-      anticoagulant: bloodThinnerData.anticoagulant,
-      indication: bloodThinnerData.indication,
-      duration: bloodThinnerData.duration,
-      dose1: bloodThinnerData.dose1,
-      dose2: bloodThinnerData.dose2,
-      dose3: bloodThinnerData.dose3,
-      inrRange: bloodThinnerData.inrRange,
-      dose: bloodThinnerData.dose,
-      creatinineRecord: bloodThinnerData.creatinineRecord,
-      inrRecord: bloodThinnerData.inrRecord,
-    });
+    if (isChangeAnticoagulant) {
+      await updateDoc(doc(firestore, "blood_thinner", patientId), {
+        nameUpdated: bloodThinnerData.nameUpdated,
+        dateTimeUpdated: bloodThinnerData.dateTimeUpdated,
+        nameVerified: bloodThinnerData.nameVerified,
+        anticoagulant: bloodThinnerData.anticoagulant,
+        indication: bloodThinnerData.indication,
+        duration: bloodThinnerData.duration,
+        dose1: bloodThinnerData.dose1,
+        dose2: bloodThinnerData.dose2,
+        dose3: bloodThinnerData.dose3,
+        inrRange: bloodThinnerData.inrRange,
+        dose: bloodThinnerData.dose,
+        creatinineRecord: bloodThinnerData.creatinineRecord,
+        inrRecord: bloodThinnerData.inrRecord,
+      });
+    } else {
+      await updateDoc(doc(firestore, "blood_thinner", patientId), {
+        nameUpdated: bloodThinnerData.nameUpdated,
+        dateTimeUpdated: bloodThinnerData.dateTimeUpdated,
+        nameVerified: bloodThinnerData.nameVerified,
+        anticoagulant: bloodThinnerData.anticoagulant,
+        indication: bloodThinnerData.indication,
+        duration: bloodThinnerData.duration,
+        dose1: bloodThinnerData.dose1,
+        dose2: bloodThinnerData.dose2,
+        dose3: bloodThinnerData.dose3,
+        inrRange: bloodThinnerData.inrRange,
+      });
+    }
   } catch (error) {
     alert(error.message);
     console.log("Error in update blood thinner data", error);
@@ -898,15 +929,13 @@ export async function deletePatientById(id, dispatch) {
 }
 
 // Delete all selected patient
-export async function deleteAllSelectedPatients(dispatch, patientList) {
-  await patientList.forEach((patient) => {
+export async function deleteAllSelectedPatients(dispatch, selectedPatientList) {
+  await selectedPatientList.forEach((patient) => {
     deletePatientById(patient.patientId, dispatch);
   });
 
   dispatch({
     type: "DELETE_SELECTED_PATIENTS_AND_UPDATE",
-    payload: patientList,
+    payload: selectedPatientList,
   });
-
-  return patientList;
 }

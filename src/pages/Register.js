@@ -5,7 +5,7 @@ import { FaEnvelope } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase";
-import { registerHcp } from "../service";
+import { registerAdminOrHcp } from "../service";
 
 function Register() {
   // State
@@ -43,7 +43,7 @@ function Register() {
       return;
     }
 
-    registerHcp(email, username);
+    registerAdminOrHcp(email, username);
     alert("Sign up successfully");
     navigate("/login");
 

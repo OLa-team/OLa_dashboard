@@ -21,9 +21,14 @@ function Allergy() {
   const patientState = usePatientState();
   const currentPatient = patientState.currentPatient;
   const patientDispatch = usePatientDispatch();
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientId = params.patientId;
 
+  const [allergyStatus, setAllergyStatus] = useState(
+    patientState.allergy.allergyStatus
+      ? patientState.allergy.allergyStatus
+      : "unknown"
+  );
   const [hasAllergy, setHasAllery] = useState(
     patientState.allergy.hasAllergy ? patientState.allergy.hasAllergy : false
   );
@@ -42,14 +47,6 @@ function Allergy() {
     ? patientState.allergy.dateTimeUpdated
     : "";
 
-  const allergyData = {
-    nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    hasAllergy: food === "" && medicine === "" ? false : hasAllergy,
-    food: hasAllergy ? food.split(",") : "",
-    medicine: hasAllergy ? medicine.split(",") : "",
-  };
-
   function convertArrayToStr(arr) {
     let str = "";
     for (let i = 0; i < arr.length; i++) {
@@ -62,6 +59,16 @@ function Allergy() {
 
   async function handleSubmitAllergy(e) {
     e.preventDefault();
+
+    const allergyData = {
+      nameUpdated: currentUserState.userDetails.username,
+      dateTimeUpdated: new Date().getTime(),
+      nameVerified: "",
+      allergyStatus: allergyStatus,
+      hasAllergy: food === "" && medicine === "" ? false : true,
+      food: allergyStatus === "Y" ? food.split(",") : "",
+      medicine: allergyStatus === "Y" ? medicine.split(",") : "",
+    };
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateAllergy(allergyData, patientId);
@@ -77,7 +84,7 @@ function Allergy() {
       await updateNameVerified(
         "allergy",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }
@@ -120,8 +127,17 @@ function Allergy() {
           <div className="allergy-choice">
             <input
               type="checkbox"
-              checked={hasAllergy ? false : true}
-              onChange={(e) => setHasAllery(false)}
+              checked={allergyStatus === "unknown" ? true : false}
+              onChange={(e) => setAllergyStatus("unknown")}
+            />
+            <label>Unknown</label>
+          </div>
+
+          <div className="allergy-choice">
+            <input
+              type="checkbox"
+              checked={allergyStatus === "N" ? true : false}
+              onChange={(e) => setAllergyStatus("N")}
             />
             <label>None</label>
           </div>
@@ -129,13 +145,13 @@ function Allergy() {
           <div className="allergy-choice">
             <input
               type="checkbox"
-              checked={hasAllergy ? true : false}
-              onChange={(e) => setHasAllery(true)}
+              checked={allergyStatus === "Y" ? true : false}
+              onChange={(e) => setAllergyStatus("Y")}
             />
             <label>Allergic to</label>
           </div>
 
-          {hasAllergy ? (
+          {allergyStatus === "Y" ? (
             <div className="allergyExample">
               <div>
                 <label>

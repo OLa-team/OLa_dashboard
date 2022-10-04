@@ -22,6 +22,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { deletePatientById } from "../service";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebase";
+import allergyLogo from "../../src/assets/allergy.png";
 
 function Patient() {
   const patientState = usePatientState();
@@ -201,7 +202,8 @@ function Patient() {
                 });
               }}
             >
-              <MdNoFood className="iconModule" />
+              {/* <MdNoFood className="iconModule" /> */}
+              <img src={allergyLogo} className="iconModule" />
               <h2>Allergy</h2>
             </div>
           </Grid>

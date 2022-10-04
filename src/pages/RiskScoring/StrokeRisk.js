@@ -19,7 +19,7 @@ function StrokeRisk() {
   const params = useParams();
 
   const pageDispatch = usePageDispatch();
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
@@ -104,26 +104,27 @@ function StrokeRisk() {
     ? patientState.strokeRisk.dateTimeUpdated
     : "";
 
-  let strokeRiskData = {
-    nameUpdated: userState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    heartFailure: heartFailure,
-    hypertension: hypertension,
-    age75: age75,
-    diabetes: diabetes,
-    stroke: stroke,
-    vascular: vascular,
-    age6574: age6574,
-    female: female,
-    score: score,
-    result: result,
-    colorMsg: colorMsg,
-  };
-
   async function handleSubmitStrokeRiskTest(e) {
     e.preventDefault();
 
     if (window.confirm("Are you sure you want to continue?")) {
+      let strokeRiskData = {
+        nameUpdated: currentUserState.userDetails.username,
+        dateTimeUpdated: new Date().getTime(),
+        nameVerified: "",
+        heartFailure: heartFailure,
+        hypertension: hypertension,
+        age75: age75,
+        diabetes: diabetes,
+        stroke: stroke,
+        vascular: vascular,
+        age6574: age6574,
+        female: female,
+        score: score,
+        result: result,
+        colorMsg: colorMsg,
+      };
+
       await updateStrokeRisk(strokeRiskData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's stroke risk successfully.");
@@ -135,7 +136,7 @@ function StrokeRisk() {
       await updateNameVerified(
         "stroke_risk",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }

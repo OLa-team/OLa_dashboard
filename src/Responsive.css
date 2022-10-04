@@ -3,10 +3,27 @@
     height: 85%;
   }
 
+  /* register */
+  .registrationCatWrapper {
+    padding: 40px 70px;
+    width: 65%;
+  }
+
+  .registrationCatWrapper .gridContainer {
+    width: auto;
+  }
+
+  .registrationCatWrapper .gridItem {
+    height: 50%;
+    text-align: center;
+  }
+
+  /* home */
   .searchPatient {
     height: 80%;
   }
 
+  /* patient profile */
   .patientProfileForm {
     height: 600px;
   }
@@ -17,6 +34,15 @@
 
   .iconModule {
     font-size: 50px;
+  }
+
+  /* patient monitoring */
+  .monitoringWrapper h2 {
+    font-size: 28px;
+  }
+
+  .monitoringWrapper h3 {
+    font-size: 24px;
   }
 }
 

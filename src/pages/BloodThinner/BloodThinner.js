@@ -23,7 +23,7 @@ function BloodThinner() {
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
-  const userState = useAuthState();
+  const currentUserState = useAuthState();
 
   const [anticoagulant, setAnticoagulant] = useState(
     patientState.bloodThinner.anticoagulant
@@ -57,7 +57,7 @@ function BloodThinner() {
   );
 
   // to track the changes of anticoagulant
-  const [change, setChange] = useState(false);
+  const [isChangeAnticoagulant, setIsChangeAnticoagulant] = useState(false);
   const [openTtrResult, setOpenTtrResult] = useState(false);
 
   const ttrResult = patientState.bloodThinner.ttrResult
@@ -71,7 +71,8 @@ function BloodThinner() {
   async function handleSubmitBloodThinner() {
     // e.preventDefault();
     let bloodThinnerData = {
-      nameUpdated: userState.userDetails.username,
+      nameUpdated: currentUserState.userDetails.username,
+      nameVerified: "",
       dateTimeUpdated: new Date().getTime(),
       anticoagulant: anticoagulant,
       indication: indication,
@@ -82,7 +83,7 @@ function BloodThinner() {
       inrRange: inrRange,
     };
 
-    if (change) {
+    if (isChangeAnticoagulant) {
       bloodThinnerData = {
         ...bloodThinnerData,
         dose: "",
@@ -92,10 +93,14 @@ function BloodThinner() {
     }
 
     if (window.confirm("Are you sure you want to continue?")) {
-      await updateBloodThinner(bloodThinnerData, patientId);
+      await updateBloodThinner(
+        bloodThinnerData,
+        patientId,
+        isChangeAnticoagulant
+      );
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's medical condition successfully.");
-      setChange(false);
+      setIsChangeAnticoagulant(false);
     } else {
       return;
     }
@@ -111,7 +116,7 @@ function BloodThinner() {
       await updateNameVerified(
         "blood_thinner",
         patientId,
-        userState.userDetails.username
+        currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
     }
@@ -166,7 +171,7 @@ function BloodThinner() {
                 setDuration("");
                 setIndication("");
                 setInrRange("");
-                setChange(true);
+                setIsChangeAnticoagulant(true);
               }}
             >
               Warfarin
@@ -177,8 +182,10 @@ function BloodThinner() {
                 setAnticoagulant("dabigatran");
                 setDuration("");
                 setIndication("");
-                setInrRange("");
-                setChange(true);
+                setDose1(0);
+                setDose2(0);
+                setDose3(0);
+                setIsChangeAnticoagulant(true);
               }}
             >
               Dabigatran
@@ -189,8 +196,7 @@ function BloodThinner() {
                 setAnticoagulant("apixaban");
                 setDuration("");
                 setIndication("");
-                setInrRange("");
-                setChange(true);
+                setIsChangeAnticoagulant(true);
               }}
             >
               Apixaban
@@ -203,8 +209,7 @@ function BloodThinner() {
                 setAnticoagulant("rivaroxaban");
                 setDuration("");
                 setIndication("");
-                setInrRange("");
-                setChange(true);
+                setIsChangeAnticoagulant(true);
               }}
             >
               Rivaroxaban
