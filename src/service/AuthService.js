@@ -44,6 +44,7 @@ export async function loginUser(dispatch, email) {
 export async function logout(dispatch) {
   dispatch({ type: "LOGOUT" });
 
+  localStorage.removeItem("user");
   localStorage.removeItem("currentUser");
   localStorage.removeItem("currentPatient");
   localStorage.removeItem("currentPage");
@@ -53,4 +54,15 @@ export async function logout(dispatch) {
   localStorage.removeItem("strokeRisk");
   localStorage.removeItem("bleedingRisk");
   localStorage.removeItem("warfarinQuality");
+  localStorage.removeItem("healthGoal");
+  localStorage.removeItem("defaultHealthGoal");
+  localStorage.removeItem("medication");
+  localStorage.removeItem("medicineList");
+  localStorage.removeItem("bloodThinner");
+  localStorage.removeItem("patientMonitoring");
+  localStorage.removeItem("hemoglobin");
+
+  localStorage.removeItem("warfarinQualityResultMessage");
+  localStorage.removeItem("bleedingRiskResultMessage");
+  localStorage.removeItem("strokeRiskResultMessage");
 }

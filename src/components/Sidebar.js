@@ -35,10 +35,6 @@ function Sidebar() {
   const isUserAdmin = currentUserState.userDetails.isAdmin;
   const isUserHcp = currentUserState.userDetails.isHcp;
 
-  const hcpId = localStorage.getItem("currentUser")
-    ? JSON.parse(localStorage.getItem("currentUser")).id
-    : "";
-
   function reset() {
     setAc1(false);
     setAc2(false);
