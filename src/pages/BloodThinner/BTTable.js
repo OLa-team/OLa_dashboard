@@ -424,9 +424,6 @@ function BTTable() {
     });
   }
 
-  console.log("result list", inrRecordList);
-  console.log("result", ttrResult);
-
   function handleDeleteInrData() {
     for (let i = 0; i < selectedInr.length; i++) {
       setInrRecordList((inrRecordList) =>
@@ -564,9 +561,10 @@ function BTTable() {
       return;
     }
 
+    let creatinineRecordData = {};
     if (openCreatinineForm.action === "add") {
       const creatinineRecordId = uuid().slice(0, 5);
-      let creatinineRecordData = {
+      creatinineRecordData = {
         id: creatinineRecordId,
         age: age,
         date: date,
@@ -576,12 +574,8 @@ function BTTable() {
         note: note,
       };
       console.log(creatinineRecordData);
-      setCreatinineRecordList((creatinineRecordList) => [
-        ...creatinineRecordList,
-        creatinineRecordData,
-      ]);
     } else {
-      let creatinineRecordData = {
+      creatinineRecordData = {
         id: creatinineRecordId,
         age: age,
         date: date,
@@ -597,12 +591,11 @@ function BTTable() {
           (record) => record.id !== creatinineRecordId
         )
       );
-
-      setCreatinineRecordList((creatinineRecordList) => [
-        ...creatinineRecordList,
-        creatinineRecordData,
-      ]);
     }
+    setCreatinineRecordList((creatinineRecordList) => [
+      ...creatinineRecordList,
+      creatinineRecordData,
+    ]);
 
     // sort
     setCreatinineRecordList((creatinineRecordList) =>
@@ -648,10 +641,6 @@ function BTTable() {
 
   async function handleSubmitCreatinineData(e) {
     e.preventDefault();
-
-    if (creatinineRecordList.length === 0) {
-      setDose();
-    }
 
     let creatinineRecordData = {
       nameUpdated: currentUserState.userDetails.username,
@@ -710,6 +699,8 @@ function BTTable() {
     }
   }, [inrRecordList]);
 
+  console.log("dose", dose);
+
   return (
     <div className="wrapper">
       <div style={{ padding: "20px 50px", height: "80%" }}>
@@ -743,7 +734,7 @@ function BTTable() {
           </div>
         </div>
 
-        {anticoagulant !== "warfarin" && anticoagulant === "rivaroxaban" && (
+        {anticoagulant === "rivaroxaban" && (
           <>
             <div className="otherDose">
               <label style={{ fontWeight: "bold" }}>
@@ -783,7 +774,7 @@ function BTTable() {
           </>
         )}
 
-        {anticoagulant !== "warfarin" && anticoagulant !== "rivaroxaban" && (
+        {anticoagulant === "dabigatran" && (
           <div className="otherDose">
             <label style={{ fontWeight: "bold" }}>
               Dose <span style={{ paddingLeft: "5px" }}>:</span>{" "}
@@ -807,6 +798,34 @@ function BTTable() {
                 }}
               />
               <p>150mg twice a day</p>
+            </div>
+          </div>
+        )}
+
+        {anticoagulant === "apixaban" && (
+          <div className="otherDose">
+            <label style={{ fontWeight: "bold" }}>
+              Dose <span style={{ paddingLeft: "5px" }}>:</span>{" "}
+            </label>
+            <div>
+              <input
+                type="checkbox"
+                checked={dose === "110mg twice a day" ? true : false}
+                onChange={() => {
+                  setDose("110mg twice a day");
+                }}
+              />
+              <p>2.5mg twice a day</p>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={dose === "150mg twice a day" ? true : false}
+                onChange={() => {
+                  setDose("150mg twice a day");
+                }}
+              />
+              <p>5mg twice a day</p>
             </div>
           </div>
         )}

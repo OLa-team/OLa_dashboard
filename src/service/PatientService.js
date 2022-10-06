@@ -578,16 +578,17 @@ export function filterPatientList(dispatch, patientList, searchResult) {
 
 // update patient profile data
 export async function updatePatientProfile(newData) {
+  console.log("newData", newData);
   try {
     await updateDoc(doc(firestore, "patient", newData.patientId), {
-      name: newData.name,
-      phoneNo: "+6" + newData.phoneNo,
-      icNo: newData.icNo,
+      // name: newData.name,
+      // phoneNo: "+6" + newData.phoneNo,
+      // icNo: newData.icNo,
       birthDate: newData.birthDate,
       age: newData.age,
       gender: newData.gender,
-      nextOfKin: newData.nextOfKin,
-      nextOfKinContact: newData.nextOfKinContact,
+      // nextOfKin: newData.nextOfKin,
+      // nextOfKinContact: newData.nextOfKinContact,
     });
   } catch (error) {
     alert(error.message);

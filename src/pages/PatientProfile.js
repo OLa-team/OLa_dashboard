@@ -57,164 +57,183 @@ function PatientProfile() {
     setAge(patientAge);
   }
 
-  function compareDataChanges() {
-    // Local data
-    const _name = patientState.currentPatient.name;
-    const _phoneNo = patientState.currentPatient.phoneNo.substring(2);
-    const _icNo = patientState.currentPatient.icNo;
-    const _birthDate = patientState.currentPatient.birthDate
-      ? convertDateObjToDateInput(patientState.currentPatient.birthDate)
-      : "";
-    const _age = patientState.currentPatient.age
-      ? patientState.currentPatient.age
-      : 0;
-    const _gender = patientState.currentPatient.gender
-      ? patientState.currentPatient.gender
-      : "";
-    const _nextOfKin = patientState.currentPatient.nextOfKin
-      ? patientState.currentPatient.nextOfKin
-      : "";
-    const _nextOfKinContact = patientState.currentPatient.nextOfKinContact
-      ? patientState.currentPatient.nextOfKinContact
-      : "";
+  // function compareDataChanges() {
+  //   // Local data
+  //   const _name = patientState.currentPatient.name;
+  //   const _phoneNo = patientState.currentPatient.phoneNo.substring(2);
+  //   const _icNo = patientState.currentPatient.icNo;
+  //   const _birthDate = patientState.currentPatient.birthDate
+  //     ? convertDateObjToDateInput(patientState.currentPatient.birthDate)
+  //     : "";
+  //   const _age = patientState.currentPatient.age
+  //     ? patientState.currentPatient.age
+  //     : 0;
+  //   const _gender = patientState.currentPatient.gender
+  //     ? patientState.currentPatient.gender
+  //     : "";
+  //   const _nextOfKin = patientState.currentPatient.nextOfKin
+  //     ? patientState.currentPatient.nextOfKin
+  //     : "";
+  //   const _nextOfKinContact = patientState.currentPatient.nextOfKinContact
+  //     ? patientState.currentPatient.nextOfKinContact
+  //     : "";
 
-    console.log("_name", _name);
-    console.log("_phoneNo", _phoneNo);
-    console.log("_icNo", _icNo);
-    console.log("_birthDate", _birthDate);
-    console.log("_age", _age);
-    console.log("_gender", _gender);
+  //   console.log("_name", _name);
+  //   console.log("_phoneNo", _phoneNo);
+  //   console.log("_icNo", _icNo);
+  //   console.log("_birthDate", _birthDate);
+  //   console.log("_age", _age);
+  //   console.log("_gender", _gender);
 
-    let changeDataObj = {};
-    if (name !== _name) {
-      changeDataObj.name = name;
-    }
-    if (phoneNo !== _phoneNo) {
-      changeDataObj.phoneNo = phoneNo;
-    }
-    if (icNo !== _icNo) {
-      changeDataObj.icNo = icNo;
-    }
-    if (birthDate !== _birthDate) {
-      changeDataObj.birthDate = birthDate;
-    }
-    if (age !== _age) {
-      changeDataObj.age = age;
-    }
-    if (gender !== _gender) {
-      changeDataObj.gender = gender;
-    }
-    if (nextOfKin !== _nextOfKin) {
-      changeDataObj.nextOfKin = nextOfKin;
-    }
-    if (nextOfKinContact !== _nextOfKinContact) {
-      changeDataObj.nextOfKinContact = nextOfKinContact;
-    }
+  //   let changeDataObj = {};
+  //   if (name !== _name) {
+  //     changeDataObj.name = name;
+  //   }
+  //   if (phoneNo !== _phoneNo) {
+  //     changeDataObj.phoneNo = phoneNo;
+  //   }
+  //   if (icNo !== _icNo) {
+  //     changeDataObj.icNo = icNo;
+  //   }
+  //   if (birthDate !== _birthDate) {
+  //     changeDataObj.birthDate = birthDate;
+  //   }
+  //   if (age !== _age) {
+  //     changeDataObj.age = age;
+  //   }
+  //   if (gender !== _gender) {
+  //     changeDataObj.gender = gender;
+  //   }
+  //   if (nextOfKin !== _nextOfKin) {
+  //     changeDataObj.nextOfKin = nextOfKin;
+  //   }
+  //   if (nextOfKinContact !== _nextOfKinContact) {
+  //     changeDataObj.nextOfKinContact = nextOfKinContact;
+  //   }
 
-    console.log("changeDataObj", changeDataObj);
-    return changeDataObj;
-  }
+  //   console.log("changeDataObj", changeDataObj);
+  //   return changeDataObj;
+  // }
 
-  async function handleUpdatePatientData(e) {
+  // async function handleUpdatePatientData(e) {
+  //   e.preventDefault();
+  //   // const newData = {
+  //   //   patientId: params.patientId,
+  //   //   name: name,
+  //   //   phoneNo: phoneNo,
+  //   //   icNo: icNo,
+  //   //   birthDate: new Date(birthDate).getTime(),
+  //   //   age: age,
+  //   //   gender: gender,
+  //   //   nextOfKin: nextOfKin,
+  //   //   nextOfKinContact: nextOfKinContact,
+  //   // };
+
+  //   // console.log("newData", newData);
+
+  //   if (window.confirm("Are you sure you want to continue?")) {
+  //     // Make phone number in correct format
+  //     let validPhoneNo = phoneNo;
+  //     if (phoneNo.startsWith("0")) {
+  //       validPhoneNo = "+6" + validPhoneNo;
+  //     } else if (phoneNo.startsWith("6")) {
+  //       validPhoneNo = "+" + validPhoneNo;
+  //     }
+
+  //     if (
+  //       ((validPhoneNo.substring(2, 5) === "011" ||
+  //         validPhoneNo.substring(2, 5) === "015") &&
+  //         validPhoneNo.length !== 13) ||
+  //       (validPhoneNo.substring(2, 5) !== "011" &&
+  //         validPhoneNo.substring(2, 5) !== "015" &&
+  //         validPhoneNo.length !== 12)
+  //     ) {
+  //       alert("The phone number is invalid. Please try again.");
+  //       return;
+  //     }
+  //     setPhoneNo(validPhoneNo);
+
+  //     if (
+  //       (icNo.charAt(0) === "A" && icNo.length !== 9) ||
+  //       (icNo.charAt(0) !== "A" && icNo.length !== 12)
+  //     ) {
+  //       alert("The I/C / Passport number is invalid. Please try again.");
+  //       return;
+  //     }
+
+  //     // Make next of kin phone number in correct format
+  //     let validNextOfKinContact = nextOfKinContact;
+  //     if (nextOfKinContact.startsWith("0")) {
+  //       validNextOfKinContact = "+6" + validNextOfKinContact;
+  //     } else if (nextOfKinContact.startsWith("6")) {
+  //       validNextOfKinContact = "+" + validNextOfKinContact;
+  //     }
+
+  //     if (
+  //       validNextOfKinContact !== "" &&
+  //       (((validNextOfKinContact.substring(2, 5) === "011" ||
+  //         validNextOfKinContact.substring(2, 5) === "015") &&
+  //         validNextOfKinContact.length !== 13) ||
+  //         (validNextOfKinContact.substring(2, 5) !== "011" &&
+  //           validNextOfKinContact.substring(2, 5) !== "015" &&
+  //           validNextOfKinContact.length !== 12))
+  //     ) {
+  //       alert("The phone number of next of kin is invalid. Please try again.");
+  //       return;
+  //     }
+  //     setNextOfKinContact(validNextOfKinContact);
+
+  //     const checkRepeatedNameForSamePhone = patientState.patientList
+  //       .filter(
+  //         (patient) =>
+  //           patient.phoneNo === phoneNo && patient.patientId !== patientId
+  //       )
+  //       .filter((p) => p.name.toLowerCase() === name.toLowerCase());
+  //     if (checkRepeatedNameForSamePhone.length > 0) {
+  //       alert("The patient's name is already existed under this phone number.");
+  //       return;
+  //     }
+
+  //     const checkRepeatedIc = patientState.patientList.filter(
+  //       (patient) => patient.icNo === icNo && patient.patientId !== patientId
+  //     );
+  //     if (checkRepeatedIc.length > 0) {
+  //       alert("The I/C No / Passport No. is already existed.");
+  //       return;
+  //     }
+
+  //     // await updatePatientProfile(newData);
+  //     let changeDataObj = {
+  //       changeDataWeb: true,
+  //       changeData: compareDataChanges(),
+  //     };
+  //     console.log("cdo", changeDataObj);
+  //     await changeProfileDataNotification(changeDataObj, patientId);
+  //     await setCurrentPatient(patientDispatch, patientId);
+  //     alert(
+  //       "Notification has been sent to patient. Please wait for the patient to approve the changes."
+  //     );
+  //   } else {
+  //     return;
+  //   }
+  // }
+
+  async function handleUpdatePatientProfile(e) {
     e.preventDefault();
-    // const newData = {
-    //   patientId: params.patientId,
-    //   name: name,
-    //   phoneNo: phoneNo,
-    //   icNo: icNo,
-    //   birthDate: new Date(birthDate).getTime(),
-    //   age: age,
-    //   gender: gender,
-    //   nextOfKin: nextOfKin,
-    //   nextOfKinContact: nextOfKinContact,
-    // };
 
-    // console.log("newData", newData);
+    const profileData = {
+      patientId: params.patientId,
+      birthDate: birthDate,
+      age: age,
+      gender: gender,
+    };
 
-    if (window.confirm("Are you sure you want to continue?")) {
-      // Make phone number in correct format
-      let validPhoneNo = phoneNo;
-      if (phoneNo.startsWith("0")) {
-        validPhoneNo = "+6" + validPhoneNo;
-      } else if (phoneNo.startsWith("6")) {
-        validPhoneNo = "+" + validPhoneNo;
-      }
+    console.log(profileData);
 
-      if (
-        ((validPhoneNo.substring(2, 5) === "011" ||
-          validPhoneNo.substring(2, 5) === "015") &&
-          validPhoneNo.length !== 13) ||
-        (validPhoneNo.substring(2, 5) !== "011" &&
-          validPhoneNo.substring(2, 5) !== "015" &&
-          validPhoneNo.length !== 12)
-      ) {
-        alert("The phone number is invalid. Please try again.");
-        return;
-      }
-      setPhoneNo(validPhoneNo);
-
-      if (
-        (icNo.charAt(0) === "A" && icNo.length !== 9) ||
-        (icNo.charAt(0) !== "A" && icNo.length !== 12)
-      ) {
-        alert("The I/C / Passport number is invalid. Please try again.");
-        return;
-      }
-
-      // Make next of kin phone number in correct format
-      let validNextOfKinContact = nextOfKinContact;
-      if (nextOfKinContact.startsWith("0")) {
-        validNextOfKinContact = "+6" + validNextOfKinContact;
-      } else if (nextOfKinContact.startsWith("6")) {
-        validNextOfKinContact = "+" + validNextOfKinContact;
-      }
-
-      if (
-        validNextOfKinContact !== "" &&
-        (((validNextOfKinContact.substring(2, 5) === "011" ||
-          validNextOfKinContact.substring(2, 5) === "015") &&
-          validNextOfKinContact.length !== 13) ||
-          (validNextOfKinContact.substring(2, 5) !== "011" &&
-            validNextOfKinContact.substring(2, 5) !== "015" &&
-            validNextOfKinContact.length !== 12))
-      ) {
-        alert("The phone number of next of kin is invalid. Please try again.");
-        return;
-      }
-      setNextOfKinContact(validNextOfKinContact);
-
-      const checkRepeatedNameForSamePhone = patientState.patientList
-        .filter(
-          (patient) =>
-            patient.phoneNo === phoneNo && patient.patientId !== patientId
-        )
-        .filter((p) => p.name.toLowerCase() === name.toLowerCase());
-      if (checkRepeatedNameForSamePhone.length > 0) {
-        alert("The patient's name is already existed under this phone number.");
-        return;
-      }
-
-      const checkRepeatedIc = patientState.patientList.filter(
-        (patient) => patient.icNo === icNo && patient.patientId !== patientId
-      );
-      if (checkRepeatedIc.length > 0) {
-        alert("The I/C No / Passport No. is already existed.");
-        return;
-      }
-
-      // await updatePatientProfile(newData);
-      let changeDataObj = {
-        changeDataWeb: true,
-        changeData: compareDataChanges(),
-      };
-      console.log("cdo", changeDataObj);
-      await changeProfileDataNotification(changeDataObj, patientId);
+    if (window.confirm("Are you sure to proceed?")) {
+      await updatePatientProfile(profileData);
       await setCurrentPatient(patientDispatch, patientId);
-      alert(
-        "Notification has been sent to patient. Please wait for the patient to approve the changes."
-      );
-    } else {
-      return;
+      alert("Patient profile updated successfully.");
     }
   }
 
@@ -225,7 +244,7 @@ function PatientProfile() {
 
         <form
           className="patientProfileForm"
-          onSubmit={(e) => handleUpdatePatientData(e)}
+          onSubmit={(e) => handleUpdatePatientProfile(e)}
         >
           <div className="patientInfo">
             <h3>
@@ -238,6 +257,7 @@ function PatientProfile() {
               value={name}
               placeholder="Patient's name"
               onChange={(e) => setName(e.target.value)}
+              disabled
             />
           </div>
 
@@ -252,6 +272,7 @@ function PatientProfile() {
               value={phoneNo}
               placeholder="Patient's phone no."
               onChange={(e) => setPhoneNo(e.target.value)}
+              disabled
             />
           </div>
 
@@ -266,6 +287,7 @@ function PatientProfile() {
               value={icNo}
               placeholder="Patient's ic no. / passport no."
               onChange={(e) => setIcNo(e.target.value)}
+              disabled
             />
           </div>
 
@@ -331,6 +353,7 @@ function PatientProfile() {
               type="text"
               value={nextOfKin}
               onChange={(e) => setNextOfKin(e.target.value)}
+              disabled
             />
           </div>
 
@@ -344,6 +367,7 @@ function PatientProfile() {
               type="text"
               value={nextOfKinContact}
               onChange={(e) => setNextOfKinContact(e.target.value)}
+              disabled
             />
           </div>
 

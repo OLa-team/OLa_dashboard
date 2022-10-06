@@ -3,12 +3,15 @@ import CryptoJS from "crypto-js";
 export function convertDateObjToDateInput(dateObj) {
   if (dateObj === "") return "";
 
-  var today = new Date(dateObj);
+  var dateTime = new Date(dateObj);
   var month =
-    today.getMonth() + 1 < 10
-      ? "0" + (today.getMonth() + 1)
-      : today.getMonth() + 1;
-  var currentDate = today.getFullYear() + "-" + month + "-" + today.getDate();
+    dateTime.getMonth() + 1 < 10
+      ? "0" + (dateTime.getMonth() + 1)
+      : dateTime.getMonth() + 1;
+  var date =
+    dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate();
+
+  var currentDate = dateTime.getFullYear() + "-" + month + "-" + date;
 
   return currentDate;
 }
