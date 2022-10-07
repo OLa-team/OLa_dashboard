@@ -70,6 +70,12 @@ function BloodThinner() {
 
   async function handleSubmitBloodThinner() {
     // e.preventDefault();
+
+    if (indication === "" || duration === "" || inrRange === "") {
+      alert("Please fill in all the fields before proceed to save.");
+      return;
+    }
+
     let bloodThinnerData = {
       nameUpdated: currentUserState.userDetails.username,
       nameVerified: "",
@@ -99,7 +105,7 @@ function BloodThinner() {
         isChangeAnticoagulant
       );
       await setCurrentPatient(patientDispatch, patientId);
-      alert("Update patient's medical condition successfully.");
+      alert("Oral anticoagulant updated successfully.");
       setIsChangeAnticoagulant(false);
     } else {
       return;

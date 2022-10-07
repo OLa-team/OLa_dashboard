@@ -1,5 +1,18 @@
 import CryptoJS from "crypto-js";
 
+export function getMaxDate() {
+  var now = new Date();
+
+  var year = now.getFullYear();
+  var month =
+    now.getMonth() + 1 < 10 ? "0" + (now.getMonth() + 1) : now.getMonth() + 1;
+  var date = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+
+  var maxDate = year + "-" + month + "-" + date;
+
+  return maxDate;
+}
+
 export function convertDateObjToDateInput(dateObj) {
   if (dateObj === "") return "";
 

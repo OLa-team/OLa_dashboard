@@ -16,7 +16,7 @@ import {
   updateInrRecord,
   updateNameVerified,
 } from "../../service/PatientService";
-import { getCurrentDate, getCurrentTime } from "../../utils";
+import { getCurrentDate, getCurrentTime, getMaxDate } from "../../utils";
 
 function BTTable() {
   const navigate = useNavigate();
@@ -989,6 +989,7 @@ function BTTable() {
                         setDate(e.target.value);
                       }}
                       required
+                      max={getMaxDate()}
                     />
                   </div>
                   <div className="btInputWrapper">
@@ -1214,6 +1215,7 @@ function BTTable() {
                     setDate(e.target.value);
                   }}
                   required
+                  max={getMaxDate()}
                 />
               </div>
               <div>
