@@ -895,11 +895,19 @@ function BTTable() {
             <button
               className="btBackBtn"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}/bloodThinner`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Blood Thinner / Clot Preventer",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(
+                    `/dashboard/patient/${params.patientId}/bloodThinner`
+                  );
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Blood Thinner / Clot Preventer",
+                  });
+                }
               }}
               style={{ padding: "7px 20px" }}
             >
@@ -1169,11 +1177,19 @@ function BTTable() {
             <button
               className="btBackBtn"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}/bloodThinner`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Blood Thinner / Clot Preventer",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(
+                    `/dashboard/patient/${params.patientId}/bloodThinner`
+                  );
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Blood Thinner / Clot Preventer",
+                  });
+                }
               }}
               style={{ padding: "7px 20px" }}
             >

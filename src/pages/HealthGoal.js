@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
+import { BsDot, BsExclamationLg } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useAuthState,
@@ -11,6 +12,8 @@ import {
 import { getCurrentDate, getCurrentTime } from "../utils";
 import { setCurrentPatient, updateHealthGoal } from "../service";
 import DatalistInput from "react-datalist-input";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function HealthGoal() {
   const navigate = useNavigate();
@@ -22,10 +25,15 @@ function HealthGoal() {
   const patientDispatch = usePatientDispatch();
   const patientId = params.patientId;
 
-  let defaultGoals = patientState.defaultHealthGoal.defaultGoal;
-  let optionalGoalList = patientState.defaultHealthGoal.optionalGoal.map(
-    (goal) => ({ id: goal, value: goal })
-  );
+  let defaultGoals = patientState.defaultHealthGoal.defaultGoal
+    ? patientState.defaultHealthGoal.defaultGoal
+    : [];
+  let optionalGoalList = patientState.defaultHealthGoal.optionalGoal
+    ? patientState.defaultHealthGoal.optionalGoal.map((goal) => ({
+        id: goal,
+        value: goal,
+      }))
+    : [];
 
   const [newHealthGoal, setNewHealthGoal] = useState("");
   const [healthGoalList, setHealthGoalList] = useState(
@@ -33,13 +41,30 @@ function HealthGoal() {
       ? patientState.healthGoal.healthGoalList
       : []
   );
-  const [agreeToGoal, setAgreeToGoal] = useState(
-    patientState.healthGoal.agreeToGoal
-      ? patientState.healthGoal.agreeToGoal
-      : false
-  );
+  // const [agreeToGoal, setAgreeToGoal] = useState(
+  //   patientState.healthGoal.agreeToGoal
+  //     ? patientState.healthGoal.agreeToGoal
+  //     : false
+  // );
+  let agreeToGoal = patientState.healthGoal.agreeToGoal
+    ? patientState.healthGoal.agreeToGoal
+    : false;
+
+  const dateTimeUpdated = patientState.healthGoal.dateTimeUpdated
+    ? patientState.healthGoal.dateTimeUpdated
+    : "";
 
   function handleAddNewHealthGoal() {
+    if (
+      healthGoalList.includes(`I will ${newHealthGoal}`) ||
+      healthGoalList.includes(newHealthGoal)
+    ) {
+      alert(
+        "The health goal entered is already existed, please enter a new health goal."
+      );
+      return;
+    }
+
     if (newHealthGoal !== "") {
       if (newHealthGoal.startsWith("I will")) {
         setHealthGoalList((arr) => [...arr, newHealthGoal]);
@@ -55,6 +80,7 @@ function HealthGoal() {
 
   function handledDeleteGoal(e) {
     console.log(e.target.getAttribute("name"));
+
     let deleteGoal = e.target.getAttribute("name");
 
     setHealthGoalList((healthGoalList) =>
@@ -62,33 +88,36 @@ function HealthGoal() {
     );
   }
 
-  const dateTimeUpdated = patientState.healthGoal.dateTimeUpdated
-    ? patientState.healthGoal.dateTimeUpdated
-    : "";
-
-  let healthGoalData = {
-    nameUpdated: currentUserState.userDetails.username,
-    dateTimeUpdated: new Date().getTime(),
-    healthGoalList: healthGoalList,
-    agreeToGoal: agreeToGoal,
-  };
-
   async function handleSubmitHealthGoal(e) {
     e.preventDefault();
 
-    if (agreeToGoal === false) {
-      alert("Please agree to follow the health goals");
-      return;
-    }
+    let healthGoalData = {
+      nameUpdated: currentUserState.userDetails.username,
+      dateTimeUpdated: new Date().getTime(),
+      healthGoalList: healthGoalList,
+      agreeToGoal: false,
+    };
 
     if (window.confirm("Are you sure you want to continue?")) {
       await updateHealthGoal(healthGoalData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's health goal successfully.");
-    } else {
-      return;
     }
   }
+
+  const q = query(collection(firestore, "health_goal"));
+
+  const agreeToGoalInstant = onSnapshot(q, (querySnapshot) => {
+    const obj = querySnapshot.docs
+      .filter((snapshot) => snapshot.id === patientId)[0]
+      .data();
+    if (obj !== null) {
+      if (obj.agreeToGoal) {
+        agreeToGoal = true;
+      }
+      console.log("agreeToGoal", agreeToGoal);
+    }
+  });
 
   return (
     <div className="wrapper">
@@ -131,6 +160,7 @@ function HealthGoal() {
               onSelect={(item) => {
                 setNewHealthGoal(item.value);
               }}
+              filters={[(optionalGoalList) => optionalGoalList]}
             />
 
             <button type="button" onClick={() => handleAddNewHealthGoal()}>
@@ -142,12 +172,11 @@ function HealthGoal() {
             {defaultGoals.map((goal) => {
               return (
                 <div key={goal}>
-                  <TiTick
+                  <BsDot
                     key={goal}
                     style={{
-                      color: "lightgreen",
                       marginRight: "10px",
-                      fontSize: "30px",
+                      fontSize: "35px",
                     }}
                   />
                   {goal}
@@ -158,11 +187,10 @@ function HealthGoal() {
             {healthGoalList.map((goal) => {
               return (
                 <div key={goal} className="eachGoal">
-                  <TiTick
+                  <BsDot
                     style={{
-                      color: "lightgreen",
                       marginRight: "10px",
-                      fontSize: "30px",
+                      fontSize: "35px",
                     }}
                   />
                   {goal}
@@ -176,16 +204,27 @@ function HealthGoal() {
             })}
           </div>
 
-          {agreeToGoal && (
+          {agreeToGoal === true ? (
             <div className="agreeToHealthGoal">
               <TiTick
                 style={{
-                  color: "red",
+                  color: "lightgreen",
                   marginRight: "10px",
                   fontSize: "30px",
                 }}
               />
-              <p>Patient agree to follow the health goals</p>
+              <p>The patient has agreed to follow the health goals</p>
+            </div>
+          ) : (
+            <div className="agreeToHealthGoal">
+              <BsExclamationLg
+                style={{
+                  color: "red",
+                  marginRight: "10px",
+                  fontSize: "20px",
+                }}
+              />
+              <p>Please remind the patient to agree to the health goal</p>
             </div>
           )}
 
@@ -197,11 +236,17 @@ function HealthGoal() {
               type="button"
               className="cancelProfile"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}/`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Patient Details",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(`/dashboard/patient/${params.patientId}`);
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Patient Details",
+                  });
+                }
               }}
             >
               Back

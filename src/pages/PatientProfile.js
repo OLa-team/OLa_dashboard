@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   usePageDispatch,
   usePatientDispatch,
@@ -223,12 +223,10 @@ function PatientProfile() {
 
     const profileData = {
       patientId: params.patientId,
-      birthDate: birthDate,
+      birthDate: new Date(birthDate).getTime(),
       age: age,
       gender: gender,
     };
-
-    console.log(profileData);
 
     if (window.confirm("Are you sure to proceed?")) {
       await updatePatientProfile(profileData);
@@ -379,11 +377,17 @@ function PatientProfile() {
               type="button"
               className="cancelProfile"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Patient Details",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(`/dashboard/patient/${params.patientId}`);
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Patient Details",
+                  });
+                }
               }}
             >
               Back

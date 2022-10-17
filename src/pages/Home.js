@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import PatientRegistration from "./PatientRegistration";
 import SearchPatient from "./SearchPatient";
-import { Routes, Route } from "react-router-dom";
-import { usePageState, usePatientState } from "../context";
+import { Routes, Route, useParams, useNavigate } from "react-router-dom";
+import { usePageState, usePatientDispatch, usePatientState } from "../context";
 import Patient from "./Patient";
 import PatientProfile from "./PatientProfile";
 import MedicalCondition from "./MedicalCondition";
@@ -29,10 +29,32 @@ import Notification from "./Notification";
 import Hemoglobin from "./BloodThinner/Hemoglobin";
 import Header from "../components/Header";
 import UserList from "./UserList";
+import AppAnalytics from "./AppAnalytics";
+import { setCurrentPatient } from "../service";
 
 function Home() {
   const patientLoading = usePatientState().loading;
   const pageLoading = usePageState().loading;
+
+  const params = useParams();
+  const navigate = useNavigate();
+  const patientState = usePatientState();
+  const patientDispatch = usePatientDispatch();
+  async function resetCurrentPatient() {
+    const patientId = params["*"].split("/")[1];
+    console.log("id", patientId);
+    await setCurrentPatient(patientDispatch, patientId);
+  }
+
+  useEffect(() => {
+    if (params["*"].startsWith("patient")) {
+      resetCurrentPatient();
+    } else {
+      return;
+    }
+    // window.location.reload();
+    // alert("!23");
+  }, []);
 
   return (
     <div className="bgHome">
@@ -47,13 +69,11 @@ function Home() {
         <div className="section">
           <Routes>
             <Route path="/" element={<SearchPatient />} />
-            <Route
-              path="/patientRegistration"
-              element={<PatientRegistration />}
-            />
+            <Route path="/registration" element={<PatientRegistration />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/users" element={<UserList />} />
+            <Route path="/appAnalytics" element={<AppAnalytics />} />
             <Route path="/patient/:patientId" element={<Patient />} />
             <Route
               path="/patient/:patientId/patientProfile"

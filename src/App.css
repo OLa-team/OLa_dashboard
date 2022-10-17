@@ -318,7 +318,7 @@
 
 .sidebar {
   /* width: 15%; */
-  width: 320px;
+  width: 335px;
   height: 100vh;
   background-color: #ec2029;
   /* border-top-right-radius: 20px; */
@@ -347,7 +347,7 @@
   justify-content: flex-start;
   align-items: center;
   color: white;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
   text-align: left;
   /* background-color: white; */
@@ -534,7 +534,7 @@ input:-webkit-autofill:active {
 .hcpProfile {
   width: 90%;
   height: 70%;
-  padding: 30px 80px;
+  padding: 40px 80px;
   display: flex;
   justify-content: space-between;
 }
@@ -2399,4 +2399,62 @@ input:-webkit-autofill:active {
 
 .MuiDataGrid-root {
   /* height: auto !important; */
+}
+
+/* App Analytics */
+.pageAnalytics {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+  margin-top: 30px;
+  height: 70%;
+  font-size: 17px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.sidePageAnalytics {
+  width: fit-content;
+  margin: 0px auto;
+  /* background-color: red; */
+}
+
+.sidePageAnalytics div {
+  margin-bottom: 20px;
+}
+
+.sidePageAnalytics ul {
+  margin-bottom: 20px;
+}
+
+.pageCountList li {
+  margin-left: 40px;
+  margin-bottom: 10px;
+}
+
+.pageCountList h4 {
+  margin-bottom: 5px;
+}
+
+.pageCountList div {
+  margin-bottom: 10px !important;
+}
+
+.pageCount {
+  display: flex;
+}
+
+.pageCount p {
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+  padding-right: 20px;
+}
+
+.pageCount h4 {
+  display: flex;
+  justify-content: space-between;
+  width: 290px;
+  padding-right: 20px;
 }

@@ -128,6 +128,25 @@ function BloodThinner() {
     }
   }
 
+  function getResultMessage(testType, result) {
+    let resultMessages = [];
+    if (testType === "Stroke Risk") {
+      resultMessages = patientState.strokeRiskResultMessage;
+    } else if (testType === "Bleeding Risk") {
+      resultMessages = patientState.bleedingRiskResultMessage;
+    } else {
+      resultMessages = patientState.warfarinQualityResultMessage;
+    }
+
+    if (result === "msg1") {
+      return resultMessages.msg1;
+    } else if (result === "msg2") {
+      return resultMessages.msg2;
+    } else {
+      return resultMessages.msg3;
+    }
+  }
+
   return (
     <div className="wrapper">
       <div style={{ padding: "30px 50px", height: "80%" }}>
@@ -486,7 +505,10 @@ function BloodThinner() {
                   <GiPlainCircle />
                   <h4>
                     {patientState.strokeRisk.result
-                      ? patientState.strokeRisk.result
+                      ? getResultMessage(
+                          "Stroke Risk",
+                          patientState.strokeRisk.result
+                        )
                       : "No result for the test"}
                   </h4>
                 </div>
@@ -521,7 +543,10 @@ function BloodThinner() {
                   <GiPlainCircle />
                   <h4>
                     {patientState.bleedingRisk.result
-                      ? patientState.bleedingRisk.result
+                      ? getResultMessage(
+                          "Stroke Risk",
+                          patientState.bleedingRisk.result
+                        )
                       : "No result for the test"}
                   </h4>
                 </div>
@@ -556,7 +581,10 @@ function BloodThinner() {
                   <GiPlainCircle />
                   <h4>
                     {patientState.warfarinQuality.result
-                      ? patientState.warfarinQuality.result
+                      ? getResultMessage(
+                          "Stroke Risk",
+                          patientState.warfarinQuality.result
+                        )
                       : "No result for the test"}
                   </h4>
                 </div>
@@ -618,11 +646,17 @@ function BloodThinner() {
             type="button"
             className="cancelProfile"
             onClick={() => {
-              navigate(`/dashboard/patient/${params.patientId}/`);
-              pageDispatch({
-                type: "SET_CURRENT_PAGE",
-                payload: "Patient Details",
-              });
+              if (
+                window.confirm(
+                  "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                )
+              ) {
+                navigate(`/dashboard/patient/${params.patientId}`);
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "Patient Details",
+                });
+              }
             }}
           >
             Back

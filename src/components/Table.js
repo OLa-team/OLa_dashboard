@@ -4,6 +4,7 @@ import { DataGrid, GridToolbar, GridToolbarContainer } from "@mui/x-data-grid";
 import { useState } from "react";
 
 function Table({
+  className,
   style,
   data,
   columns,
@@ -17,7 +18,7 @@ function Table({
   const [pageSize, setPageSize] = useState(10);
 
   return (
-    <Box style={style}>
+    <Box className={className} style={style}>
       <DataGrid
         rows={data}
         columns={columns}

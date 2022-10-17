@@ -29,11 +29,29 @@
   }
 
   .patientModule {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .iconModule {
     font-size: 55px;
+  }
+
+  /* Table */
+  .medicationTable {
+    height: 90% !important;
+  }
+
+  .bloodThinnerTable {
+    height: 85% !important;
+  }
+
+  .hemoglobinTable {
+    height: 70% !important;
+  }
+
+  /* Health Goal */
+  .healthGoalList {
+    height: 100%;
   }
 
   /* patient monitoring */
@@ -43,6 +61,11 @@
 
   .monitoringWrapper h3 {
     font-size: 24px;
+  }
+
+  /* App Analytics */
+  .pageAnalytics {
+    font-size: 21px;
   }
 }
 

@@ -4,8 +4,10 @@ import logo2 from "../../src/assets/logo_2.png";
 import { BsPencilSquare, BsPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { IoMdNotifications } from "react-icons/io";
-import { IoLogOutSharp } from "react-icons/io5";
+import { ImExit } from "react-icons/im";
 import { HiUsers } from "react-icons/hi";
+import { SiSimpleanalytics } from "react-icons/si";
+import { TbDeviceDesktopAnalytics } from "react-icons/tb";
 import SidebarItem from "./SidebarItem";
 import { useNavigate } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../context";
@@ -21,6 +23,7 @@ function Sidebar() {
   const [ac3, setAc3] = useState(false);
   const [ac4, setAc4] = useState(false);
   const [ac5, setAc5] = useState(false);
+  const [ac6, setAc6] = useState(false);
   const [hasNotification, setHasNotification] = useState(false);
 
   // Navigate
@@ -41,6 +44,7 @@ function Sidebar() {
     setAc3(false);
     setAc4(false);
     setAc5(false);
+    setAc6(false);
   }
 
   function handleLogout() {
@@ -55,10 +59,14 @@ function Sidebar() {
         case "Search Section":
           reset();
           setAc1((prev) => !prev);
-          navigate("/dashboard");
+          if (
+            JSON.parse(localStorage.getItem("currentPage")) === "Patient List"
+          ) {
+            navigate("/dashboard");
+          }
           return;
 
-        case "Register Section":
+        case "Registration Section":
           reset();
           setAc2((prev) => !prev);
           navigate("/dashboard/patientRegistration");
@@ -80,6 +88,12 @@ function Sidebar() {
           reset();
           setAc5((prev) => !prev);
           navigate("/dashboard/users");
+          return;
+
+        case "App Analytics Section":
+          reset();
+          setAc6((prev) => !prev);
+          navigate("/dashboard/appAnalytics");
           return;
 
         default:
@@ -137,18 +151,20 @@ function Sidebar() {
             setAc2((prev) => !prev);
             localStorage.setItem(
               "currentSection",
-              JSON.stringify("Register Section")
+              JSON.stringify("Registration Section")
             );
             pageDispatch({
               type: "SET_CURRENT_PAGE",
               payload: "Registration",
             });
-            navigate("/dashboard/patientRegistration");
+            navigate("/dashboard/registration");
           }}
         >
           <SidebarItem
             Icon={<BsPencilSquare />}
-            section={isUserAdmin ? "Register Users" : "Register Patient"}
+            section={
+              isUserAdmin ? "Registration Users" : "Registration Patient"
+            }
             active={ac2}
             alert={false}
           />
@@ -200,28 +216,53 @@ function Sidebar() {
         </div>
 
         {isUserAdmin && (
-          <div
-            onClick={() => {
-              reset();
-              setAc5((prev) => !prev);
-              localStorage.setItem(
-                "currentSection",
-                JSON.stringify("User List Section")
-              );
-              pageDispatch({
-                type: "SET_CURRENT_PAGE",
-                payload: "User List",
-              });
-              navigate("/dashboard/users");
-            }}
-          >
-            <SidebarItem
-              Icon={<HiUsers />}
-              section="Admin & HCP"
-              active={ac5}
-              alert={false}
-            />
-          </div>
+          <>
+            <div
+              onClick={() => {
+                reset();
+                setAc5((prev) => !prev);
+                localStorage.setItem(
+                  "currentSection",
+                  JSON.stringify("User List Section")
+                );
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "User List",
+                });
+                navigate("/dashboard/users");
+              }}
+            >
+              <SidebarItem
+                Icon={<HiUsers />}
+                section="Admin & HCP"
+                active={ac5}
+                alert={false}
+              />
+            </div>
+            <div
+              onClick={() => {
+                // reset();
+                // setAc6((prev) => !prev);
+                // localStorage.setItem(
+                //   "currentSection",
+                //   JSON.stringify("App Analytics Section")
+                // );
+                // pageDispatch({
+                //   type: "SET_CURRENT_PAGE",
+                //   payload: "App Analytics",
+                // });
+                // navigate("/dashboard/appAnalytics");
+              }}
+            >
+              <SidebarItem
+                Icon={<TbDeviceDesktopAnalytics />}
+                section="App Analytics"
+                active={ac6}
+                alert={false}
+                customStyle={{ cursor: "no-drop" }}
+              />
+            </div>
+          </>
         )}
 
         <div
@@ -233,7 +274,7 @@ function Sidebar() {
             }
           }}
         >
-          <SidebarItem Icon={<IoLogOutSharp />} section="Log Out" />
+          <SidebarItem Icon={<ImExit />} section="Log Out" />
         </div>
       </div>
     </div>

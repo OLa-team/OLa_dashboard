@@ -23,7 +23,6 @@ function Allergy() {
   const patientDispatch = usePatientDispatch();
   const currentUserState = useAuthState();
   const patientId = params.patientId;
-
   const [allergyStatus, setAllergyStatus] = useState(
     patientState.allergy.allergyStatus
       ? patientState.allergy.allergyStatus
@@ -198,11 +197,17 @@ function Allergy() {
               type="button"
               className="cancelProfile"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Patient Details",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(`/dashboard/patient/${params.patientId}`);
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Patient Details",
+                  });
+                }
               }}
             >
               Back

@@ -277,11 +277,17 @@ function MedicalCondition() {
               type="button"
               className="cancelProfile"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Patient Details",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(`/dashboard/patient/${params.patientId}`);
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Patient Details",
+                  });
+                }
               }}
             >
               Back

@@ -30,6 +30,25 @@ export async function createPatientAccount(newPatientData, dispatch) {
       gender: "",
       nextOfKin: "",
       nextOfKinContact: "",
+
+      generalInfoPage: 0,
+      allergyPage: 0,
+      medicalConditionPage: 0,
+      medicationPage: 0,
+      bloodThinnerPage: 0,
+      healthGoalsPage: 0,
+      bpHrPage: 0,
+      bloodSugarLevelPage: 0,
+      bodyWeightPage: 0,
+      bleedingSymptomsPage: 0,
+      healthDiaryPage: 0,
+      remindMePage: 0,
+      atrialFibrillationPage: 0,
+      heartFailurePage: 0,
+      oacPage: 0,
+      oacAndInteractionsPage: 0,
+      medicalHelpPage: 0,
+      loginPage: 0,
     });
 
     await setDoc(doc(firestore, "medical_condition", patientId), {
@@ -58,6 +77,7 @@ export async function createPatientAccount(newPatientData, dispatch) {
       allergyStatus: "unknown",
       food: [],
       medicine: [],
+      newToAllergyPage: true,
     });
 
     await setDoc(doc(firestore, "stroke_risk", patientId), {
@@ -248,6 +268,10 @@ export async function setCurrentPatient(dispatch, patientId) {
       await getDoc(doc(firestore, "constant", "warfarin_quality"))
     ).data();
 
+    let responseMedicationConstantList = await (
+      await getDoc(doc(firestore, "constant", "medication"))
+    ).data();
+
     // patient profile
     if (responsePatient) {
       dispatch({
@@ -256,7 +280,6 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       encryptLocalData(responsePatient, "currentPatient");
-      // localStorage.setItem("currentPatient", JSON.stringify(responsePatient));
     } else {
       dispatch({
         type: "SET_CURRENT_PATIENT",
@@ -469,7 +492,7 @@ export async function setCurrentPatient(dispatch, patientId) {
       });
 
       localStorage.setItem("hemoglobin", JSON.stringify({}));
-
+      //
       alert("Error in fetching hemoglobin data");
     }
 
@@ -519,6 +542,18 @@ export async function setCurrentPatient(dispatch, patientId) {
       localStorage.setItem(
         "warfarinQualityResultMessage",
         JSON.stringify(responseWarfarinQualityResultMessage)
+      );
+    }
+
+    if (responseMedicationConstantList) {
+      dispatch({
+        type: "SET_MEDICATION_CONSTANT_LIST",
+        payload: responseMedicationConstantList,
+      });
+
+      localStorage.setItem(
+        "medicationConstantList",
+        JSON.stringify(responseMedicationConstantList)
       );
     }
 

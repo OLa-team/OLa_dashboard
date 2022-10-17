@@ -46,6 +46,9 @@ let brrm = localStorage.getItem("bleedingRiskResultMessage")
 let wqrm = localStorage.getItem("warfarinQualityResultMessage")
   ? JSON.parse(localStorage.getItem("warfarinQualityResultMessage"))
   : null;
+let mcl = localStorage.getItem("medicationConstantList")
+  ? JSON.parse(localStorage.getItem("medicationConstantList"))
+  : null;
 
 // Initial state
 const initialState = {
@@ -67,6 +70,7 @@ const initialState = {
   strokeRiskResultMessage: srrm || {},
   bleedingRiskResultMessage: brrm || {},
   warfarinQualityResultMessage: wqrm || {},
+  medicationConstantList: mcl || {},
   loading: false,
 };
 
@@ -207,6 +211,12 @@ const PatientReducer = (initialState, action) => {
       return {
         ...initialState,
         warfarinQualityResultMessage: action.payload,
+      };
+
+    case "SET_MEDICATION_CONSTANT_LIST":
+      return {
+        ...initialState,
+        medicationConstantList: action.payload,
       };
 
     default:

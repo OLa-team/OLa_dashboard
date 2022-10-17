@@ -9,10 +9,8 @@ function Header() {
 
   const isUserAdmin = currentUserState.userDetails.isAdmin;
   const isUserHcp = currentUserState.userDetails.isHcp;
-  const role = useState(
-    isUserAdmin && isUserHcp ? "Admin & HCP" : isUserAdmin ? "Admin" : "HCP"
-  );
-
+  const role =
+    isUserAdmin && isUserHcp ? "Admin & HCP" : isUserAdmin ? "Admin" : "HCP";
   var windowWidth;
   window.onresize = window.onload = function () {
     windowWidth = this.innerWidth;

@@ -254,7 +254,7 @@ function PatientRegistration() {
             onSubmit={(e) => submitRegistration(e)}
           >
             <div className="register-inputField">
-              <label>Name</label>
+              <label>Name:</label>
               <input
                 type="text"
                 placeholder="Enter name"
@@ -268,7 +268,7 @@ function PatientRegistration() {
             {category === "Patient" ? (
               <>
                 <div className="register-inputField">
-                  <label>Mobile Phone No.</label>
+                  <label>Mobile Phone No.:</label>
                   <input
                     type="text"
                     placeholder="Enter phone number (e.g. 01XXXXXXXX)"
@@ -280,7 +280,7 @@ function PatientRegistration() {
                 </div>
 
                 <div className="register-inputField">
-                  <label>I/C No. / Passport No.</label>
+                  <label>I/C No. / Passport No.:</label>
                   <input
                     type="text"
                     placeholder="Enter I/C or passport no. (e.g. XXXXXX-XX-XXXX)"
@@ -298,7 +298,7 @@ function PatientRegistration() {
             ) : (
               <>
                 <div className="register-inputField">
-                  <label>Email Address</label>
+                  <label>Email Address:</label>
                   <input
                     type="text"
                     placeholder="Enter email address"
@@ -313,7 +313,7 @@ function PatientRegistration() {
                   className="register-inputField"
                   style={{ marginBottom: "15px" }}
                 >
-                  <label>I/C No. / Passport No.</label>
+                  <label>I/C No. / Passport No.:</label>
                   <input
                     type="text"
                     placeholder="Enter I/C or passport no. (e.g. XXXXXX-XX-XXXX)"

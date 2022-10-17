@@ -87,7 +87,7 @@ function Patient() {
               <span>Mobile Phone No.</span>
               <span>:</span>
             </h3>
-            <p>{patientState.currentPatient.phoneNo.substring(2)}</p>
+            <p>{patientState.currentPatient.phoneNo}</p>
           </div>
           <div className="detail">
             <h3>

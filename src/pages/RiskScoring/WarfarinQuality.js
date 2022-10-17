@@ -92,10 +92,10 @@ function WarfarinQuality() {
     setScore(currentScore);
 
     if (currentScore <= 2) {
-      setResult(resultMessages.msg1);
+      setResult("msg1");
       setColorMsg("#45f248");
     } else {
-      setResult(resultMessages.msg2);
+      setResult("msg2");
       setColorMsg("#ec2029");
     }
   }, [testResult]);
@@ -138,6 +138,16 @@ function WarfarinQuality() {
         currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
+    }
+  }
+
+  function getResultMessage(result) {
+    if (result === "msg1") {
+      return resultMessages.msg1;
+    } else if (result === "msg2") {
+      return resultMessages.msg2;
+    } else {
+      return resultMessages.msg3;
     }
   }
 
@@ -238,7 +248,7 @@ function WarfarinQuality() {
 
           <div className="risk-result">
             <h4>Score: {score} points</h4>
-            <p style={{ color: `${colorMsg}` }}>{result}</p>
+            <p style={{ color: `${colorMsg}` }}>{getResultMessage(result)}</p>
           </div>
 
           <div className="saveAndCancelButton ">
@@ -256,11 +266,19 @@ function WarfarinQuality() {
               type="button"
               className="cancelProfile"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}/riskScoring`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Patient Details",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(
+                    `/dashboard/patient/${params.patientId}/riskScoring`
+                  );
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Risk Scoring",
+                  });
+                }
               }}
             >
               Back

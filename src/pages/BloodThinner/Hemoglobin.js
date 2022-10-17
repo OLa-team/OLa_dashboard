@@ -14,7 +14,7 @@ import {
   updateHemoglobinRecord,
   updateNameVerified,
 } from "../../service";
-import { getCurrentDate, getCurrentTime } from "../../utils";
+import { getCurrentDate, getCurrentTime, getMaxDate } from "../../utils";
 import { Line } from "react-chartjs-2";
 
 function Hemoglobin() {
@@ -315,6 +315,7 @@ function Hemoglobin() {
         {changeView === "table" ? (
           <>
             <Table
+              className="hemoglobinTable"
               style={style}
               columns={columns}
               data={hemoglobinList}
@@ -407,6 +408,7 @@ function Hemoglobin() {
                       setDate(e.target.value);
                     }}
                     required
+                    max={getMaxDate()}
                   />
                 </div>
                 <div>
@@ -447,6 +449,19 @@ function Hemoglobin() {
           <>
             <div className="monitoringGraph">
               <Line data={graphData} options={options} />
+            </div>
+            <div className="saveAndCancelButton" style={{ right: "80px" }}>
+              <button
+                className="medBackBtn"
+                onClick={() => {
+                  navigate(
+                    `/dashboard/patient/${params.patientId}/bloodThinner`
+                  );
+                }}
+                style={{ padding: "7px 20px" }}
+              >
+                Back
+              </button>
             </div>
           </>
         )}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoPrimitiveDot } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { MdAdd, MdDelete } from "react-icons/md";
@@ -50,21 +50,18 @@ function Medication() {
     action: "",
   });
 
-  const medicationNameList = [
-    "Perindopril",
-    "Bisoprolol",
-    "Simvastatin",
-    "Atorvastatin",
-    "Gemfibrozil",
-    "Isordil",
-    "S/L GTN",
-    "Metformin",
-  ].map((medicine) => ({ id: medicine, value: medicine }));
+  const medicationNameList =
+    patientState.medicationConstantList.medicationNameList.map((medicine) => ({
+      id: medicine,
+      value: medicine,
+    }));
 
-  const frequencyList = ["OD", "BD", "TDS", "QID", "PRN"].map((frequency) => ({
-    id: frequency,
-    value: frequency,
-  }));
+  const frequencyList = patientState.medicationConstantList.frequencyList.map(
+    (frequency) => ({
+      id: frequency,
+      value: frequency,
+    })
+  );
 
   const style = {
     height: "80%",
@@ -285,6 +282,7 @@ function Medication() {
         </div>
 
         <Table
+          className="medicationTable"
           style={style}
           columns={columns}
           data={medicineList}
@@ -337,11 +335,17 @@ function Medication() {
           <button
             className="medBackBtn"
             onClick={() => {
-              navigate(`/dashboard/patient/${params.patientId}`);
-              pageDispatch({
-                type: "SET_CURRENT_PAGE",
-                payload: "Patient Details",
-              });
+              if (
+                window.confirm(
+                  "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                )
+              ) {
+                navigate(`/dashboard/patient/${params.patientId}`);
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "Patient Details",
+                });
+              }
             }}
           >
             Back
@@ -379,6 +383,7 @@ function Medication() {
                 onSelect={(item) => {
                   setName(item.value);
                 }}
+                filters={[(medicationNameList) => medicationNameList]}
               />
               {/* <select
                 name="name"
@@ -421,6 +426,7 @@ function Medication() {
                 onSelect={(item) => {
                   setFrequency(item.value);
                 }}
+                filters={[(frequencyList) => frequencyList]}
               />
               {/* <select
                 name="frequency"

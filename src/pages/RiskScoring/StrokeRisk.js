@@ -89,16 +89,18 @@ function StrokeRisk() {
     setScore(currentScore);
 
     if (currentScore === 0) {
-      setResult(resultMessages.msg1);
+      setResult("msg1");
       setColorMsg("#45f248");
     } else if (currentScore === 1) {
-      setResult(resultMessages.msg2);
+      setResult("msg2");
       setColorMsg("#ff9f00");
     } else {
-      setResult(resultMessages.msg3);
+      setResult("msg3");
       setColorMsg("#ec2029");
     }
   }, [testResult]);
+
+  console.log(result);
 
   const dateTimeUpdated = patientState.strokeRisk.dateTimeUpdated
     ? patientState.strokeRisk.dateTimeUpdated
@@ -139,6 +141,16 @@ function StrokeRisk() {
         currentUserState.userDetails.username
       );
       await setCurrentPatient(patientDispatch, patientId);
+    }
+  }
+
+  function getResultMessage(result) {
+    if (result === "msg1") {
+      return resultMessages.msg1;
+    } else if (result === "msg2") {
+      return resultMessages.msg2;
+    } else {
+      return resultMessages.msg3;
     }
   }
 
@@ -238,7 +250,7 @@ function StrokeRisk() {
 
           <div className="risk-result">
             <h4>Score: {score} points</h4>
-            <p style={{ color: `${colorMsg}` }}>{result}</p>
+            <p style={{ color: `${colorMsg}` }}>{getResultMessage(result)}</p>
           </div>
 
           <div className="saveAndCancelButton ">
@@ -256,11 +268,19 @@ function StrokeRisk() {
               type="button"
               className="cancelProfile"
               onClick={() => {
-                navigate(`/dashboard/patient/${params.patientId}/riskScoring`);
-                pageDispatch({
-                  type: "SET_CURRENT_PAGE",
-                  payload: "Patient Details",
-                });
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                  )
+                ) {
+                  navigate(
+                    `/dashboard/patient/${params.patientId}/riskScoring`
+                  );
+                  pageDispatch({
+                    type: "SET_CURRENT_PAGE",
+                    payload: "Risk Scoring",
+                  });
+                }
               }}
             >
               Back
