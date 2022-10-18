@@ -162,9 +162,7 @@ function Sidebar() {
         >
           <SidebarItem
             Icon={<BsPencilSquare />}
-            section={
-              isUserAdmin ? "Registration Users" : "Registration Patient"
-            }
+            section={isUserAdmin ? "User Registration" : "Patient Registration"}
             active={ac2}
             alert={false}
           />
