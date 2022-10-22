@@ -37,7 +37,7 @@ function Medication() {
     : "";
 
   const [name, setName] = useState("");
-  const [dose, setDose] = useState("");
+  const [dose, setDose] = useState(0.0);
   const [frequency, setFrequency] = useState("");
   const [note, setNote] = useState("");
   const [medicineId, setMedicineId] = useState("");
@@ -157,7 +157,7 @@ function Medication() {
       medicineData = {
         id: medicineId,
         name: name,
-        dose: parseInt(dose),
+        dose: parseFloat(dose),
         frequency: frequency,
         note: note,
       };
@@ -165,7 +165,7 @@ function Medication() {
       medicineData = {
         id: medicineId,
         name: name,
-        dose: parseInt(dose),
+        dose: parseFloat(dose),
         frequency: frequency,
         note: note,
       };
@@ -181,7 +181,7 @@ function Medication() {
       action: "",
     });
     setName("");
-    setDose("");
+    setDose(0);
     setFrequency("");
     setNote("");
     setMedicineId("");
@@ -365,7 +365,7 @@ function Medication() {
                   action: "",
                 });
                 setName("");
-                setDose("");
+                setDose(0);
                 setFrequency("");
                 setNote("");
                 setMedicineId("");
