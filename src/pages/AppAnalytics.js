@@ -10,16 +10,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { usePageDispatch } from "../context";
 import { firestore } from "../firebase";
-import { getMaxDate } from "../utils";
+import { convertDateObjToDateInput, getMaxDate } from "../utils";
 
 function AppAnalytics() {
   const pageDispatch = usePageDispatch();
 
   var date = new Date();
   const [period, setPeriod] = useState("daily");
-  const [startDate, setStartDate] = useState(
-    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-  );
+  const [startDate, setStartDate] = useState(convertDateObjToDateInput(date));
   const [minDate, setMinDate] = useState("");
 
   const [myselfModuleTotalCount, setMyselfModuleTotalCount] = useState(0);
