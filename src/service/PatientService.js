@@ -30,25 +30,6 @@ export async function createPatientAccount(newPatientData, dispatch) {
       gender: "",
       nextOfKin: "",
       nextOfKinContact: "",
-
-      generalInfoPage: 0,
-      allergyPage: 0,
-      medicalConditionPage: 0,
-      medicationPage: 0,
-      bloodThinnerPage: 0,
-      healthGoalsPage: 0,
-      bpHrPage: 0,
-      bloodSugarLevelPage: 0,
-      bodyWeightPage: 0,
-      bleedingSymptomsPage: 0,
-      healthDiaryPage: 0,
-      remindMePage: 0,
-      atrialFibrillationPage: 0,
-      heartFailurePage: 0,
-      oacPage: 0,
-      oacAndInteractionsPage: 0,
-      medicalHelpPage: 0,
-      loginPage: 0,
     });
 
     await setDoc(doc(firestore, "medical_condition", patientId), {

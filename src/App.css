@@ -1403,6 +1403,10 @@ input:-webkit-autofill:active {
   color: #ec2029;
 }
 
+.infoCircle.strokeRisk {
+  left: 175px;
+}
+
 /* ------------------------------------------------ */
 
 /* Current medication */
@@ -2457,4 +2461,27 @@ input:-webkit-autofill:active {
   justify-content: space-between;
   width: 290px;
   padding-right: 20px;
+}
+
+.filterDate {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterDate div {
+  padding-left: 30px;
+  display: flex;
+}
+
+.filterDate div p {
+  padding-right: 10px;
+}
+
+.filterDate select,
+.filterDate input {
+  padding: 3px 10px;
+  border-radius: 10px;
+  outline: none;
 }

@@ -13,6 +13,7 @@ import {
   updateNameVerified,
   updateStrokeRisk,
 } from "../../service";
+import { HiInformationCircle } from "react-icons/hi";
 
 function StrokeRisk() {
   const navigate = useNavigate();
@@ -226,13 +227,21 @@ function StrokeRisk() {
             checkedNo={!stroke ? true : false}
             onChangeNo={(e) => setStroke((prev) => (prev = false))}
           />
-          <Checkbox
-            name="Vascular Disease"
-            checkedYes={vascular ? true : false}
-            onChangeYes={(e) => setVascular((prev) => (prev = true))}
-            checkedNo={!vascular ? true : false}
-            onChangeNo={(e) => setVascular((prev) => (prev = false))}
-          />
+          <div className="medicalHistory">
+            <Checkbox
+              name="Vascular Disease"
+              checkedYes={vascular ? true : false}
+              onChangeYes={(e) => setVascular((prev) => (prev = true))}
+              checkedNo={!vascular ? true : false}
+              onChangeNo={(e) => setVascular((prev) => (prev = false))}
+            />
+            <HiInformationCircle
+              className="infoCircle strokeRisk"
+              title="- Prior myocardial infarction
+                - Peripheral artery disease
+                - Aortic plaque"
+            />
+          </div>
           <Checkbox
             name="Age 65 - 74 years old"
             checkedYes={age6574 ? true : false}

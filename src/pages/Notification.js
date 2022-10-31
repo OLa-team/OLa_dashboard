@@ -88,9 +88,9 @@ function Notification() {
       ? pendingNotification.map((notif) => ({
           id: notif.id,
           dateTime:
-            getCurrentTime(notif.registration.time) +
+            getCurrentDate(notif.registration.time) +
             " " +
-            getCurrentDate(notif.registration.time),
+            getCurrentTime(notif.registration.time),
           title: `${notif.registration.name} requests to register a new account.`,
           details: notif.registration,
         }))
@@ -174,25 +174,6 @@ function Notification() {
       setPendingNotification([]);
     }
   }
-
-  // async function getAllNotification() {
-  //   const notificationData = await fetchAllNotification();
-  //   let pendingRequestList = [];
-
-  //   notificationData.forEach((notif) => {
-  //     if (notif.registrationMobile && !notif.registrationWeb) {
-  //       pendingRequestList.push(notif);
-  //     }
-  //   });
-
-  //   if (pendingRequestList.length > 0) {
-  //     setPendingNotification(pendingRequestList);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getAllNotification();
-  // }, []);
 
   return (
     <div className="wrapper notification">

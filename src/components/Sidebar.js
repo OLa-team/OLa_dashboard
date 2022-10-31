@@ -239,17 +239,17 @@ function Sidebar() {
             </div>
             <div
               onClick={() => {
-                // reset();
-                // setAc6((prev) => !prev);
-                // localStorage.setItem(
-                //   "currentSection",
-                //   JSON.stringify("App Analytics Section")
-                // );
-                // pageDispatch({
-                //   type: "SET_CURRENT_PAGE",
-                //   payload: "App Analytics",
-                // });
-                // navigate("/dashboard/appAnalytics");
+                reset();
+                setAc6((prev) => !prev);
+                localStorage.setItem(
+                  "currentSection",
+                  JSON.stringify("App Analytics Section")
+                );
+                pageDispatch({
+                  type: "SET_CURRENT_PAGE",
+                  payload: "App Analytics",
+                });
+                navigate("/dashboard/appAnalytics");
               }}
             >
               <SidebarItem
@@ -257,7 +257,7 @@ function Sidebar() {
                 section="App Analytics"
                 active={ac6}
                 alert={false}
-                customStyle={{ cursor: "no-drop" }}
+                // customStyle={{ cursor: "no-drop" }}
               />
             </div>
           </>

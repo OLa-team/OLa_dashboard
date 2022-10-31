@@ -34,7 +34,7 @@ export function getCurrentDate(date) {
 
   var today = new Date(date);
   var currentDate =
-    today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
+    today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
 
   return currentDate;
 }

@@ -1,10 +1,31 @@
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import React, { useState } from "react";
+import {
+  collection,
+  doc,
+  documentId,
+  FieldPath,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { usePageDispatch } from "../context";
 import { firestore } from "../firebase";
+import { getMaxDate } from "../utils";
 
 function AppAnalytics() {
   const pageDispatch = usePageDispatch();
+
+  var date = new Date();
+  const [period, setPeriod] = useState("daily");
+  const [startDate, setStartDate] = useState(
+    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+  );
+  const [minDate, setMinDate] = useState("");
+
+  const [myselfModuleTotalCount, setMyselfModuleTotalCount] = useState(0);
+  const [selfMonitorModuleTotalCount, setSelfMonitorModuleTotalCount] =
+    useState(0);
+  const [learningModuleTotalCount, setLearningModuleTotalCount] = useState(0);
 
   const [generalInfoPageTotalCount, setGeneralInfoPageTotalCount] = useState(0);
   const [allergyPageTotalCount, setAllergyPageTotalCount] = useState(0);
@@ -36,14 +57,52 @@ function AppAnalytics() {
   const [medicalHelpPageTotalCount, setMedicalHelpPageTotalCount] = useState(0);
   const [loginPageTotalCount, setLoginPageTotalCount] = useState(0);
 
-  const q = query(collection(firestore, "patient"));
+  function getPageCount(analyticsData) {
+    const q = query(collection(firestore, "analytics"));
 
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    pageDispatch({
-      type: "SET_LOADING_TRUE",
-    });
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      pageDispatch({
+        type: "SET_LOADING_TRUE",
+      });
 
-    if (querySnapshot.docs.length > 0) {
+      setMinDate(querySnapshot.docs[0].id);
+
+      if (period === "daily") {
+        analyticsData.push(
+          querySnapshot.docs.find((doc) => doc.id === startDate)
+        );
+
+        console.log("daily", analyticsData);
+      } else if (period === "weekly") {
+        var startIndex = querySnapshot.docs.findIndex(
+          (doc) => doc.id === startDate
+        );
+
+        if (startIndex > -1) {
+          for (let i = startIndex; i < startIndex + 6; i++) {
+            if (querySnapshot.docs[i] !== undefined) {
+              analyticsData.push(querySnapshot.docs[i]);
+            }
+          }
+        }
+
+        console.log("weekly", analyticsData);
+      } else {
+        var startIndex = querySnapshot.docs.findIndex(
+          (doc) => doc.id === startDate
+        );
+
+        if (startIndex > -1) {
+          for (let i = startIndex; i < startIndex + 30; i++) {
+            if (querySnapshot.docs[i] !== undefined) {
+              analyticsData.push(querySnapshot.docs[i]);
+            }
+          }
+        }
+
+        console.log("monthly", analyticsData);
+      }
+
       let generalInfoPageCount = 0;
       let allergyPageCount = 0;
       let medicalConditionPageCount = 0;
@@ -63,74 +122,140 @@ function AppAnalytics() {
       let medicalHelpPageCount = 0;
       let loginPageCount = 0;
 
-      querySnapshot.docs.forEach((doc) => {
-        generalInfoPageCount += doc.data().generalInfoPage;
-        allergyPageCount += doc.data().allergyPage;
-        medicalConditionPageCount += doc.data().medicalConditionPage;
-        medicationPageCount += doc.data().medicationPage;
-        bloodThinnerPageCount += doc.data().bloodThinnerPage;
-        healthGoalsPageCount += doc.data().healthGoalsPage;
-        bpHrPageCount += doc.data().bpHrPage;
-        bloodSugarLevelPageCount += doc.data().bloodSugarLevelPage;
-        bodyWeightPageCount += doc.data().bodyWeightPage;
-        bleedingSymptomsPageCount += doc.data().bleedingSymptomsPage;
-        healthDiaryPageCount += doc.data().healthDiaryPage;
-        remindMePageCount += doc.data().remindMePage;
-        atrialFibrillationPageCount += doc.data().atrialFibrillationPage;
-        heartFailurePageCount += doc.data().heartFailurePage;
-        oacPageCount += doc.data().oacPage;
-        oacAndInteractionsPageCount += doc.data().oacAndInteractionsPage;
-        medicalHelpPageCount += doc.data().medicalHelpPage;
-        loginPageCount += doc.data().loginPage;
+      let myselfModuleCount = 0;
+      let selfMonitorCount = 0;
+      let learningModuleCount = 0;
 
-        setGeneralInfoPageTotalCount(generalInfoPageCount);
-        setAllergyPageTotalCount(allergyPageCount);
-        setMedicalConditionPageTotalCount(medicalConditionPageCount);
-        setMedicationPageTotalCount(medicationPageCount);
-        setBloodThinnerPageTotalCount(bloodThinnerPageCount);
-        setHealthGoalsPageTotalCount(healthGoalsPageCount);
-        setBpHrPageTotalCount(bpHrPageCount);
-        setBloodSugarLevelPageTotalCount(bloodSugarLevelPageCount);
-        setBodyWeightPageTotalCount(bodyWeightPageCount);
-        setBleedingSymptomsPageTotalCount(bleedingSymptomsPageCount);
-        setHealthDiaryPageTotalCount(healthDiaryPageCount);
-        setRemindMePageTotalCount(remindMePageCount);
-        setAtrialFibrillationPageTotalCount(atrialFibrillationPageCount);
-        setHeartFailurePageTotalCount(heartFailurePageCount);
-        setOacPageTotalCount(oacPageCount);
-        setOacAndInteractionsPageTotalCount(oacAndInteractionsPageCount);
-        setMedicalHelpPageTotalCount(medicalHelpPageCount);
-        setLoginPageTotalCount(loginPageCount);
+      if (analyticsData[0] !== undefined) {
+        analyticsData.forEach((doc) => {
+          generalInfoPageCount += doc.data().generalInfoPage;
+          allergyPageCount += doc.data().allergyPage;
+          medicalConditionPageCount += doc.data().medicalConditionPage;
+          medicationPageCount += doc.data().medicationPage;
+          bloodThinnerPageCount += doc.data().bloodThinnerPage;
+          healthGoalsPageCount += doc.data().healthGoalsPage;
+          bpHrPageCount += doc.data().bpHrPage;
+          bloodSugarLevelPageCount += doc.data().bloodSugarLevelPage;
+          bodyWeightPageCount += doc.data().bodyWeightPage;
+          bleedingSymptomsPageCount += doc.data().bleedingSymptomsPage;
+          healthDiaryPageCount += doc.data().healthDiaryPage;
+          remindMePageCount += doc.data().remindMePage;
+          atrialFibrillationPageCount += doc.data().atrialFibrillationPage;
+          heartFailurePageCount += doc.data().heartFailurePage;
+          oacPageCount += doc.data().oacPage;
+          oacAndInteractionsPageCount += doc.data().oacAndInteractionsPage;
+          medicalHelpPageCount += doc.data().medicalHelpPage;
+          loginPageCount += doc.data().loginPage;
+
+          myselfModuleCount =
+            generalInfoPageCount +
+            allergyPageCount +
+            medicalConditionPageCount +
+            medicationPageCount;
+          selfMonitorCount =
+            bpHrPageCount +
+            bloodSugarLevelPageCount +
+            bodyWeightPageCount +
+            bleedingSymptomsPageCount +
+            healthDiaryPageCount;
+          learningModuleCount =
+            atrialFibrillationPageCount +
+            heartFailurePageCount +
+            oacPageCount +
+            oacAndInteractionsPageCount;
+        });
+      }
+
+      setGeneralInfoPageTotalCount(generalInfoPageCount);
+      setAllergyPageTotalCount(allergyPageCount);
+      setMedicalConditionPageTotalCount(medicalConditionPageCount);
+      setMedicationPageTotalCount(medicationPageCount);
+      setBloodThinnerPageTotalCount(bloodThinnerPageCount);
+      setHealthGoalsPageTotalCount(healthGoalsPageCount);
+      setBpHrPageTotalCount(bpHrPageCount);
+      setBloodSugarLevelPageTotalCount(bloodSugarLevelPageCount);
+      setBodyWeightPageTotalCount(bodyWeightPageCount);
+      setBleedingSymptomsPageTotalCount(bleedingSymptomsPageCount);
+      setHealthDiaryPageTotalCount(healthDiaryPageCount);
+      setRemindMePageTotalCount(remindMePageCount);
+      setAtrialFibrillationPageTotalCount(atrialFibrillationPageCount);
+      setHeartFailurePageTotalCount(heartFailurePageCount);
+      setOacPageTotalCount(oacPageCount);
+      setOacAndInteractionsPageTotalCount(oacAndInteractionsPageCount);
+      setMedicalHelpPageTotalCount(medicalHelpPageCount);
+      setLoginPageTotalCount(loginPageCount);
+
+      setMyselfModuleTotalCount(myselfModuleCount);
+      setSelfMonitorModuleTotalCount(selfMonitorCount);
+      setLearningModuleTotalCount(learningModuleCount);
+
+      pageDispatch({
+        type: "SET_LOADING_FALSE",
       });
-    }
-
-    pageDispatch({
-      type: "SET_LOADING_FALSE",
     });
-  });
+  }
+
+  useEffect(() => {
+    console.log(period);
+    console.log(startDate);
+    if (period !== "" && startDate !== "") {
+      let analyticsData = [];
+      getPageCount(analyticsData);
+    }
+  }, [period, startDate]);
 
   return (
     <div className="wrapper">
       <div
         style={{
           padding: "40px",
-          height: "100%",
+          height: "105%",
           overflowY: "scroll",
         }}
       >
-        <h1>Total Visit Per Page</h1>
+        <div className="filterDate">
+          <h1>Total Visit Per Page</h1>
+
+          <div>
+            <div>
+              <p>Period:</p>
+              <select onChange={(e) => setPeriod(e.target.value)}>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+
+            <div>
+              <p>Start from:</p>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                max={getMaxDate()}
+                min={minDate}
+              />
+            </div>
+          </div>
+        </div>
 
         <div className="pageAnalytics">
           <div className="sidePageAnalytics">
             <ul className="pageCountList">
-              <h4>Myself</h4>
+              <div className="pageCount">
+                <h4>
+                  <span>Myself</span>
+                  <span>:</span>
+                </h4>
+                <p>{myselfModuleTotalCount}</p>
+              </div>
               <li>
                 <div className="pageCount">
                   <p>
                     <span>General Info</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{generalInfoPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -148,7 +273,7 @@ function AppAnalytics() {
                     <span>Medical Condition</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{medicalConditionPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -157,7 +282,7 @@ function AppAnalytics() {
                     <span>Current Medication</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{medicationPageTotalCount}</p>
                 </div>
               </li>
             </ul>
@@ -167,7 +292,7 @@ function AppAnalytics() {
                 <span>Blood Thinner</span>
                 <span>:</span>
               </h4>
-              <p>10</p>
+              <p>{bloodThinnerPageTotalCount}</p>
             </div>
 
             <div className="pageCount">
@@ -175,18 +300,24 @@ function AppAnalytics() {
                 <span>Health Goals</span>
                 <span>:</span>
               </h4>
-              <p>10</p>
+              <p>{healthGoalsPageTotalCount}</p>
             </div>
 
             <ul className="pageCountList">
-              <h4>Self-Monitor</h4>
+              <div className="pageCount">
+                <h4>
+                  <span>Self-Monitor</span>
+                  <span>:</span>
+                </h4>
+                <p>{selfMonitorModuleTotalCount}</p>
+              </div>
               <li>
                 <div className="pageCount">
                   <p>
                     <span>BP & HR</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{bpHrPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -195,7 +326,7 @@ function AppAnalytics() {
                     <span>Blood Sugar Level</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{bloodSugarLevelPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -204,7 +335,7 @@ function AppAnalytics() {
                     <span>Body Weight</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{bodyWeightPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -213,7 +344,7 @@ function AppAnalytics() {
                     <span>Bleeding Symptoms</span>
                     <span>:</span>
                   </p>
-                  <p>7</p>
+                  <p>{bleedingSymptomsPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -222,7 +353,7 @@ function AppAnalytics() {
                     <span>Health Diary</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{healthDiaryPageTotalCount}</p>
                 </div>
               </li>
             </ul>
@@ -234,18 +365,24 @@ function AppAnalytics() {
                 <span>Remind Me</span>
                 <span>:</span>
               </h4>
-              <p>10</p>
+              <p>{remindMePageTotalCount}</p>
             </div>
 
             <ul className="pageCountList">
-              <h4>Learning Module</h4>
+              <div className="pageCount">
+                <h4>
+                  <span>Learning Module</span>
+                  <span>:</span>
+                </h4>
+                <p>{learningModuleTotalCount}</p>
+              </div>
               <li>
                 <div className="pageCount">
                   <p>
                     <span>Atrial Fibrillation</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{atrialFibrillationPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -254,7 +391,7 @@ function AppAnalytics() {
                     <span>Heart Failure</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{heartFailurePageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -263,7 +400,7 @@ function AppAnalytics() {
                     <span>OAC</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{oacPageTotalCount}</p>
                 </div>
               </li>
               <li>
@@ -272,7 +409,7 @@ function AppAnalytics() {
                     <span>OAC and Interactions</span>
                     <span>:</span>
                   </p>
-                  <p>10</p>
+                  <p>{oacAndInteractionsPageTotalCount}</p>
                 </div>
               </li>
             </ul>
@@ -282,7 +419,7 @@ function AppAnalytics() {
                 <span>Medical Help</span>
                 <span>:</span>
               </h4>
-              <p>10</p>
+              <p>{medicalHelpPageTotalCount}</p>
             </div>
 
             <div className="pageCount">
@@ -290,7 +427,7 @@ function AppAnalytics() {
                 <span>Login</span>
                 <span>:</span>
               </h4>
-              <p>10</p>
+              <p>{loginPageTotalCount}</p>
             </div>
           </div>
         </div>

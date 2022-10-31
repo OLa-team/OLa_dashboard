@@ -11,24 +11,12 @@ function Header() {
   const isUserHcp = currentUserState.userDetails.isHcp;
   const role =
     isUserAdmin && isUserHcp ? "Admin & HCP" : isUserAdmin ? "Admin" : "HCP";
-  var windowWidth;
-  window.onresize = window.onload = function () {
-    windowWidth = this.innerWidth;
-    console.log("width", windowWidth < 1100);
-  };
-
-  function openSiderbar() {
-    // if (windowWidth < 1100) {
-    //   alert(windowWidth);
-    //   console.log(document.getElementsByClassName("sidebar").style.width);
-    // }
-  }
 
   return (
     <div className="header">
       <div className="headerDetails">
         <div className="leftDetail">
-          <CgMenu className="menu-icon" onClick={() => openSiderbar()} />
+          <CgMenu className="menu-icon" />
           <h2>{pageState.currentPage}</h2>
         </div>
 
