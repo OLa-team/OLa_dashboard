@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import small from "../../src/assets/small.png";
-import logoWhite from "../../src/assets/logo-white.png";
 import logo2 from "../../src/assets/logo_2.png";
 import { Link } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../context";

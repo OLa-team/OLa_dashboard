@@ -77,6 +77,50 @@
   top: 30% !important;
 }
 
+/* Page Not Found */
+.bgPageNotFound div {
+  width: 80%;
+  margin: auto;
+  font-size: 20px;
+  padding: 50px 0px;
+  text-align: center;
+}
+
+/* Privacy Policy */
+.bgPrivacyPolicy {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.bgPrivacyPolicy .content {
+  /* padding: 100px 150px; */
+  width: 87%;
+  margin: auto;
+  background-color: rgba(250, 250, 250, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+}
+
+.bgPrivacyPolicy .title {
+  font-size: 50px;
+  padding-bottom: 20px;
+  font-weight: 500;
+}
+
+.bgPrivacyPolicy .subTitle {
+  padding-top: 30px;
+}
+
+.bgPrivacyPolicy p,
+.bgPrivacyPolicy li {
+  font-size: 20px;
+}
+
+.privacyPolicyBar {
+  width: 87% !important;
+  padding: 20px 0px;
+}
+
 /* ---------------------------------------------------- */
 /* Login page */
 .bg {
@@ -218,7 +262,9 @@
 
 /* ---------------------------------------------------- */
 /* Register */
-.bgRegister {
+.bgRegister,
+.bgPageNotFound,
+.bgPrivacyPolicy {
   background-image: url("../src/assets/bgRegister.png");
   background-position: center;
   background-repeat: no-repeat;
@@ -1859,12 +1905,6 @@ input:-webkit-autofill:active {
   text-align: center;
   background-color: transparent;
   border-bottom: 1px dashed #000 !important;
-}
-
-.ttrBtn {
-  /* position: absolute;
-  top: -30px;
-  left: 75px; */
 }
 
 .ttrBtn button {

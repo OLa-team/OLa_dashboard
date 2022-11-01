@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logoRed from "../../src/assets/logo-red.png";
 import { BsPersonFill } from "react-icons/bs";
 import { FaEnvelope } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -68,7 +67,7 @@ function Register() {
       <div className="register">
         <div className="registerPart">
           <div className="top">
-            <img src={logoRed} alt="logoRed.png" />
+            {/* <img src={logoRed} alt="logoRed.png" /> */}
             <h2>Create an account</h2>
           </div>
           <form onSubmit={(e) => signUp(e)} className="signUpForm">

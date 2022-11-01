@@ -3,8 +3,14 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
 import PageNotFound from "../pages/PageNotFound";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
 
 const routes = [
+  {
+    path: "/privacyPolicy",
+    element: <PrivacyPolicy />,
+    isPrivate: false,
+  },
   {
     path: "/login",
     element: <Login />,
@@ -23,7 +29,7 @@ const routes = [
   {
     path: "/*",
     element: <PageNotFound />,
-    isPrivate: true,
+    isPrivate: false,
   },
 ];
 

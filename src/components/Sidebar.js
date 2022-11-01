@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logoWhite from "../../src/assets/logo-white.png";
 import logo2 from "../../src/assets/logo_2.png";
 import { BsPencilSquare, BsPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";

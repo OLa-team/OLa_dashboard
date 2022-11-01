@@ -65,4 +65,5 @@ export async function logout(dispatch) {
   localStorage.removeItem("warfarinQualityResultMessage");
   localStorage.removeItem("bleedingRiskResultMessage");
   localStorage.removeItem("strokeRiskResultMessage");
+  localStorage.removeItem("medicationConstantList");
 }

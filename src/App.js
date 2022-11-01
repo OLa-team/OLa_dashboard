@@ -18,22 +18,8 @@ function App() {
   // Global state
   const userDetails = useAuthState();
 
-  const params = useParams();
-
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
-
-  async function resetCurrentPatient() {
-    await setCurrentPatient(patientDispatch, params.patientId);
-  }
-
-  console.log("patientState", patientState);
-
-  useEffect(() => {
-    // resetCurrentPatient();
-    // window.location.reload();
-    // alert("!23");
-  }, []);
 
   return (
     <div className="container">
