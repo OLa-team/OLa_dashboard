@@ -7,7 +7,7 @@ import PrivacyPolicy from "../pages/PrivacyPolicy";
 
 const routes = [
   {
-    path: "/privacyPolicy",
+    path: "/privacy",
     element: <PrivacyPolicy />,
     isPrivate: false,
   },
