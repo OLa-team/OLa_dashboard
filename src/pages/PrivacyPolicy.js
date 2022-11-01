@@ -98,9 +98,7 @@ function PrivacyPolicy() {
 
         <div>
           <h1 className="subTitle">Feedback</h1>
-          <p>
-            <a href="mailto:ola_admin@um.edu.my">ola_admin@um.edu.my </a>
-          </p>
+          <p>ola_admin@um.edu.my</p>
         </div>
       </div>
     </div>
