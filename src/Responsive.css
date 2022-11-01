@@ -118,6 +118,10 @@
     /* background-color: black; */
   }
 
+  .privacyPolicyBar {
+    height: fit-content;
+  }
+
   .loginPart p:nth-child(1) {
     font-size: 35px;
   }
