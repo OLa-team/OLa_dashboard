@@ -37,7 +37,7 @@ function Medication() {
     : "";
 
   const [name, setName] = useState("");
-  const [dose, setDose] = useState(0.0);
+  const [dose, setDose] = useState("");
   const [frequency, setFrequency] = useState("");
   const [note, setNote] = useState("");
   const [medicineId, setMedicineId] = useState("");
@@ -157,7 +157,7 @@ function Medication() {
       medicineData = {
         id: medicineId,
         name: name,
-        dose: parseFloat(dose),
+        dose: dose,
         frequency: frequency,
         note: note,
       };
@@ -165,7 +165,7 @@ function Medication() {
       medicineData = {
         id: medicineId,
         name: name,
-        dose: parseFloat(dose),
+        dose: dose,
         frequency: frequency,
         note: note,
       };
@@ -181,7 +181,7 @@ function Medication() {
       action: "",
     });
     setName("");
-    setDose(0);
+    setDose("");
     setFrequency("");
     setNote("");
     setMedicineId("");
@@ -365,7 +365,7 @@ function Medication() {
                   action: "",
                 });
                 setName("");
-                setDose(0);
+                setDose("");
                 setFrequency("");
                 setNote("");
                 setMedicineId("");
@@ -402,11 +402,11 @@ function Medication() {
               </select> */}
             </div>
             <div>
-              <label>Dose (in mg): </label>
+              <label>Dose: </label>
               <input
                 type="text"
                 name="dose"
-                placeholder="Enter dose in mg"
+                placeholder="Enter dose (in mcg, mg, g or iu)"
                 value={dose}
                 onChange={(e) => {
                   setDose(e.target.value);
