@@ -74,8 +74,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
       age6574: false,
       female: false,
       score: 0,
-      result: "",
-      colorMsg: "",
+      result: "No result",
+      colorMsg: "#000000",
     });
 
     await setDoc(doc(firestore, "bleeding_risk", patientId), {
@@ -92,8 +92,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
       drugs: false,
       alcohol: false,
       score: 0,
-      result: "",
-      colorMsg: "",
+      result: "No result",
+      colorMsg: "#000000",
     });
 
     await setDoc(doc(firestore, "warfarin_quality", patientId), {
@@ -107,8 +107,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
       tobacco: false,
       race: false,
       score: 0,
-      result: "",
-      colorMsg: "",
+      result: "No result",
+      colorMsg: "#000000",
     });
 
     await setDoc(doc(firestore, "health_goal", patientId), {

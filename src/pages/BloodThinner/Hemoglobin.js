@@ -14,7 +14,13 @@ import {
   updateHemoglobinRecord,
   updateNameVerified,
 } from "../../service";
-import { getCurrentDate, getCurrentTime, getMaxDate } from "../../utils";
+import {
+  convertDateObjToDateInput,
+  getCurrentDate,
+  getCurrentTime,
+  getMaxDate,
+  parseDate,
+} from "../../utils";
 import { Line } from "react-chartjs-2";
 
 function Hemoglobin() {
@@ -66,6 +72,9 @@ function Hemoglobin() {
       field: "date",
       headerName: "Date",
       flex: 0.7,
+      renderCell: (params) => {
+        return <div>{convertDateObjToDateInput(params.row.date)}</div>;
+      },
     },
     {
       field: "hemoglobin",
@@ -109,14 +118,14 @@ function Hemoglobin() {
       const hemoglobinId = uuid().slice(0, 5);
       hemoglobinData = {
         id: hemoglobinId,
-        date: date,
+        date: parseDate(date).getTime(),
         hemoglobin: parseFloat(hemoglobin),
         note: note,
       };
     } else {
       hemoglobinData = {
         id: hemoglobinId,
-        date: date,
+        date: parseDate(date).getTime(),
         hemoglobin: parseFloat(hemoglobin),
         note: note,
       };
@@ -143,7 +152,7 @@ function Hemoglobin() {
   }
 
   function selectHemoglobin(row) {
-    setDate(row.date);
+    setDate(convertDateObjToDateInput(row.date));
     setHemoglobin(row.hemoglobin);
     setNote(row.note);
     setHemoglobinId(row.id);
@@ -253,6 +262,8 @@ function Hemoglobin() {
       },
     },
   };
+
+  console.log("date", date);
 
   return (
     <div className="wrapper">

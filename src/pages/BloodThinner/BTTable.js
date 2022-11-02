@@ -16,7 +16,13 @@ import {
   updateInrRecord,
   updateNameVerified,
 } from "../../service/PatientService";
-import { getCurrentDate, getCurrentTime, getMaxDate } from "../../utils";
+import {
+  convertDateObjToDateInput,
+  getCurrentDate,
+  getCurrentTime,
+  getMaxDate,
+  parseDate,
+} from "../../utils";
 
 function BTTable() {
   const navigate = useNavigate();
@@ -410,9 +416,6 @@ function BTTable() {
         _numberOfTestsInRange += 1;
       }
     });
-    console.log("_daysWithinRange", _daysWithinRange);
-    console.log("_totalDays", _totalDays);
-    console.log("_numberOfTestsInRange", _numberOfTestsInRange);
 
     _percentageDaysWithinRange = (_daysWithinRange / _totalDays) * 100;
     _percentageOfTestsInRange =
@@ -510,6 +513,9 @@ function BTTable() {
       field: "date",
       headerName: "Date",
       flex: 1,
+      renderCell: (params) => {
+        return <div>{convertDateObjToDateInput(params.row.date)}</div>;
+      },
     },
     {
       field: "age",
@@ -567,7 +573,7 @@ function BTTable() {
       creatinineRecordData = {
         id: creatinineRecordId,
         age: age,
-        date: date,
+        date: parseDate(date).getTime(),
         weight: parseFloat(weight),
         serumCreatinine: parseFloat(serumCreatinine),
         creatinineClearance: creatinineClearance,
@@ -578,7 +584,7 @@ function BTTable() {
       creatinineRecordData = {
         id: creatinineRecordId,
         age: age,
-        date: date,
+        date: parseDate(date).getTime(),
         weight: parseFloat(weight),
         serumCreatinine: parseFloat(serumCreatinine),
         creatinineClearance: creatinineClearance,
@@ -610,7 +616,7 @@ function BTTable() {
   }
 
   function selectCreatinineData(row) {
-    setDate(row.date);
+    setDate(convertDateObjToDateInput(row.date));
     setWeight(row.weight);
     setSerumCreatinine(row.serumCreatinine);
     setCreatinineClearance(row.creatinineClearance);
@@ -660,9 +666,9 @@ function BTTable() {
 
   function resetCreatinineForm() {
     setDate("");
-    setWeight("");
-    setSerumCreatinine("");
-    setCreatinineClearance("");
+    setWeight(0);
+    setSerumCreatinine(0);
+    setCreatinineClearance(0);
     setNote("");
   }
 
@@ -671,11 +677,13 @@ function BTTable() {
   }
 
   function calculateCreatinineClearance() {
-    let genderFactor = gender === "male" ? 1.23 : 1.04;
-    let result =
-      ((140 - age) * parseFloat(weight) * genderFactor) /
-      parseFloat(serumCreatinine);
-    setCreatinineClearance(Math.round(result));
+    if (weight !== 0 && serumCreatinine !== 0) {
+      let genderFactor = gender === "male" ? 1.23 : 1.04;
+      let result =
+        ((140 - age) * parseFloat(weight) * genderFactor) /
+        parseFloat(serumCreatinine);
+      setCreatinineClearance(Math.round(result));
+    }
   }
 
   async function verifyData() {
@@ -699,7 +707,8 @@ function BTTable() {
     }
   }, [inrRecordList]);
 
-  console.log("dose", dose);
+  console.log("dose", parseDate(date).getTime());
+  console.log("dose", convertDateObjToDateInput(parseDate(date).getTime()));
 
   return (
     <div className="wrapper">

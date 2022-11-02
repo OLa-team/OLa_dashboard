@@ -149,8 +149,10 @@ function BloodThinner() {
       return resultMessages.msg1;
     } else if (result === "msg2") {
       return resultMessages.msg2;
-    } else {
+    } else if (result === "msg3") {
       return resultMessages.msg3;
+    } else {
+      return result;
     }
   }
 
