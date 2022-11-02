@@ -743,32 +743,22 @@ function BTTable() {
               <div>
                 <input
                   type="checkbox"
-                  checked={dose === "15mg once daily" ? true : false}
+                  checked={dose === "15mg OD" ? true : false}
                   onChange={() => {
-                    setDose("15mg once daily");
+                    setDose("15mg OD");
                   }}
                 />
-                <p>15mg once daily</p>
+                <p>15mg OD</p>
               </div>
               <div>
                 <input
                   type="checkbox"
-                  checked={dose === "15mg twice a day" ? true : false}
+                  checked={dose === "20mg OD" ? true : false}
                   onChange={() => {
-                    setDose("15mg twice a day");
+                    setDose("20mg OD");
                   }}
                 />
-                <p>15mg twice a day</p>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  checked={dose === "20mg twice a day" ? true : false}
-                  onChange={() => {
-                    setDose("20mg twice a day");
-                  }}
-                />
-                <p>20mg twice a day</p>
+                <p>20mg OD</p>
               </div>
             </div>
           </>
@@ -782,22 +772,22 @@ function BTTable() {
             <div>
               <input
                 type="checkbox"
-                checked={dose === "110mg twice a day" ? true : false}
+                checked={dose === "110mg BD" ? true : false}
                 onChange={() => {
-                  setDose("110mg twice a day");
+                  setDose("110mg BD");
                 }}
               />
-              <p>110mg twice a day</p>
+              <p>110mg BD</p>
             </div>
             <div>
               <input
                 type="checkbox"
-                checked={dose === "150mg twice a day" ? true : false}
+                checked={dose === "150mg OD" ? true : false}
                 onChange={() => {
-                  setDose("150mg twice a day");
+                  setDose("150mg OD");
                 }}
               />
-              <p>150mg twice a day</p>
+              <p>150mg OD</p>
             </div>
           </div>
         )}
@@ -810,22 +800,22 @@ function BTTable() {
             <div>
               <input
                 type="checkbox"
-                checked={dose === "110mg twice a day" ? true : false}
+                checked={dose === "2.5mg BD" ? true : false}
                 onChange={() => {
-                  setDose("110mg twice a day");
+                  setDose("2.5mg BD");
                 }}
               />
-              <p>2.5mg twice a day</p>
+              <p>2.5mg BD</p>
             </div>
             <div>
               <input
                 type="checkbox"
-                checked={dose === "150mg twice a day" ? true : false}
+                checked={dose === "5mg BD" ? true : false}
                 onChange={() => {
-                  setDose("150mg twice a day");
+                  setDose("5mg BD");
                 }}
               />
-              <p>5mg twice a day</p>
+              <p>5mg BD</p>
             </div>
           </div>
         )}

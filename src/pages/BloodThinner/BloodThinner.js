@@ -71,9 +71,16 @@ function BloodThinner() {
   async function handleSubmitBloodThinner() {
     // e.preventDefault();
 
-    if (indication === "" || duration === "" || inrRange === "") {
-      alert("Please fill in all the fields before proceed to save.");
-      return;
+    if (anticoagulant === "warfarin") {
+      if (indication === "" || duration === "" || inrRange === "") {
+        alert("Please fill in all the fields before proceed to save.");
+        return;
+      }
+    } else {
+      if (indication === "" || duration === "") {
+        alert("Please fill in all the fields before proceed to save.");
+        return;
+      }
     }
 
     let bloodThinnerData = {

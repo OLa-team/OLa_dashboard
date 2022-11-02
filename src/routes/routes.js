@@ -16,11 +16,11 @@ const routes = [
     element: <Login />,
     isPrivate: false,
   },
-  {
-    path: "/register",
-    element: <Register />,
-    isPrivate: false,
-  },
+  // {
+  //   path: "/register",
+  //   element: <Register />,
+  //   isPrivate: false,
+  // },
   {
     path: "/dashboard/*",
     element: <Home />,
