@@ -228,7 +228,7 @@ function Medication() {
   function selectMedicine(row) {
     setName(row.name);
     setDose(row.dose);
-    setFrequency(row.frequency);
+    setFrequency(convertFrequencyWithDescription(row.frequency));
     setNote(row.note);
     setMedicineId(row.id);
 
