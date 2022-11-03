@@ -3,12 +3,18 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
 import PageNotFound from "../pages/PageNotFound";
-import PrivacyPolicy from "../pages/PrivacyPolicy";
+import PrivacyPolicyEn from "../pages/PrivacyPolicyEn";
+import PrivacyPolicyBm from "../pages/PrivacyPolicyBm";
 
 const routes = [
   {
-    path: "/privacy",
-    element: <PrivacyPolicy />,
+    path: "/privacy/en",
+    element: <PrivacyPolicyEn />,
+    isPrivate: false,
+  },
+  {
+    path: "/privacy/bm",
+    element: <PrivacyPolicyBm />,
     isPrivate: false,
   },
   {

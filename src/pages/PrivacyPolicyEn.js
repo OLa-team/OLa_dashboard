@@ -2,7 +2,7 @@ import React from "react";
 import logo2 from "../../src/assets/logo_2.png";
 import logo1 from "../../src/assets/logo_1.png";
 
-function PrivacyPolicy() {
+function PrivacyPolicyEn() {
   return (
     <div className="bgPrivacyPolicy">
       <div className="topBar privacyPolicyBar">
@@ -105,4 +105,4 @@ function PrivacyPolicy() {
   );
 }
 
-export default PrivacyPolicy;
+export default PrivacyPolicyEn;

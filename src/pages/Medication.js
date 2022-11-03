@@ -56,12 +56,30 @@ function Medication() {
       value: medicine,
     }));
 
+  const ODPRN = "OD/PRN - once daily and when needed";
+  const BDPRN = "BD/PRN - twice daily and when needed";
+  const TDSPRN = "TDS/PRN - three times a day and when needed";
+
   const frequencyList = patientState.medicationConstantList.frequencyList.map(
     (frequency) => ({
       id: frequency,
-      value: frequency,
+      value: convertFrequencyWithDescription(frequency),
     })
   );
+
+  function convertFrequencyWithDescription(frequency) {
+    if (frequency === "ODPRN") return ODPRN;
+    else if (frequency === "BDPRN") return BDPRN;
+    else if (frequency === "TDSPRN") return TDSPRN;
+    else return frequency;
+  }
+
+  function convertFrequencyWithoutDescription(frequency) {
+    if (frequency === ODPRN) return "ODPRN";
+    else if (frequency === BDPRN) return "BDPRN";
+    else if (frequency === TDSPRN) return "TDSPRN";
+    else return frequency;
+  }
 
   const style = {
     height: "80%",
@@ -88,22 +106,27 @@ function Medication() {
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      flex: 0.8,
     },
     {
       field: "dose",
       headerName: "Dose (in mg)",
-      flex: 1,
+      flex: 0.8,
     },
     {
       field: "frequency",
       headerName: "Frequency",
       flex: 1,
+      renderCell: (params) => {
+        return (
+          <div>{convertFrequencyWithDescription(params.row.frequency)}</div>
+        );
+      },
     },
     {
       field: "note",
       headerName: "Notes",
-      flex: 2.5,
+      flex: 2,
     },
     {
       field: "button",
@@ -129,6 +152,13 @@ function Medication() {
     ? patientState.medication.dateTimeUpdated
     : "";
 
+  function convertFrequencyInMedicineList(medicineList) {
+    return medicineList.map((medicine) => ({
+      ...medicine,
+      frequency: convertFrequencyWithoutDescription(medicine.frequency),
+    }));
+  }
+
   async function handleSubmitMedication(e) {
     e.preventDefault();
 
@@ -136,7 +166,7 @@ function Medication() {
       nameUpdated: currentUserState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
       nameVerified: "",
-      medicineList: medicineList,
+      medicineList: convertFrequencyInMedicineList(medicineList),
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
