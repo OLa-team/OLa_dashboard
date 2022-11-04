@@ -377,9 +377,15 @@ function Hemoglobin() {
               <button
                 className="hbBackBtn"
                 onClick={() => {
-                  navigate(
-                    `/dashboard/patient/${params.patientId}/bloodThinner`
-                  );
+                  if (
+                    window.confirm(
+                      "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
+                    )
+                  ) {
+                    navigate(
+                      `/dashboard/patient/${params.patientId}/bloodThinner`
+                    );
+                  }
                 }}
               >
                 Back
@@ -425,7 +431,7 @@ function Hemoglobin() {
                 <div>
                   <label>Hemoglobin level (g/dL): </label>
                   <input
-                    type="text"
+                    type="number"
                     name="hemoglobin"
                     placeholder="Enter dose in mg"
                     value={hemoglobin}
@@ -433,6 +439,7 @@ function Hemoglobin() {
                       setHemoglobin(e.target.value);
                     }}
                     required
+                    min={0}
                   />
                 </div>
                 <div>

@@ -1049,6 +1049,7 @@ function BTTable() {
                           type="number"
                           value={sun}
                           onChange={(e) => setSun(parseFloat(e.target.value))}
+                          min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1060,6 +1061,7 @@ function BTTable() {
                           type="number"
                           value={mon}
                           onChange={(e) => setMon(parseFloat(e.target.value))}
+                          min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1073,6 +1075,7 @@ function BTTable() {
                           type="number"
                           value={tues}
                           onChange={(e) => setTues(parseFloat(e.target.value))}
+                          min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1084,6 +1087,7 @@ function BTTable() {
                           type="number"
                           value={wed}
                           onChange={(e) => setWed(parseFloat(e.target.value))}
+                          min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1097,6 +1101,7 @@ function BTTable() {
                           type="number"
                           value={thur}
                           onChange={(e) => setThur(parseFloat(e.target.value))}
+                          min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1108,6 +1113,7 @@ function BTTable() {
                           type="number"
                           value={fri}
                           onChange={(e) => setFri(parseFloat(e.target.value))}
+                          min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1121,6 +1127,7 @@ function BTTable() {
                           type="number"
                           value={sat}
                           onChange={(e) => setSat(parseFloat(e.target.value))}
+                          min={0}
                         />
                         <p>mg</p>
                       </span>

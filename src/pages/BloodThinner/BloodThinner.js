@@ -385,18 +385,21 @@ function BloodThinner() {
                             type="number"
                             value={dose1}
                             onChange={(e) => setDose1(e.target.value)}
+                            min={0}
                           />
                           /
                           <input
                             type="number"
                             value={dose2}
                             onChange={(e) => setDose2(e.target.value)}
+                            min={0}
                           />
                           /
                           <input
                             type="number"
                             value={dose3}
                             onChange={(e) => setDose3(e.target.value)}
+                            min={0}
                           />
                         </div>
                       </div>
