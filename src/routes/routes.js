@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/*",
     element: <PageNotFound />,
-    isPrivate: false,
+    isPrivate: true,
   },
 ];
 
