@@ -707,8 +707,20 @@ function BTTable() {
     }
   }, [inrRecordList]);
 
-  console.log("dose", parseDate(date).getTime());
-  console.log("dose", convertDateObjToDateInput(parseDate(date).getTime()));
+  function restrictNegativeValue(value, day) {
+    if (parseFloat(value) < 0) {
+      alert("The value cannot be negative, please try again.");
+      return;
+    } else {
+      if (day === "Sun") setSun(parseFloat(value));
+      else if (day === "Mon") setMon(parseFloat(value));
+      else if (day === "Tues") setTues(parseFloat(value));
+      else if (day === "Wed") setWed(parseFloat(value));
+      else if (day === "Thur") setThur(parseFloat(value));
+      else if (day === "Fri") setFri(parseFloat(value));
+      else if (day === "Sat") setSat(parseFloat(value));
+    }
+  }
 
   return (
     <div className="wrapper">
@@ -1048,8 +1060,10 @@ function BTTable() {
                         <input
                           type="number"
                           value={sun}
-                          onChange={(e) => setSun(parseFloat(e.target.value))}
-                          min={0}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Sun");
+                          }}
+                          // min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1060,8 +1074,10 @@ function BTTable() {
                         <input
                           type="number"
                           value={mon}
-                          onChange={(e) => setMon(parseFloat(e.target.value))}
-                          min={0}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Mon");
+                          }}
+                          // min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1074,8 +1090,10 @@ function BTTable() {
                         <input
                           type="number"
                           value={tues}
-                          onChange={(e) => setTues(parseFloat(e.target.value))}
-                          min={0}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Tues");
+                          }}
+                          // min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1086,8 +1104,10 @@ function BTTable() {
                         <input
                           type="number"
                           value={wed}
-                          onChange={(e) => setWed(parseFloat(e.target.value))}
-                          min={0}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Wed");
+                          }}
+                          // min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1100,8 +1120,10 @@ function BTTable() {
                         <input
                           type="number"
                           value={thur}
-                          onChange={(e) => setThur(parseFloat(e.target.value))}
-                          min={0}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Thur");
+                          }}
+                          // min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1112,8 +1134,10 @@ function BTTable() {
                         <input
                           type="number"
                           value={fri}
-                          onChange={(e) => setFri(parseFloat(e.target.value))}
-                          min={0}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Fri");
+                          }}
+                          // min={0}
                         />
                         <p>mg</p>
                       </span>
@@ -1126,8 +1150,10 @@ function BTTable() {
                         <input
                           type="number"
                           value={sat}
-                          onChange={(e) => setSat(parseFloat(e.target.value))}
-                          min={0}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Sat");
+                          }}
+                          // min={0}
                         />
                         <p>mg</p>
                       </span>

@@ -263,7 +263,14 @@ function Hemoglobin() {
     },
   };
 
-  console.log("date", date);
+  function restrictNegativeValue(value) {
+    if (parseFloat(value) < 0) {
+      alert("The value cannot be negative, please try again.");
+      return;
+    } else {
+      setHemoglobin(value);
+    }
+  }
 
   return (
     <div className="wrapper">
@@ -436,10 +443,10 @@ function Hemoglobin() {
                     placeholder="Enter dose in mg"
                     value={hemoglobin}
                     onChange={(e) => {
-                      setHemoglobin(e.target.value);
+                      restrictNegativeValue(e.target.value);
                     }}
                     required
-                    min={0}
+                    // min={0}
                   />
                 </div>
                 <div>
