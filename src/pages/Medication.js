@@ -56,9 +56,9 @@ function Medication() {
       value: medicine,
     }));
 
-  const ODPRN = "OD/PRN - once daily and when needed";
-  const BDPRN = "BD/PRN - twice daily and when needed";
-  const TDSPRN = "TDS/PRN - three times a day and when needed";
+  const ODPRN = "OD/PRN";
+  const BDPRN = "BD/PRN";
+  const TDSPRN = "TDS/PRN";
 
   const frequencyList = patientState.medicationConstantList.frequencyList.map(
     (frequency) => ({
@@ -110,7 +110,7 @@ function Medication() {
     },
     {
       field: "dose",
-      headerName: "Dose (in mg)",
+      headerName: "Dose",
       flex: 0.8,
     },
     {
