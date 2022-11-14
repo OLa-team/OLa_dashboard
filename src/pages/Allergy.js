@@ -65,8 +65,8 @@ function Allergy() {
       nameVerified: "",
       allergyStatus: allergyStatus,
       hasAllergy: food === "" && medicine === "" ? false : true,
-      food: allergyStatus === "Y" ? food.split(",") : "",
-      medicine: allergyStatus === "Y" ? medicine.split(",") : "",
+      food: allergyStatus === "Y" ? food.split(",") : [],
+      medicine: allergyStatus === "Y" ? medicine.split(",") : [],
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
