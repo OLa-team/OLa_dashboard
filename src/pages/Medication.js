@@ -169,7 +169,11 @@ function Medication() {
       medicineList: convertFrequencyInMedicineList(medicineList),
     };
 
-    if (window.confirm("Are you sure you want to continue?")) {
+    if (
+      window.confirm(
+        "Please check for medication interactions. Please click ok if you want to save the information."
+      )
+    ) {
       await updateMedication(medicationData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's current medication successfully.");
