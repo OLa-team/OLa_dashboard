@@ -8,9 +8,14 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import ExcelExport from "../components/ExcelExport";
 import { usePageDispatch } from "../context";
 import { firestore } from "../firebase";
-import { convertDateObjToDateInput, getMaxDate } from "../utils";
+import {
+  convertDateObjToDateInput,
+  getCurrentDate,
+  getMaxDate,
+} from "../utils";
 
 function AppAnalytics() {
   const pageDispatch = usePageDispatch();
@@ -202,19 +207,94 @@ function AppAnalytics() {
     }
   }, [period, startDate]);
 
+  const sampleData = [
+    ["Date:", startDate],
+    ["Period:", period],
+    [],
+    [
+      "Myself",
+      myselfModuleTotalCount,
+      "Blood Thinner",
+      bloodThinnerPageTotalCount,
+      "Health Goals",
+      healthGoalsPageTotalCount,
+      "Self-Monitor",
+      selfMonitorModuleTotalCount,
+      "Remind Me",
+      remindMePageTotalCount,
+      "Learning Module",
+      learningModuleTotalCount,
+      "Medical Help",
+      medicalHelpPageTotalCount,
+      "Login",
+      loginPageTotalCount,
+    ],
+    [
+      "General Info",
+      generalInfoPageTotalCount,
+      "",
+      "",
+      "",
+      "",
+      "BP & HR",
+      bpHrPageTotalCount,
+      "",
+      "",
+      "Atrial Fibrilation",
+      atrialFibrillationPageTotalCount,
+    ],
+    [
+      "Allergy",
+      allergyPageTotalCount,
+      "",
+      "",
+      "",
+      "",
+      "Blood Sugar Level",
+      bloodSugarLevelPageTotalCount,
+      "",
+      "",
+      "Heart Failure",
+      heartFailurePageTotalCount,
+    ],
+    [
+      "Medical Condition",
+      medicalConditionPageTotalCount,
+      "",
+      "",
+      "",
+      "",
+      "Body Weight",
+      bodyWeightPageTotalCount,
+      "",
+      "",
+      "OAC",
+      oacPageTotalCount,
+    ],
+    [
+      "Current Medication",
+      medicationPageTotalCount,
+      "",
+      "",
+      "",
+      "",
+      "Bleeding Symptoms",
+      bleedingSymptomsPageTotalCount,
+      "",
+      "",
+      "OAC and Interations",
+      oacAndInteractionsPageTotalCount,
+    ],
+    ["", "", "", "", "", "", "Health Diary", healthDiaryPageTotalCount],
+  ];
+
   return (
     <div className="wrapper">
-      <div
-        style={{
-          padding: "40px",
-          height: "105%",
-          overflowY: "scroll",
-        }}
-      >
+      <div className="appAnalyticsWrap">
         <div className="filterDate">
           <h1>Total Visit Per Page</h1>
 
-          <div>
+          <div style={{ alignItems: "center" }}>
             <div>
               <p>Period:</p>
               <select onChange={(e) => setPeriod(e.target.value)}>
@@ -234,6 +314,13 @@ function AppAnalytics() {
                 min={minDate}
               />
             </div>
+
+            <ExcelExport
+              excelData={sampleData}
+              fileName={`App Analytics_${startDate.split("-")[2]}/${
+                startDate.split("-")[1]
+              }/${startDate.split("-")[0]}`}
+            />
           </div>
         </div>
 

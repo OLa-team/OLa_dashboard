@@ -42,7 +42,7 @@
   }
 
   .bloodThinnerTable {
-    height: 85% !important;
+    height: 90% !important;
   }
 
   .hemoglobinTable {
@@ -63,7 +63,16 @@
     font-size: 24px;
   }
 
+  /* Blood thinner */
+  .bloodThinnerForm {
+    height: 80%;
+  }
+
   /* App Analytics */
+  .appAnalyticsWrap {
+    height: 105%;
+  }
+
   .pageAnalytics {
     font-size: 21px;
   }

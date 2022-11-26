@@ -35,6 +35,9 @@ function BloodThinner() {
       ? patientState.bloodThinner.indication
       : ""
   );
+  const [dose, setDose] = useState(
+    patientState.bloodThinner.dose ? patientState.bloodThinner.dose : ""
+  );
   const [duration, setDuration] = useState(
     patientState.bloodThinner.duration ? patientState.bloodThinner.duration : ""
   );
@@ -89,6 +92,7 @@ function BloodThinner() {
       dateTimeUpdated: new Date().getTime(),
       anticoagulant: anticoagulant,
       indication: indication,
+      dose: dose,
       duration: duration,
       dose1: dose1,
       dose2: dose2,
@@ -99,7 +103,6 @@ function BloodThinner() {
     if (isChangeAnticoagulant) {
       bloodThinnerData = {
         ...bloodThinnerData,
-        dose: "",
         creatinineRecord: [],
         inrRecord: [],
       };
@@ -330,6 +333,80 @@ function BloodThinner() {
                     </div>
                   </div>
                 </div>
+
+                {anticoagulant !== "warfarin" && (
+                  <div className="checkboxBloodThinner">
+                    <h3>
+                      <span>Current Dose</span>
+                      <span>:</span>
+                    </h3>
+                    {anticoagulant === "dabigatran" && (
+                      <div className="choiceWrapper currentDose">
+                        <div>
+                          <input
+                            type="checkbox"
+                            checked={dose === "110mg BD" ? true : false}
+                            onChange={() => setDose("110mg BD")}
+                          />
+                          <p>110mg BD</p>
+                        </div>
+
+                        <div>
+                          <input
+                            type="checkbox"
+                            checked={dose === "150mg OD" ? true : false}
+                            onChange={() => setDose("150mg OD")}
+                          />
+                          <p>150mg OD</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {anticoagulant === "apixaban" && (
+                      <div className="choiceWrapper currentDose">
+                        <div>
+                          <input
+                            type="checkbox"
+                            checked={dose === "5mg BD" ? true : false}
+                            onChange={() => setDose("5mg BD")}
+                          />
+                          <p>5mg BD</p>
+                        </div>
+
+                        <div>
+                          <input
+                            type="checkbox"
+                            checked={dose === "2.5mg BD" ? true : false}
+                            onChange={() => setDose("2.5mg BD")}
+                          />
+                          <p>2.5mg BD</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {anticoagulant === "rivaroxaban" && (
+                      <div className="choiceWrapper currentDose">
+                        <div>
+                          <input
+                            type="checkbox"
+                            checked={dose === "20mg OD" ? true : false}
+                            onChange={() => setDose("20mg OD")}
+                          />
+                          <p>20mg OD</p>
+                        </div>
+
+                        <div>
+                          <input
+                            type="checkbox"
+                            checked={dose === "15mg OD" ? true : false}
+                            onChange={() => setDose("15mg OD")}
+                          />
+                          <p>15mg OD</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="checkboxBloodThinner">
                   <h3>

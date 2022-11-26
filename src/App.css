@@ -1872,6 +1872,14 @@ input:-webkit-autofill:active {
   display: flex;
 }
 
+.choiceWrapper.currentDose {
+  justify-content: flex-start;
+}
+
+.choiceWrapper.currentDose div {
+  padding-right: 60px;
+}
+
 .choiceWrapper div {
   display: flex;
   align-items: center;
@@ -2447,6 +2455,12 @@ input:-webkit-autofill:active {
 }
 
 /* App Analytics */
+.appAnalyticsWrap {
+  padding: 40px;
+  height: 100%;
+  overflow-y: scroll;
+}
+
 .pageAnalytics {
   display: flex;
   justify-content: space-between;

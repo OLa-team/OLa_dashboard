@@ -18,6 +18,7 @@
     "chart.js": "^3.9.1",
     "crypto-js": "^4.1.1",
     "emailjs-com": "^3.2.0",
+    "file-saver": "^2.0.5",
     "firebase": "^9.8.4",
     "material-table": "^2.0.3",
     "react": "^18.2.0",
@@ -28,6 +29,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.4.0",
     "react-spinners": "^0.13.3",
+    "sheetjs-style": "^0.15.8",
     "styled-components": "^5.3.5",
     "uuidv4": "^6.2.13",
     "web-vitals": "^2.1.4"

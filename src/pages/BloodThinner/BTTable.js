@@ -86,9 +86,6 @@ function BTTable() {
   const [percentageOfTestsInRange, setPercentageOfTestsInRange] = useState(0);
 
   // Creatinine Clearance data state
-  const [dose, setDose] = useState(
-    patientState.bloodThinner.dose ? patientState.bloodThinner.dose : ""
-  );
   const age = patientState.currentPatient.age
     ? patientState.currentPatient.age
     : 0;
@@ -652,7 +649,6 @@ function BTTable() {
       nameUpdated: currentUserState.userDetails.username,
       dateTimeUpdated: new Date().getTime(),
       creatinineRecord: creatinineRecordList,
-      dose: dose,
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
@@ -754,92 +750,6 @@ function BTTable() {
             </div>
           </div>
         </div>
-
-        {anticoagulant === "rivaroxaban" && (
-          <>
-            <div className="otherDose">
-              <label style={{ fontWeight: "bold" }}>
-                Dose <span style={{ paddingLeft: "5px" }}>:</span>{" "}
-              </label>
-              <div>
-                <input
-                  type="checkbox"
-                  checked={dose === "15mg OD" ? true : false}
-                  onChange={() => {
-                    setDose("15mg OD");
-                  }}
-                />
-                <p>15mg OD</p>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  checked={dose === "20mg OD" ? true : false}
-                  onChange={() => {
-                    setDose("20mg OD");
-                  }}
-                />
-                <p>20mg OD</p>
-              </div>
-            </div>
-          </>
-        )}
-
-        {anticoagulant === "dabigatran" && (
-          <div className="otherDose">
-            <label style={{ fontWeight: "bold" }}>
-              Dose <span style={{ paddingLeft: "5px" }}>:</span>{" "}
-            </label>
-            <div>
-              <input
-                type="checkbox"
-                checked={dose === "110mg BD" ? true : false}
-                onChange={() => {
-                  setDose("110mg BD");
-                }}
-              />
-              <p>110mg BD</p>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                checked={dose === "150mg OD" ? true : false}
-                onChange={() => {
-                  setDose("150mg OD");
-                }}
-              />
-              <p>150mg OD</p>
-            </div>
-          </div>
-        )}
-
-        {anticoagulant === "apixaban" && (
-          <div className="otherDose">
-            <label style={{ fontWeight: "bold" }}>
-              Dose <span style={{ paddingLeft: "5px" }}>:</span>{" "}
-            </label>
-            <div>
-              <input
-                type="checkbox"
-                checked={dose === "2.5mg BD" ? true : false}
-                onChange={() => {
-                  setDose("2.5mg BD");
-                }}
-              />
-              <p>2.5mg BD</p>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                checked={dose === "5mg BD" ? true : false}
-                onChange={() => {
-                  setDose("5mg BD");
-                }}
-              />
-              <p>5mg BD</p>
-            </div>
-          </div>
-        )}
 
         {anticoagulant === "warfarin" ? (
           <Table
