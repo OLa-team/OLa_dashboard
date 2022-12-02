@@ -36,13 +36,13 @@ function BTTable() {
   // INR data state
   const [date, setDate] = useState("");
   const [inr, setInr] = useState("");
-  const [sun, setSun] = useState(0);
   const [mon, setMon] = useState(0);
   const [tues, setTues] = useState(0);
   const [wed, setWed] = useState(0);
   const [thur, setThur] = useState(0);
   const [fri, setFri] = useState(0);
   const [sat, setSat] = useState(0);
+  const [sun, setSun] = useState(0);
   const [weeklyDoses, setWeeklyDoses] = useState([]);
   const [totalDose, setTotalDose] = useState(0);
   const [duration, setDuration] = useState("");
@@ -169,13 +169,13 @@ function BTTable() {
             <p
               onClick={() => {
                 setOpenWeeklyDose(true);
-                setSun(params.row.weeklyDoses[0]);
-                setMon(params.row.weeklyDoses[1]);
-                setTues(params.row.weeklyDoses[2]);
-                setWed(params.row.weeklyDoses[3]);
-                setThur(params.row.weeklyDoses[4]);
-                setFri(params.row.weeklyDoses[5]);
-                setSat(params.row.weeklyDoses[6]);
+                setMon(params.row.weeklyDoses[0]);
+                setTues(params.row.weeklyDoses[1]);
+                setWed(params.row.weeklyDoses[2]);
+                setThur(params.row.weeklyDoses[3]);
+                setFri(params.row.weeklyDoses[4]);
+                setSat(params.row.weeklyDoses[5]);
+                setSun(params.row.weeklyDoses[6]);
                 setTotalDose(params.row.totalDose);
               }}
             >
@@ -219,13 +219,13 @@ function BTTable() {
     e.preventDefault();
 
     let arr = [];
-    arr.push(sun);
     arr.push(mon);
     arr.push(tues);
     arr.push(wed);
     arr.push(thur);
     arr.push(fri);
     arr.push(sat);
+    arr.push(sun);
 
     let totalDoseAmount = 0;
     arr.forEach((a) => (totalDoseAmount += a));
@@ -436,13 +436,13 @@ function BTTable() {
     console.log("row", row);
     setDate(row.date);
     setInr(row.inr);
-    setSun(row.weeklyDoses[0]);
-    setMon(row.weeklyDoses[1]);
-    setTues(row.weeklyDoses[2]);
-    setWed(row.weeklyDoses[3]);
-    setThur(row.weeklyDoses[4]);
-    setFri(row.weeklyDoses[5]);
-    setSat(row.weeklyDoses[6]);
+    setMon(row.weeklyDoses[0]);
+    setTues(row.weeklyDoses[1]);
+    setWed(row.weeklyDoses[2]);
+    setThur(row.weeklyDoses[3]);
+    setFri(row.weeklyDoses[4]);
+    setSat(row.weeklyDoses[5]);
+    setSun(row.weeklyDoses[6]);
     setTotalDose(row.totalDose);
     setDuration(row.duration);
     setNote(row.note);
@@ -848,9 +848,6 @@ function BTTable() {
                 />
               </div>
               <label>
-                Sunday: <p>{sun} mg</p>
-              </label>
-              <label>
                 Monday: <p>{mon} mg</p>
               </label>
               <label>
@@ -867,6 +864,9 @@ function BTTable() {
               </label>
               <label>
                 Saturday: <p>{sat} mg</p>
+              </label>
+              <label>
+                Sunday: <p>{sun} mg</p>
               </label>
               <div style={{ padding: "5px 3px" }}>
                 <h4>Total: </h4>
@@ -965,20 +965,6 @@ function BTTable() {
                   <label>New Weekly Dose: </label>
                   <div className="weeklyDoseRow">
                     <div className="btInputWrapper">
-                      <label>Sunday:</label>
-                      <span>
-                        <input
-                          type="number"
-                          value={sun}
-                          onChange={(e) => {
-                            restrictNegativeValue(e.target.value, "Sun");
-                          }}
-                          // min={0}
-                        />
-                        <p>mg</p>
-                      </span>
-                    </div>
-                    <div className="btInputWrapper">
                       <label>Monday:</label>
                       <span>
                         <input
@@ -992,8 +978,6 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
-                  </div>
-                  <div className="weeklyDoseRow">
                     <div className="btInputWrapper">
                       <label>Tuesday:</label>
                       <span>
@@ -1008,6 +992,8 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
+                  </div>
+                  <div className="weeklyDoseRow">
                     <div className="btInputWrapper">
                       <label>Wednesday:</label>
                       <span>
@@ -1022,8 +1008,7 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
-                  </div>
-                  <div className="weeklyDoseRow">
+
                     <div className="btInputWrapper">
                       <label>Thursday:</label>
                       <span>
@@ -1038,6 +1023,8 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
+                  </div>
+                  <div className="weeklyDoseRow">
                     <div className="btInputWrapper">
                       <label>Friday:</label>
                       <span>
@@ -1052,8 +1039,7 @@ function BTTable() {
                         <p>mg</p>
                       </span>
                     </div>
-                  </div>
-                  <div className="weeklyDoseRow">
+
                     <div className="btInputWrapper">
                       <label>Saturday:</label>
                       <span>
@@ -1062,6 +1048,22 @@ function BTTable() {
                           value={sat}
                           onChange={(e) => {
                             restrictNegativeValue(e.target.value, "Sat");
+                          }}
+                          // min={0}
+                        />
+                        <p>mg</p>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="weeklyDoseRow">
+                    <div className="btInputWrapper">
+                      <label>Sunday:</label>
+                      <span>
+                        <input
+                          type="number"
+                          value={sun}
+                          onChange={(e) => {
+                            restrictNegativeValue(e.target.value, "Sun");
                           }}
                           // min={0}
                         />
