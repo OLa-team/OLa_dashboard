@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
 import { usePageDispatch, usePatientState } from "../../context";
 import { getCurrentDate } from "../../utils";
+import ExcelExport from "../../components/ExcelExport";
 
 function BPAndHeartRate() {
   const patientState = usePatientState();
@@ -194,6 +195,29 @@ function BPAndHeartRate() {
     },
   };
 
+  let excelData = [
+    [
+      "Date",
+      "BP (systolic) (mmHg)",
+      "BP (diastolic) (mmHg)",
+      "HR (bpm)",
+      "Device",
+      "Note",
+    ],
+  ];
+
+  const data = patientState.patientMonitoring.bloodPressureHeartRateRecord;
+  for (let i = 0; i < data.length; i++) {
+    excelData.push([
+      getCurrentDate(data[i].date),
+      data[i].bpSystolic,
+      data[i].bpDiastolic,
+      data[i].heartRate,
+      data[i].device,
+      data[i].note,
+    ]);
+  }
+
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
@@ -239,6 +263,11 @@ function BPAndHeartRate() {
                   />
                   <label>Graph</label>
                 </div>
+
+                <ExcelExport
+                  excelData={excelData}
+                  fileName={`Blood Pressure & Heart Rate_${patientState.currentPatient.name}`}
+                />
               </div>
             </div>
 

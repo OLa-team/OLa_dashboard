@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
 import { usePageDispatch, usePatientState } from "../../context";
 import { getCurrentDate } from "../../utils";
+import ExcelExport from "../../components/ExcelExport";
 
 function BodyWeight() {
   const patientState = usePatientState();
@@ -148,6 +149,17 @@ function BodyWeight() {
     },
   };
 
+  let excelData = [["Date", "Weight (kg)", "Note"]];
+
+  const data = patientState.patientMonitoring.bodyWeightRecord;
+  for (let i = 0; i < data.length; i++) {
+    excelData.push([
+      getCurrentDate(data[i].date),
+      data[i].bodyWeight,
+      data[i].note,
+    ]);
+  }
+
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
@@ -193,6 +205,11 @@ function BodyWeight() {
                   />
                   <label>Graph</label>
                 </div>
+
+                <ExcelExport
+                  excelData={excelData}
+                  fileName={`Body Weight_${patientState.currentPatient.name}`}
+                />
               </div>
             </div>
 

@@ -207,7 +207,7 @@ function AppAnalytics() {
     }
   }, [period, startDate]);
 
-  const sampleData = [
+  const excelData = [
     ["Date:", startDate],
     ["Period:", period],
     [],
@@ -316,7 +316,7 @@ function AppAnalytics() {
             </div>
 
             <ExcelExport
-              excelData={sampleData}
+              excelData={excelData}
               fileName={`App Analytics_${startDate.split("-")[2]}/${
                 startDate.split("-")[1]
               }/${startDate.split("-")[0]}`}

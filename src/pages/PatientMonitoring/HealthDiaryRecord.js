@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
 import { usePageDispatch, usePatientState } from "../../context";
 import { getCurrentDate } from "../../utils";
+import ExcelExport from "../../components/ExcelExport";
 
 function HealthDiaryRecord() {
   const patientState = usePatientState();
@@ -95,22 +96,47 @@ function HealthDiaryRecord() {
     setNote(row.note);
   }
 
+  let excelData = [["Date", "Hospital Admission", "Note"]];
+
+  const data = patientState.patientMonitoring.healthDiaryRecord;
+  for (let i = 0; i < data.length; i++) {
+    excelData.push([
+      getCurrentDate(data[i].date),
+      data[i].hospital,
+      data[i].note,
+    ]);
+  }
+
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
         {!openView ? (
           <>
-            <h2>
-              <BsArrowLeft
-                className="backToMonitoringMainPage"
-                onClick={() =>
-                  navigate(
-                    `/dashboard/patient/${params.patientId}/patientMonitoring`
-                  )
-                }
-              />
-              Health Diary
-            </h2>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <h2>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() =>
+                    navigate(
+                      `/dashboard/patient/${params.patientId}/patientMonitoring`
+                    )
+                  }
+                />
+                Health Diary
+              </h2>
+              <span style={{ float: "right" }}>
+                <ExcelExport
+                  excelData={excelData}
+                  fileName={`Health Diary_${patientState.currentPatient.name}`}
+                />
+              </span>
+            </div>
             <Table
               style={style}
               className="monitoringTable"

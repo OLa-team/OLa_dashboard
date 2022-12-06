@@ -354,10 +354,10 @@ function BloodThinner() {
                         <div>
                           <input
                             type="checkbox"
-                            checked={dose === "150mg OD" ? true : false}
-                            onChange={() => setDose("150mg OD")}
+                            checked={dose === "150mg BD" ? true : false}
+                            onChange={() => setDose("150mg BD")}
                           />
-                          <p>150mg OD</p>
+                          <p>150mg BD</p>
                         </div>
                       </div>
                     )}

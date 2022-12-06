@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
 import { usePageDispatch, usePatientState } from "../../context";
 import { getCurrentDate } from "../../utils";
+import ExcelExport from "../../components/ExcelExport";
 
 function BloodSugarLevel() {
   const patientState = usePatientState();
@@ -162,6 +163,21 @@ function BloodSugarLevel() {
     },
   };
 
+  let excelData = [
+    ["Date", "Time Taken", "Reading (mmol/L)", "Device", "Note"],
+  ];
+
+  const data = patientState.patientMonitoring.sugarLevelRecord;
+  for (let i = 0; i < data.length; i++) {
+    excelData.push([
+      getCurrentDate(data[i].date),
+      data[i].timeTaken,
+      data[i].bloodSugarLevel,
+      data[i].device,
+      data[i].note,
+    ]);
+  }
+
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
@@ -207,6 +223,11 @@ function BloodSugarLevel() {
                   />
                   <label>Graph</label>
                 </div>
+
+                <ExcelExport
+                  excelData={excelData}
+                  fileName={`Blood Sugar Level_${patientState.currentPatient.name}`}
+                />
               </div>
             </div>
 
