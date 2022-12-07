@@ -837,7 +837,6 @@ export async function updateCreatinineRecord(creatinineRecordData, patientId) {
       nameUpdated: creatinineRecordData.nameUpdated,
       dateTimeUpdated: creatinineRecordData.dateTimeUpdated,
       creatinineRecord: creatinineRecordData.creatinineRecord,
-      dose: creatinineRecordData.dose,
     });
   } catch (error) {
     alert(error.message);
