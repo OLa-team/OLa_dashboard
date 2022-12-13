@@ -18,10 +18,10 @@ import {
 } from "../../service/PatientService";
 import {
   convertDateObjToDateInput,
-  getCurrentDate,
   getCurrentTime,
   getMaxDate,
   parseDate,
+  getCurrentDate,
 } from "../../utils";
 
 function BTTable() {
@@ -102,6 +102,7 @@ function BTTable() {
       ? patientState.bloodThinner.creatinineRecord
       : []
   );
+  console.log("creatinineRecordList", creatinineRecordList);
   const [openCreatinineForm, setOpenCreatinineForm] = useState({
     open: false,
     action: "add",
@@ -148,6 +149,9 @@ function BTTable() {
       field: "date",
       headerName: "Date",
       flex: 0.9,
+      renderCell: (params) => {
+        return <div>{getCurrentDate(params.row.date)}</div>;
+      },
     },
     {
       field: "inr",
@@ -274,7 +278,6 @@ function BTTable() {
   }
 
   function calcultateTtrResult() {
-    console.log("list", inrRecordList);
     var inrRangeArr = inrRange.trim().split("-");
     var lowRange = parseInt(inrRangeArr[0].trim());
     var highRange = parseInt(inrRangeArr[1].trim());
@@ -470,8 +473,6 @@ function BTTable() {
       ttrResult: ttrResult,
     };
 
-    console.log("inrRecordData", inrRecordData);
-
     if (window.confirm("Are you sure you want to continue?")) {
       await updateInrRecord(inrRecordData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
@@ -511,7 +512,7 @@ function BTTable() {
       headerName: "Date",
       flex: 1,
       renderCell: (params) => {
-        return <div>{convertDateObjToDateInput(params.row.date)}</div>;
+        return <div>{getCurrentDate(params.row.date)}</div>;
       },
     },
     {
@@ -722,7 +723,28 @@ function BTTable() {
     <div className="wrapper">
       <div style={{ padding: "20px 50px", height: "80%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h1>{capitalizeFirstLetter(anticoagulant)} record table</h1>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <h1>{capitalizeFirstLetter(anticoagulant)} record table</h1>
+            <button
+              onClick={() => {
+                navigate(
+                  `/dashboard/patient/${params.patientId}/bloodThinner/graph`
+                );
+              }}
+              style={{
+                marginLeft: "20px",
+                padding: "8px 15px",
+                borderRadius: "15px",
+                outline: "none",
+                border: "1px solid black",
+                color: "white",
+                background: "black",
+                cursor: "pointer",
+              }}
+            >
+              Graph
+            </button>
+          </div>
           <div className="lastUpdatedBox">
             <div>
               <h4>

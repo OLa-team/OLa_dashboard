@@ -1949,7 +1949,7 @@ input:-webkit-autofill:active {
   position: fixed;
   top: 175px;
   right: 100px;
-  width: 400px;
+  width: 325px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1958,7 +1958,7 @@ input:-webkit-autofill:active {
 .tableButton button {
   padding: 10px 25px;
   border-radius: 20px;
-  font-size: 18px;
+  font-size: 15px;
   background-color: #000;
   color: white;
   cursor: pointer;

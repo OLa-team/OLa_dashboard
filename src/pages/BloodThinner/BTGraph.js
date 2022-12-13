@@ -91,7 +91,9 @@ function BTGraph() {
           <button
             className="medBackBtn"
             onClick={() => {
-              navigate(`/dashboard/patient/${params.patientId}/bloodThinner`);
+              navigate(
+                `/dashboard/patient/${params.patientId}/bloodThinner/table`
+              );
               pageDispatch({
                 type: "SET_CURRENT_PAGE",
                 payload: "Blood Thinner / Clot Preventer",

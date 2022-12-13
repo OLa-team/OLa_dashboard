@@ -544,7 +544,7 @@ function BloodThinner() {
                 % Days Within Range :{" "}
                 <p>
                   {ttrResult.percentageDaysWithinRange
-                    ? ttrResult.percentageDaysWithinRange === NaN
+                    ? isNaN(ttrResult.percentageDaysWithinRange)
                       ? 0
                       : ttrResult.percentageDaysWithinRange.toFixed(1)
                     : 0}
@@ -693,7 +693,6 @@ function BloodThinner() {
                   `/dashboard/patient/${params.patientId}/bloodThinner/hemoglobin`
                 );
               }}
-              style={{ fontSize: "15px" }}
             >
               Hemoglobin
             </button>
@@ -704,9 +703,9 @@ function BloodThinner() {
                 );
               }}
             >
-              Table
+              INR/Creatine
             </button>
-            <button
+            {/* <button
               onClick={() => {
                 navigate(
                   `/dashboard/patient/${params.patientId}/bloodThinner/graph`
@@ -714,7 +713,7 @@ function BloodThinner() {
               }}
             >
               Graph
-            </button>
+            </button> */}
           </div>
         </form>
         <div className="saveAndCancelButton bt">
