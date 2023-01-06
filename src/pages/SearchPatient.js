@@ -1,4 +1,11 @@
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +22,7 @@ import {
   filterPatientList,
   setCurrentPatient,
 } from "../service";
+import { GoPrimitiveDot } from "react-icons/go";
 
 function SearchPatient() {
   // Global state
@@ -27,6 +35,10 @@ function SearchPatient() {
 
   // State
   const [searchResult, setSearchResult] = useState("");
+  const [healthDiaryNotification, setHealthDiaryNotification] = useState(false);
+  const [patientHasNotifList, setPatientHasNotifList] = useState([]);
+  const [hasNewNotif, setHasNewNotif] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   const style = { height: "90%", width: "95%", margin: "auto" };
 
@@ -48,6 +60,21 @@ function SearchPatient() {
       field: "name",
       headerName: "Patient's name",
       flex: 2,
+      renderCell: (params) => {
+        if (
+          patientHasNotifList.find(
+            (patientId) => patientId === params.row.patientId
+          )
+        ) {
+          return (
+            <div>
+              {params.row.name} {<GoPrimitiveDot className="alertDot home" />}
+            </div>
+          );
+        } else {
+          return <div>{params.row.name} </div>;
+        }
+      },
     },
     {
       field: "icNo",
@@ -61,6 +88,106 @@ function SearchPatient() {
     },
   ];
 
+  // useEffect(() => {
+  //   console.log("list", patientHasNotifList);
+  //   console.log("list11", patientHasNotifList);
+  //   let arr = [];
+  //   if (firstLoad) {
+  //     const qBpAndHeartRate = query(
+  //       collection(firestore, "notification"),
+  //       where("SM_bpAndHeartRate", "==", true)
+  //     );
+  //     const qSugarLevel = query(
+  //       collection(firestore, "notification"),
+  //       where("SM_sugarLevel", "==", true)
+  //     );
+  //     const qBodyWeight = query(
+  //       collection(firestore, "notification"),
+  //       where("SM_bodyWeight", "==", true)
+  //     );
+  //     const qBleedingSymptom = query(
+  //       collection(firestore, "notification"),
+  //       where("SM_bleedingSymptom", "==", true)
+  //     );
+  //     const qHealthDiary = query(
+  //       collection(firestore, "notification"),
+  //       where("SM_healthDiary", "==", true)
+  //     );
+
+  //     const unsubscribe1 = onSnapshot(
+  //       qBpAndHeartRate,
+  //       async (querySnapshot) => {
+  //         if (querySnapshot.docs.length > 0) {
+  //           querySnapshot.docs.forEach((doc) => {
+  //             console.log("bp&HeartRate", doc.data());
+  //             if (!patientHasNotifList.includes(doc.id)) {
+  //               // setPatientHasNotifList((id) => [...id, doc.id]);
+  //               arr.push(doc.id);
+  //             }
+  //           });
+  //         }
+  //       }
+  //     );
+
+  //     const unsubscribe2 = onSnapshot(qSugarLevel, async (querySnapshot) => {
+  //       console.log("querySnapshot.docs.length", querySnapshot.docs.length);
+  //       if (querySnapshot.docs.length > 0) {
+  //         querySnapshot.docs.forEach((doc) => {
+  //           console.log("sugar level", doc.id);
+  //           console.log("exist", !patientHasNotifList.includes(doc.id));
+  //           if (!patientHasNotifList.includes(doc.id)) {
+  //             // setPatientHasNotifList((id) => [...id, doc.id]);
+  //             arr.push(doc.id);
+  //             console.log("??", arr);
+  //           }
+  //         });
+  //       }
+  //     });
+
+  //     const unsubscribe3 = onSnapshot(qBodyWeight, async (querySnapshot) => {
+  //       if (querySnapshot.docs.length > 0) {
+  //         querySnapshot.docs.forEach((doc) => {
+  //           console.log("body weight", doc.id);
+  //           if (!patientHasNotifList.includes(doc.id)) {
+  //             // setPatientHasNotifList((id) => [...id, doc.id]);
+  //             arr.push(doc.id);
+  //           }
+  //         });
+  //       }
+  //     });
+
+  //     const unsubscribe4 = onSnapshot(
+  //       qBleedingSymptom,
+  //       async (querySnapshot) => {
+  //         if (querySnapshot.docs.length > 0) {
+  //           querySnapshot.docs.forEach((doc) => {
+  //             console.log("bleeding", doc.id);
+  //             if (!patientHasNotifList.includes(doc.id)) {
+  //               // setPatientHasNotifList((id) => [...id, doc.id]);
+  //               arr.push(doc.id);
+  //             }
+  //           });
+  //         }
+  //       }
+  //     );
+
+  //     const unsubscribe5 = onSnapshot(qHealthDiary, async (querySnapshot) => {
+  //       if (querySnapshot.docs.length > 0) {
+  //         querySnapshot.docs.forEach((doc) => {
+  //           console.log("health diary", doc.data());
+  //           if (!patientHasNotifList.includes(doc.id)) {
+  //             // setPatientHasNotifList((id) => [...id, doc.id]);
+  //             arr.push(doc.id);
+  //           }
+  //         });
+  //       }
+  //     });
+  //     console.log("arr", arr);
+  //   }
+  //   setFirstLoad(false);
+  //   setPatientHasNotifList(arr);
+  // }, []);
+
   function setSelectedPatientList(ids, data) {
     const selectedIDs = new Set(ids);
     const selectedRowData = data.filter((row) => selectedIDs.has(row.id));
@@ -72,7 +199,7 @@ function SearchPatient() {
   }
 
   async function getPatientList() {
-    await fetchPatientList(patientDispatch, pageDispatch);
+    await fetchPatientList(patientDispatch, pageDispatch, patientHasNotifList);
   }
 
   async function selectPatient(row) {
@@ -121,8 +248,9 @@ function SearchPatient() {
   }
 
   useEffect(() => {
+    console.log("list123", patientHasNotifList);
     getPatientList();
-  }, []);
+  }, [patientHasNotifList]);
 
   useEffect(() => {
     if (patientState.patientList.length > 0 && searchResult !== "") {
@@ -140,7 +268,7 @@ function SearchPatient() {
         <div className="searchBar">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search any value"
             onChange={(e) => setSearchResult(e.target.value)}
           />
           <BiSearch className="searchIcon" />
