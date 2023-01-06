@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import PatientRegistration from "./PatientRegistration";
 import SearchPatient from "./SearchPatient";
@@ -31,6 +31,7 @@ import Header from "../components/Header";
 import UserList from "./UserList";
 import AppAnalytics from "./AppAnalytics";
 import { setCurrentPatient } from "../service";
+import MessageForPatient from "./PatientMonitoring/MessageForPatient";
 
 function Home() {
   const patientLoading = usePatientState().loading;
@@ -39,10 +40,13 @@ function Home() {
   const params = useParams();
   const navigate = useNavigate();
   const patientState = usePatientState();
+  const pageState = usePageState();
   const patientDispatch = usePatientDispatch();
+
+  const [openSidebar, setOpenSidebar] = useState("");
+
   async function resetCurrentPatient() {
     const patientId = params["*"].split("/")[1];
-    console.log("id", patientId);
     await setCurrentPatient(patientDispatch, patientId);
   }
 
@@ -52,8 +56,6 @@ function Home() {
     } else {
       return;
     }
-    // window.location.reload();
-    // alert("!23");
   }, []);
 
   return (
@@ -66,7 +68,7 @@ function Home() {
         <Header />
 
         {/* Section */}
-        <div className="section">
+        <div className={`section ${openSidebar}`}>
           <Routes>
             <Route path="/" element={<SearchPatient />} />
             <Route path="/registration" element={<PatientRegistration />} />
@@ -147,6 +149,10 @@ function Home() {
             <Route
               path="/patient/:patientId/patientMonitoring/healthDiary"
               element={<HealthDiaryRecord />}
+            />
+            <Route
+              path="/patient/:patientId/patientMonitoring/messageForPatients"
+              element={<MessageForPatient />}
             />
           </Routes>
         </div>
