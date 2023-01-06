@@ -977,6 +977,7 @@ export async function deletePatientById(id, dispatch) {
     var hemoglobinRef = doc(firestore, "hemoglobin", id);
     var notificationRef = doc(firestore, "notification", id);
     var reminderRef = doc(firestore, "reminder", id);
+    var messageForPatientsRef = doc(firestore, "message_for_patients", id);
 
     const patientDocSnap = await getDoc(patientRef);
     const medicalConDocSnap = await getDoc(medicalConRef);
@@ -991,6 +992,7 @@ export async function deletePatientById(id, dispatch) {
     const hemoglobinDocSnap = await getDoc(hemoglobinRef);
     const notificationDocSnap = await getDoc(notificationRef);
     const reminderDocSnap = await getDoc(reminderRef);
+    const messageForPatientsDocSnap = await getDoc(messageForPatientsRef);
 
     if (
       !patientDocSnap.exists() ||
@@ -1005,7 +1007,8 @@ export async function deletePatientById(id, dispatch) {
       !selfMonitorDocSnap.exists() ||
       !hemoglobinDocSnap.exists() ||
       !notificationDocSnap.exists() ||
-      !reminderDocSnap.exists()
+      !reminderDocSnap.exists() ||
+      !messageForPatientsDocSnap.exists()
     ) {
       alert("Document does not exist");
       return;
@@ -1025,6 +1028,7 @@ export async function deletePatientById(id, dispatch) {
     await deleteDoc(hemoglobinRef);
     await deleteDoc(notificationRef);
     await deleteDoc(reminderRef);
+    await deleteDoc(messageForPatientsRef);
   } catch (error) {
     alert("Error in delete patient by id");
     throw new Error("Error in delete patient by id", error);
