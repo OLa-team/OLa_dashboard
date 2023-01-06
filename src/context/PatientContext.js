@@ -49,6 +49,9 @@ let wqrm = localStorage.getItem("warfarinQualityResultMessage")
 let mcl = localStorage.getItem("medicationConstantList")
   ? JSON.parse(localStorage.getItem("medicationConstantList"))
   : null;
+let mfp = localStorage.getItem("messageForPatients")
+  ? JSON.parse(localStorage.getItem("messageForPatients"))
+  : null;
 
 // Initial state
 const initialState = {
@@ -71,6 +74,12 @@ const initialState = {
   bleedingRiskResultMessage: brrm || {},
   warfarinQualityResultMessage: wqrm || {},
   medicationConstantList: mcl || {},
+  messageForPatients: mfp || {},
+  bpAndHeartRateNotif: false,
+  sugarLevelNotif: false,
+  bodyWeightNotif: false,
+  bleedingSymptomNotif: false,
+  healthDiaryNotif: false,
   loading: false,
 };
 
@@ -217,6 +226,72 @@ const PatientReducer = (initialState, action) => {
       return {
         ...initialState,
         medicationConstantList: action.payload,
+      };
+
+    case "SET_MESSAGE_FOR_PATIENTS":
+      return {
+        ...initialState,
+        messageForPatients: action.payload,
+      };
+
+    case "SET_BP_AND_HEART_RATE_NOTIF_TRUE":
+      return {
+        ...initialState,
+        bpAndHeartRateNotif: true,
+      };
+
+    case "SET_BP_AND_HEART_RAT_NOTIF_FALSE":
+      return {
+        ...initialState,
+        bpAndHeartRateNotif: false,
+      };
+
+    case "SET_SUGAR_LEVEL_NOTIF_TRUE":
+      return {
+        ...initialState,
+        sugarLevelNotif: true,
+      };
+
+    case "SET_SUGAR_LEVEL_NOTIF_FALSE":
+      return {
+        ...initialState,
+        sugarLevelNotif: false,
+      };
+
+    case "SET_BODY_WEIGHT_NOTIF_TRUE":
+      return {
+        ...initialState,
+        bodyWeightNotif: true,
+      };
+
+    case "SET_BODY_WEIGHT_NOTIF_FALSE":
+      return {
+        ...initialState,
+        bodyWeightNotif: false,
+      };
+
+    case "SET_BLEEDING_SYMPTOM_NOTIF_TRUE":
+      return {
+        ...initialState,
+        bleedingSymptomNotif: true,
+      };
+
+    case "SET_BLEEDING_SYMPTOM_NOTIF_FALSE":
+      return {
+        ...initialState,
+        bleedingSymptomNotif: false,
+      };
+
+    case "SET_HEALTH_DIARY_NOTIF_TRUE":
+      return {
+        ...initialState,
+        healthDiaryNotif: true,
+      };
+
+    case "SET_HEALTH_DIARY_NOTIF_FALSE":
+      return {
+        ...initialState,
+        healthDiaryNotif: false,
       };
 
     default:
