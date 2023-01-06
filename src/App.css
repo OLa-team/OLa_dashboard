@@ -1496,15 +1496,38 @@ input:-webkit-autofill:active {
   top: -13px;
   right: -7px;
   font-size: 27px;
-  color: #ec2029;
   animation: blink 0.5s steps(1, end) infinite;
+  color: lightgreen;
 }
 
 .alertDot.sidebarItem {
-  color: lightgreen !important;
+  color: lightgreen;
   position: relative;
   top: -10px;
   right: 0;
+}
+
+.alertDot.home {
+  color: lightgreen;
+  position: relative;
+  top: 5px;
+  right: 0;
+}
+
+.alertDot.patientHome {
+  color: lightgreen;
+  position: absolute;
+  top: -25px;
+  right: -150px;
+  font-size: 35px;
+}
+
+.alertDot.monitoring {
+  color: lightgreen;
+  position: absolute;
+  top: -40px;
+  right: -165px;
+  font-size: 35px;
 }
 
 @keyframes blink {
@@ -2539,4 +2562,46 @@ input:-webkit-autofill:active {
   padding: 3px 10px;
   border-radius: 10px;
   outline: none;
+}
+
+/* Message For Patients */
+.messageForPatientsContent {
+  text-align: center;
+  height: 100%;
+}
+
+.messageForPatientsContent textarea {
+  width: 55%;
+  height: 48%;
+  margin: 50px 0;
+  background-color: #f3f3f3;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  padding: 30px;
+  font-size: 20px;
+}
+
+.messageForPatientsContent div button {
+  margin: 0 15px;
+  padding: 8px 22px;
+  border-radius: 20px;
+  font-size: 15px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.messageForPatientsContent div button:hover {
+  transform: scale(1.05);
+  background-color: rgb(240, 239, 239) !important;
+}
+
+.messageForPatientsContent div button:nth-child(1) {
+  background-color: lightgreen;
+}
+
+.messageForPatientsContent div button:nth-child(2) {
+  background-color: #e9414a;
 }
