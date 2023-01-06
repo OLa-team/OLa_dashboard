@@ -151,9 +151,14 @@ export async function createPatientAccount(newPatientData, dispatch) {
     });
 
     await setDoc(doc(firestore, "notification", patientId), {
-      changeData: {},
-      changeDataMobile: false,
-      changeDataWeb: false,
+      SM_bleedingSymptom: false,
+      SM_bodyWeight: false,
+      SM_bpAndHeartRate: false,
+      SM_healthDiary: false,
+      SM_sugarLevel: false,
+      // changeData: {},
+      // changeDataMobile: false,
+      // changeDataWeb: false,
       // registration: {},
       // registrationMobile: false,
       // registrationWeb: true,
@@ -164,6 +169,11 @@ export async function createPatientAccount(newPatientData, dispatch) {
       nameVerified: "",
       dateTimeUpdated: 0,
       hemoglobinRecord: [],
+    });
+
+    await setDoc(doc(firestore, "message_for_patients", patientId), {
+      messageList: [],
+      read: false,
     });
 
     await setDoc(doc(firestore, "reminder", patientId), {
@@ -231,6 +241,10 @@ export async function setCurrentPatient(dispatch, patientId) {
 
     let responseHemoglobin = await (
       await getDoc(doc(firestore, "hemoglobin", patientId))
+    ).data();
+
+    let responseMessageForPatients = await (
+      await getDoc(doc(firestore, "message_for_patients", patientId))
     ).data();
 
     let responseDefaultHealthGoal = await (
@@ -477,6 +491,28 @@ export async function setCurrentPatient(dispatch, patientId) {
       alert("Error in fetching hemoglobin data");
     }
 
+    // message for patients
+    if (responseMessageForPatients) {
+      dispatch({
+        type: "SET_MESSAGE_FOR_PATIENTS",
+        payload: responseMessageForPatients,
+      });
+
+      localStorage.setItem(
+        "messageForPatients",
+        JSON.stringify(responseMessageForPatients)
+      );
+    } else {
+      dispatch({
+        type: "SET_MESSAGE_FOR_PATIENTS",
+        payload: {},
+      });
+
+      localStorage.setItem("messageForPatients", JSON.stringify({}));
+      //
+      alert("Error in fetching messageForPatients data");
+    }
+
     // CONSTANT from db
     if (responseDefaultHealthGoal) {
       dispatch({
@@ -547,7 +583,11 @@ export async function setCurrentPatient(dispatch, patientId) {
 }
 
 // fetch patient list
-export async function fetchPatientList(patientDispatch, pageDispatch) {
+export async function fetchPatientList(
+  patientDispatch,
+  pageDispatch,
+  patientHasNotifList
+) {
   pageDispatch({
     type: "SET_LOADING_TRUE",
   });
@@ -555,19 +595,39 @@ export async function fetchPatientList(patientDispatch, pageDispatch) {
   try {
     let response = await getDocs(patientCollectionRef);
     let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    let number = 1;
     let patientListData = data.map((patient) => ({
       patientId: patient.id,
-      id: number++,
       name: patient.name,
       icNo: patient.icNo,
       phoneNo: patient.phoneNo,
     }));
 
+    patientHasNotifList = patientHasNotifList.filter(
+      (value, index, self) => self.indexOf(value) === index
+    );
+    console.log("123", patientHasNotifList);
+    let notifList = [];
+    patientHasNotifList.forEach((id) => {
+      patientListData.forEach((patient) => {
+        if (patient.patientId === id) {
+          notifList.push(patient);
+          patientListData = patientListData.filter((pt) => {
+            return pt.patientId !== id;
+          });
+        }
+      });
+    });
+
+    let number = 1;
+    let finalList = notifList.concat(patientListData).map((pt) => ({
+      ...pt,
+      id: number++,
+    }));
+
     if (patientListData.length >= 0) {
       patientDispatch({
         type: "SET_PATIENT_LIST",
-        payload: patientListData,
+        payload: finalList,
       });
     }
 
@@ -575,16 +635,26 @@ export async function fetchPatientList(patientDispatch, pageDispatch) {
       type: "SET_LOADING_FALSE",
     });
   } catch (error) {
-    throw new Error(`Error in set patient list: `, error);
+    throw new Error(`Error in set patient list: `, error.message);
   }
 }
 
 // filter patient list
 export function filterPatientList(dispatch, patientList, searchResult) {
-  let tempPatientList = patientList.filter(
-    (patient) =>
-      patient.name.toLowerCase().indexOf(searchResult.toLowerCase()) > -1
-  );
+  let tempPatientList = patientList.filter((patient) => {
+    return (
+      (patient.name
+        ? patient.name.toLowerCase().indexOf(searchResult.toLowerCase()) !== -1
+        : false) ||
+      (patient.icNo
+        ? patient.icNo.toLowerCase().indexOf(searchResult.toLowerCase()) !== -1
+        : false) ||
+      (patient.phoneNo
+        ? patient.phoneNo.toLowerCase().indexOf(searchResult.toLowerCase()) !==
+          -1
+        : false)
+    );
+  });
 
   dispatch({
     type: "SET_TEMP_PATIENT_LIST",
@@ -594,7 +664,6 @@ export function filterPatientList(dispatch, patientList, searchResult) {
 
 // update patient profile data
 export async function updatePatientProfile(newData) {
-  console.log("newData", newData);
   try {
     await updateDoc(doc(firestore, "patient", newData.patientId), {
       // name: newData.name,
@@ -608,7 +677,7 @@ export async function updatePatientProfile(newData) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update patient data", error);
+    console.error("Error in update patient data", error);
     return;
   }
 }
@@ -635,7 +704,7 @@ export async function updateMedicalCondition(medicalConditionData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update medical_condition data", error);
+    console.error("Error in update medical_condition data", error);
     return;
   }
 }
@@ -654,7 +723,7 @@ export async function updateAllergy(allergyData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update allergy data", error);
+    console.error("Error in update allergy data", error);
     return;
   }
 }
@@ -680,7 +749,7 @@ export async function updateStrokeRisk(strokeRiskData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update stroke risk data", error);
+    console.error("Error in update stroke risk data", error);
     return;
   }
 }
@@ -707,7 +776,7 @@ export async function updateBleedingRisk(bleedingRiskData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update bleeding risk data", error);
+    console.error("Error in update bleeding risk data", error);
     return;
   }
 }
@@ -731,7 +800,7 @@ export async function updateWarfarinQuality(warfarinQualityData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update warfarin quality data", error);
+    console.error("Error in update warfarin quality data", error);
     return;
   }
 }
@@ -747,7 +816,7 @@ export async function updateHealthGoal(healthGoalData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update health goal data", error);
+    console.error("Error in update health goal data", error);
     return;
   }
 }
@@ -763,7 +832,7 @@ export async function updateMedication(medicationData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update medication data", error);
+    console.error("Error in update medication data", error);
     return;
   }
 }
@@ -809,7 +878,7 @@ export async function updateBloodThinner(
     }
   } catch (error) {
     alert(error.message);
-    console.log("Error in update blood thinner data", error);
+    console.error("Error in update blood thinner data", error);
     return;
   }
 }
@@ -825,7 +894,7 @@ export async function updateInrRecord(inrRecordData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update inr record data", error);
+    console.error("Error in update inr record data", error);
     return;
   }
 }
@@ -840,7 +909,7 @@ export async function updateCreatinineRecord(creatinineRecordData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update creatinine record data", error);
+    console.error("Error in update creatinine record data", error);
     return;
   }
 }
@@ -855,9 +924,25 @@ export async function updateHemoglobinRecord(hemoglobinData, patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.log("Error in update hemoglobin record data", error);
+    console.error("Error in update hemoglobin record data", error);
     return;
   }
+}
+
+// update patient hemoglobin record data
+export async function updateMessageForPatients(data, patientId) {
+  // try {
+  //   await updateDoc(doc(firestore, "message_for_patients", patientId), {
+  //     message: data.message,
+  //     read: data.read,
+  //     nameUpdated: data.nameUpdated,
+  //     dateTimeUpdated: data.dateTimeUpdated,
+  //   });
+  // } catch (error) {
+  //   alert(error.message);
+  //   console.error("Error in update message for patients data", error);
+  //   return;
+  // }
 }
 
 // update name verified for specific data
