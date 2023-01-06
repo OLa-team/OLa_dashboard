@@ -435,7 +435,7 @@ function BTTable() {
     }
   }
 
-  async function selectInrData(row) {
+  function selectInrData(row) {
     console.log("row", row);
     setDate(row.date);
     setInr(row.inr);

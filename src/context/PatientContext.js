@@ -198,6 +198,12 @@ const PatientReducer = (initialState, action) => {
         hemoglobin: action.payload,
       };
 
+    case "SET_MESSAGE_FOR_PATIENTS":
+      return {
+        ...initialState,
+        messageForPatients: action.payload,
+      };
+
     case "SET_DEFAULT_HEALTH_GOAL":
       return {
         ...initialState,
@@ -226,12 +232,6 @@ const PatientReducer = (initialState, action) => {
       return {
         ...initialState,
         medicationConstantList: action.payload,
-      };
-
-    case "SET_MESSAGE_FOR_PATIENTS":
-      return {
-        ...initialState,
-        messageForPatients: action.payload,
       };
 
     case "SET_BP_AND_HEART_RATE_NOTIF_TRUE":

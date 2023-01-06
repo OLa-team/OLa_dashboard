@@ -929,20 +929,18 @@ export async function updateHemoglobinRecord(hemoglobinData, patientId) {
   }
 }
 
-// update patient hemoglobin record data
-export async function updateMessageForPatients(data, patientId) {
-  // try {
-  //   await updateDoc(doc(firestore, "message_for_patients", patientId), {
-  //     message: data.message,
-  //     read: data.read,
-  //     nameUpdated: data.nameUpdated,
-  //     dateTimeUpdated: data.dateTimeUpdated,
-  //   });
-  // } catch (error) {
-  //   alert(error.message);
-  //   console.error("Error in update message for patients data", error);
-  //   return;
-  // }
+// update patient message for patients data
+export async function updateMessageForPatients(messageData, patientId) {
+  try {
+    await updateDoc(doc(firestore, "message_for_patients", patientId), {
+      messageList: messageData.messageList,
+      read: messageData.read,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.error("Error in update message for patients data", error);
+    return;
+  }
 }
 
 // update name verified for specific data

@@ -1,12 +1,13 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import { FaHeartbeat, FaWeight } from "react-icons/fa";
+import { FaHeartbeat, FaWeight, FaEnvelope } from "react-icons/fa";
 import { MdOutlineBloodtype } from "react-icons/md";
 import { BiDonateBlood } from "react-icons/bi";
 import { RiHealthBookFill } from "react-icons/ri";
 import { BsArrowLeft } from "react-icons/bs";
 import { usePageDispatch, usePatientState } from "../../context";
 import { useNavigate, useParams } from "react-router-dom";
+import { GoPrimitiveDot } from "react-icons/go";
 
 function PatientMonitoring() {
   const patientState = usePatientState();
@@ -15,6 +16,7 @@ function PatientMonitoring() {
   const navigate = useNavigate();
   const params = useParams();
   const patientId = params.patientId;
+  const healthDiaryNotif = patientState.healthDiaryNotif;
 
   return (
     <div className="patientMonitoring">
@@ -88,8 +90,25 @@ function PatientMonitoring() {
                 navigate(`healthDiary`);
               }}
             >
+              {healthDiaryNotif && (
+                <div style={{ position: "relative" }}>
+                  <GoPrimitiveDot className="alertDot monitoring" />
+                </div>
+              )}
               <RiHealthBookFill className="iconModule" />
               <h2>Health Diary Record</h2>
+            </div>
+          </Grid>
+
+          <Grid item xs={4} className="gridItem">
+            <div
+              className="monitoringModule"
+              onClick={() => {
+                navigate(`messageForPatients`);
+              }}
+            >
+              <FaEnvelope className="iconModule" />
+              <h2>Message for patients</h2>
             </div>
           </Grid>
         </Grid>
