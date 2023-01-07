@@ -114,7 +114,11 @@ function Notification() {
         patientId: patientId,
       };
 
-      await updatePatientRegistrationNotification(patientId, patientDispatch);
+      await updatePatientRegistrationNotification(
+        patientId,
+        patientDispatch,
+        "approve"
+      );
       createPatientAccount(newPatientData, patientDispatch);
 
       setPage("table");
@@ -130,7 +134,11 @@ function Notification() {
 
   async function rejectRegistration() {
     if (window.confirm("Are you sure to proceed?")) {
-      await updatePatientRegistrationNotification(patientId, patientDispatch);
+      await updatePatientRegistrationNotification(
+        patientId,
+        patientDispatch,
+        "reject"
+      );
       setPendingNotification(
         pendingNotification.filter((notif) => notif.id !== patientId)
       );

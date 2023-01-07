@@ -31,16 +31,21 @@ export async function fetchAllNotification() {
 // new patient registration notification from mobile
 export async function updatePatientRegistrationNotification(
   patientId,
-  dispatch
+  dispatch,
+  action
 ) {
   try {
     dispatch({
       type: "SET_LOADING_TRUE",
     });
 
-    await updateDoc(doc(firestore, "notification", patientId), {
-      registrationWeb: true,
-    });
+    if (action === "approve") {
+      await updateDoc(doc(firestore, "notification", patientId), {
+        registrationWeb: true,
+      });
+    } else if (action === "reject") {
+      await deleteDoc(doc(firestore, "notification", patientId));
+    }
   } catch (error) {
     alert("Error when update patient registration notification");
     throw new Error(
