@@ -78,7 +78,7 @@ function PatientMonitoring() {
     where("SM_healthDiary", "==", true)
   );
 
-  const unsubscribe1 = onSnapshot(qBpAndHeartRate, async (querySnapshot) => {
+  const unsubscribe1 = onSnapshot(qBpAndHeartRate, (querySnapshot) => {
     if (querySnapshot.docs.length > 0) {
       querySnapshot.docs.forEach((doc) => {
         if (patientId === doc.id) {
@@ -89,7 +89,7 @@ function PatientMonitoring() {
     }
   });
 
-  const unsubscribe2 = onSnapshot(qSugarLevel, async (querySnapshot) => {
+  const unsubscribe2 = onSnapshot(qSugarLevel, (querySnapshot) => {
     if (querySnapshot.docs.length > 0) {
       querySnapshot.docs.forEach((doc) => {
         if (patientId === doc.id) {
@@ -100,7 +100,7 @@ function PatientMonitoring() {
     }
   });
 
-  const unsubscribe3 = onSnapshot(qBodyWeight, async (querySnapshot) => {
+  const unsubscribe3 = onSnapshot(qBodyWeight, (querySnapshot) => {
     if (querySnapshot.docs.length > 0) {
       querySnapshot.docs.forEach((doc) => {
         if (patientId === doc.id) {
@@ -111,7 +111,7 @@ function PatientMonitoring() {
     }
   });
 
-  const unsubscribe4 = onSnapshot(qBleedingSymptom, async (querySnapshot) => {
+  const unsubscribe4 = onSnapshot(qBleedingSymptom, (querySnapshot) => {
     if (querySnapshot.docs.length > 0) {
       querySnapshot.docs.forEach((doc) => {
         if (patientId === doc.id) {
@@ -121,8 +121,7 @@ function PatientMonitoring() {
       });
     }
   });
-
-  const unsubscribe5 = onSnapshot(qHealthDiary, async (querySnapshot) => {
+  const unsubscribe5 = onSnapshot(qHealthDiary, (querySnapshot) => {
     if (querySnapshot.docs.length > 0) {
       querySnapshot.docs.forEach((doc) => {
         if (patientId === doc.id) {
