@@ -3,16 +3,24 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Line } from "react-chartjs-2";
 import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
-import { usePageDispatch, usePatientState } from "../../context";
+import {
+  usePageDispatch,
+  usePatientDispatch,
+  usePatientState,
+} from "../../context";
 import { getCurrentDate } from "../../utils";
+import { updateSMNotification } from "../../service";
+import ExcelExport from "../../components/ExcelExport";
 
 function BleedingSymptom() {
   const patientState = usePatientState();
+  const patientDispatch = usePatientDispatch();
   const pageDispatch = usePageDispatch();
 
   const navigate = useNavigate();
   const params = useParams();
   const patientId = params.patientId;
+  const notification = patientState.notification;
 
   const [openView, setOpenView] = useState(false);
 
@@ -81,31 +89,61 @@ function BleedingSymptom() {
     },
   ];
 
+  let excelData = [["Date", "Bleeding Site", "Note"]];
+
+  const data = patientState.patientMonitoring.bleedingSymptomRecord;
+  for (let i = 0; i < data.length; i++) {
+    excelData.push([
+      getCurrentDate(data[i].date),
+      data[i].bleeding,
+      data[i].note,
+    ]);
+  }
+
   function openViewDetails(row) {
     setOpenView(true);
-    console.log("row", row);
 
     setDate(row.date);
     setBleeding(row.bleeding);
     setNote(row.note);
   }
 
+  useEffect(() => {
+    if (notification.SM_bleedingSymptom) {
+      updateSMNotification(patientId, "bleedingSymptom", patientDispatch);
+    }
+  }, []);
+
   return (
     <div className="wrapper eachMonitoringPage">
       <div style={{ padding: "30px 50px", height: "100%" }}>
         {!openView ? (
           <>
-            <h2>
-              <BsArrowLeft
-                className="backToMonitoringMainPage"
-                onClick={() =>
-                  navigate(
-                    `/dashboard/patient/${params.patientId}/patientMonitoring`
-                  )
-                }
-              />
-              Bleeding Symptom
-            </h2>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <h2>
+                <BsArrowLeft
+                  className="backToMonitoringMainPage"
+                  onClick={() =>
+                    navigate(
+                      `/dashboard/patient/${params.patientId}/patientMonitoring`
+                    )
+                  }
+                />
+                Bleeding Symptom
+              </h2>
+              <span style={{ float: "right" }}>
+                <ExcelExport
+                  excelData={excelData}
+                  fileName={`Bleeding Symptom_${patientState.currentPatient.name}`}
+                />
+              </span>
+            </div>
             <Table
               style={style}
               className="monitoringTable"

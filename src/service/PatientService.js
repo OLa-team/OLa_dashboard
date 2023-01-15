@@ -243,6 +243,10 @@ export async function setCurrentPatient(dispatch, patientId) {
       await getDoc(doc(firestore, "hemoglobin", patientId))
     ).data();
 
+    let responseNotification = await (
+      await getDoc(doc(firestore, "notification", patientId))
+    ).data();
+
     let responseMessageForPatients = await (
       await getDoc(doc(firestore, "message_for_patients", patientId))
     ).data();
@@ -491,6 +495,28 @@ export async function setCurrentPatient(dispatch, patientId) {
       alert("Error in fetching hemoglobin data");
     }
 
+    // notification
+    if (responseNotification) {
+      dispatch({
+        type: "SET_NOTIFICATION",
+        payload: responseNotification,
+      });
+
+      localStorage.setItem(
+        "notification",
+        JSON.stringify(responseNotification)
+      );
+    } else {
+      dispatch({
+        type: "SET_NOTIFICATION",
+        payload: {},
+      });
+
+      localStorage.setItem("notification", JSON.stringify({}));
+      //
+      alert("Error in fetching notification data");
+    }
+
     // message for patients
     if (responseMessageForPatients) {
       dispatch({
@@ -595,31 +621,35 @@ export async function fetchPatientList(
   try {
     let response = await getDocs(patientCollectionRef);
     let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    // let number = 1;
     let patientListData = data.map((patient) => ({
+      // id: number++,
       patientId: patient.id,
       name: patient.name,
       icNo: patient.icNo,
       phoneNo: patient.phoneNo,
     }));
-
-    patientHasNotifList = patientHasNotifList.filter(
-      (value, index, self) => self.indexOf(value) === index
-    );
-    console.log("123", patientHasNotifList);
     let notifList = [];
-    patientHasNotifList.forEach((id) => {
-      patientListData.forEach((patient) => {
-        if (patient.patientId === id) {
-          notifList.push(patient);
-          patientListData = patientListData.filter((pt) => {
-            return pt.patientId !== id;
-          });
-        }
+
+    if (patientHasNotifList.length > 0) {
+      patientHasNotifList = patientHasNotifList.filter(
+        (value, index, self) => self.indexOf(value) === index
+      );
+      console.log("patientHasNotifList", patientHasNotifList);
+      patientHasNotifList.forEach((patientHasNotifId) => {
+        patientListData.forEach((patient) => {
+          if (patient.patientId === patientHasNotifId) {
+            notifList.push(patient);
+            patientListData = patientListData.filter((pt) => {
+              return pt.patientId !== patientHasNotifId;
+            });
+          }
+        });
       });
-    });
+    }
 
     let number = 1;
-    let finalList = notifList.concat(patientListData).map((pt) => ({
+    patientListData = notifList.concat(patientListData).map((pt) => ({
       ...pt,
       id: number++,
     }));
@@ -627,7 +657,7 @@ export async function fetchPatientList(
     if (patientListData.length >= 0) {
       patientDispatch({
         type: "SET_PATIENT_LIST",
-        payload: finalList,
+        payload: patientListData,
       });
     }
 
@@ -641,20 +671,29 @@ export async function fetchPatientList(
 
 // filter patient list
 export function filterPatientList(dispatch, patientList, searchResult) {
-  let tempPatientList = patientList.filter((patient) => {
-    return (
-      (patient.name
-        ? patient.name.toLowerCase().indexOf(searchResult.toLowerCase()) !== -1
-        : false) ||
-      (patient.icNo
-        ? patient.icNo.toLowerCase().indexOf(searchResult.toLowerCase()) !== -1
-        : false) ||
-      (patient.phoneNo
-        ? patient.phoneNo.toLowerCase().indexOf(searchResult.toLowerCase()) !==
-          -1
-        : false)
-    );
-  });
+  let number = 1;
+  let tempPatientList = patientList
+    .filter((patient) => {
+      return (
+        (patient.name
+          ? patient.name.toLowerCase().indexOf(searchResult.toLowerCase()) !==
+            -1
+          : false) ||
+        (patient.icNo
+          ? patient.icNo.toLowerCase().indexOf(searchResult.toLowerCase()) !==
+            -1
+          : false) ||
+        (patient.phoneNo
+          ? patient.phoneNo
+              .toLowerCase()
+              .indexOf(searchResult.toLowerCase()) !== -1
+          : false)
+      );
+    })
+    .map((pt) => ({
+      ...pt,
+      id: number++,
+    }));
 
   dispatch({
     type: "SET_TEMP_PATIENT_LIST",

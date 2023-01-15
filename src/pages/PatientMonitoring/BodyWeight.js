@@ -3,17 +3,24 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Line } from "react-chartjs-2";
 import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
-import { usePageDispatch, usePatientState } from "../../context";
+import {
+  usePageDispatch,
+  usePatientDispatch,
+  usePatientState,
+} from "../../context";
 import { getCurrentDate } from "../../utils";
 import ExcelExport from "../../components/ExcelExport";
+import { updateSMNotification } from "../../service";
 
 function BodyWeight() {
   const patientState = usePatientState();
+  const patientDispatch = usePatientDispatch();
   const pageDispatch = usePageDispatch();
 
   const navigate = useNavigate();
   const params = useParams();
   const patientId = params.patientId;
+  const notification = patientState.notification;
 
   const [displayMode, setDisplayMode] = useState("table");
   const [openView, setOpenView] = useState(false);
@@ -159,6 +166,12 @@ function BodyWeight() {
       data[i].note,
     ]);
   }
+
+  useEffect(() => {
+    if (notification.SM_bodyWeight) {
+      updateSMNotification(patientId, "bodyWeight", patientDispatch);
+    }
+  }, []);
 
   return (
     <div className="wrapper eachMonitoringPage">

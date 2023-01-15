@@ -35,7 +35,7 @@ export function convertDateObjToDateInput(dateObj) {
 }
 
 export function getCurrentDate(date) {
-  if (date === "") return "";
+  if (date === "" || date === 0) return "";
 
   var today = new Date(date);
   var currentDate =
@@ -45,7 +45,7 @@ export function getCurrentDate(date) {
 }
 
 export function getCurrentTime(date) {
-  if (date === "") return "";
+  if (date === "" || date === 0) return "";
 
   var today = new Date(date);
 
@@ -63,8 +63,8 @@ export function getCurrentTime(date) {
 export function encryptLocalData(data, item) {
   const salt = process.env.SALT || "6d090796-ecdf-11ea-adc1-0242ac112345";
   const encryptedData = encryptData(data, salt);
-  console.log(`encrypt ${item}`, encryptedData);
   localStorage.setItem(item, encryptedData);
+  // console.log(`encrypt ${item}`, encryptedData);
 }
 
 export function decryptLocalData(item) {
@@ -81,7 +81,7 @@ export function decryptLocalData(item) {
   if (!originalData) {
     alert("Data have been altered");
   }
-  console.log(`decrypted local data ${item}`, originalData);
+  // console.log(`decrypted local data ${item}`, originalData);
 
   return originalData;
 }

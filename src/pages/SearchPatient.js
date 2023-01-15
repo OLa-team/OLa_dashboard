@@ -8,9 +8,12 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
+import { HiOutlineRefresh } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Table from "../components/Table";
 import {
+  useNotifDispatch,
+  useNotifState,
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
@@ -20,6 +23,7 @@ import {
   deleteAllSelectedPatients,
   fetchPatientList,
   filterPatientList,
+  getHasNotifPatientList,
   setCurrentPatient,
 } from "../service";
 import { GoPrimitiveDot } from "react-icons/go";
@@ -27,18 +31,17 @@ import { GoPrimitiveDot } from "react-icons/go";
 function SearchPatient() {
   // Global state
   const patientState = usePatientState();
+  const notifState = useNotifState();
 
   // Dispatch
   const patientDispatch = usePatientDispatch();
+  const notifDispatch = useNotifDispatch();
   const pageDispatch = usePageDispatch();
   const navigate = useNavigate();
 
   // State
   const [searchResult, setSearchResult] = useState("");
-  const [healthDiaryNotification, setHealthDiaryNotification] = useState(false);
   const [patientHasNotifList, setPatientHasNotifList] = useState([]);
-  const [hasNewNotif, setHasNewNotif] = useState(false);
-  const [firstLoad, setFirstLoad] = useState(true);
 
   const style = { height: "90%", width: "95%", margin: "auto" };
 
@@ -62,9 +65,9 @@ function SearchPatient() {
       flex: 2,
       renderCell: (params) => {
         if (
-          patientHasNotifList.find(
-            (patientId) => patientId === params.row.patientId
-          )
+          patientHasNotifList
+            .filter((value, index, self) => self.indexOf(value) === index)
+            .find((patientId) => patientId === params.row.patientId)
         ) {
           return (
             <div>
@@ -87,106 +90,6 @@ function SearchPatient() {
       flex: 1,
     },
   ];
-
-  // useEffect(() => {
-  //   console.log("list", patientHasNotifList);
-  //   console.log("list11", patientHasNotifList);
-  //   let arr = [];
-  //   if (firstLoad) {
-  //     const qBpAndHeartRate = query(
-  //       collection(firestore, "notification"),
-  //       where("SM_bpAndHeartRate", "==", true)
-  //     );
-  //     const qSugarLevel = query(
-  //       collection(firestore, "notification"),
-  //       where("SM_sugarLevel", "==", true)
-  //     );
-  //     const qBodyWeight = query(
-  //       collection(firestore, "notification"),
-  //       where("SM_bodyWeight", "==", true)
-  //     );
-  //     const qBleedingSymptom = query(
-  //       collection(firestore, "notification"),
-  //       where("SM_bleedingSymptom", "==", true)
-  //     );
-  //     const qHealthDiary = query(
-  //       collection(firestore, "notification"),
-  //       where("SM_healthDiary", "==", true)
-  //     );
-
-  //     const unsubscribe1 = onSnapshot(
-  //       qBpAndHeartRate,
-  //       async (querySnapshot) => {
-  //         if (querySnapshot.docs.length > 0) {
-  //           querySnapshot.docs.forEach((doc) => {
-  //             console.log("bp&HeartRate", doc.data());
-  //             if (!patientHasNotifList.includes(doc.id)) {
-  //               // setPatientHasNotifList((id) => [...id, doc.id]);
-  //               arr.push(doc.id);
-  //             }
-  //           });
-  //         }
-  //       }
-  //     );
-
-  //     const unsubscribe2 = onSnapshot(qSugarLevel, async (querySnapshot) => {
-  //       console.log("querySnapshot.docs.length", querySnapshot.docs.length);
-  //       if (querySnapshot.docs.length > 0) {
-  //         querySnapshot.docs.forEach((doc) => {
-  //           console.log("sugar level", doc.id);
-  //           console.log("exist", !patientHasNotifList.includes(doc.id));
-  //           if (!patientHasNotifList.includes(doc.id)) {
-  //             // setPatientHasNotifList((id) => [...id, doc.id]);
-  //             arr.push(doc.id);
-  //             console.log("??", arr);
-  //           }
-  //         });
-  //       }
-  //     });
-
-  //     const unsubscribe3 = onSnapshot(qBodyWeight, async (querySnapshot) => {
-  //       if (querySnapshot.docs.length > 0) {
-  //         querySnapshot.docs.forEach((doc) => {
-  //           console.log("body weight", doc.id);
-  //           if (!patientHasNotifList.includes(doc.id)) {
-  //             // setPatientHasNotifList((id) => [...id, doc.id]);
-  //             arr.push(doc.id);
-  //           }
-  //         });
-  //       }
-  //     });
-
-  //     const unsubscribe4 = onSnapshot(
-  //       qBleedingSymptom,
-  //       async (querySnapshot) => {
-  //         if (querySnapshot.docs.length > 0) {
-  //           querySnapshot.docs.forEach((doc) => {
-  //             console.log("bleeding", doc.id);
-  //             if (!patientHasNotifList.includes(doc.id)) {
-  //               // setPatientHasNotifList((id) => [...id, doc.id]);
-  //               arr.push(doc.id);
-  //             }
-  //           });
-  //         }
-  //       }
-  //     );
-
-  //     const unsubscribe5 = onSnapshot(qHealthDiary, async (querySnapshot) => {
-  //       if (querySnapshot.docs.length > 0) {
-  //         querySnapshot.docs.forEach((doc) => {
-  //           console.log("health diary", doc.data());
-  //           if (!patientHasNotifList.includes(doc.id)) {
-  //             // setPatientHasNotifList((id) => [...id, doc.id]);
-  //             arr.push(doc.id);
-  //           }
-  //         });
-  //       }
-  //     });
-  //     console.log("arr", arr);
-  //   }
-  //   setFirstLoad(false);
-  //   setPatientHasNotifList(arr);
-  // }, []);
 
   function setSelectedPatientList(ids, data) {
     const selectedIDs = new Set(ids);
@@ -247,8 +150,78 @@ function SearchPatient() {
     } while (!check);
   }
 
+  const qBpAndHeartRate = query(
+    collection(firestore, "notification"),
+    where("SM_bpAndHeartRate", "==", true)
+  );
+  const qSugarLevel = query(
+    collection(firestore, "notification"),
+    where("SM_sugarLevel", "==", true)
+  );
+  const qBodyWeight = query(
+    collection(firestore, "notification"),
+    where("SM_bodyWeight", "==", true)
+  );
+  const qBleedingSymptom = query(
+    collection(firestore, "notification"),
+    where("SM_bleedingSymptom", "==", true)
+  );
+  const qHealthDiary = query(
+    collection(firestore, "notification"),
+    where("SM_healthDiary", "==", true)
+  );
+
+  const unsubscribe1 = onSnapshot(qBpAndHeartRate, (querySnapshot) => {
+    if (querySnapshot.docs.length > 0) {
+      querySnapshot.docs.forEach((doc) => {
+        if (!patientHasNotifList.includes(doc.id)) {
+          setPatientHasNotifList((id) => [...id, doc.id]);
+        }
+      });
+    }
+  });
+
+  const unsubscribe2 = onSnapshot(qSugarLevel, (querySnapshot) => {
+    if (querySnapshot.docs.length > 0) {
+      querySnapshot.docs.forEach((doc) => {
+        if (!patientHasNotifList.includes(doc.id)) {
+          setPatientHasNotifList((id) => [...id, doc.id]);
+        }
+      });
+    }
+  });
+
+  const unsubscribe3 = onSnapshot(qBodyWeight, (querySnapshot) => {
+    if (querySnapshot.docs.length > 0) {
+      querySnapshot.docs.forEach((doc) => {
+        if (!patientHasNotifList.includes(doc.id)) {
+          setPatientHasNotifList((id) => [...id, doc.id]);
+        }
+      });
+    }
+  });
+
+  const unsubscribe4 = onSnapshot(qBleedingSymptom, (querySnapshot) => {
+    if (querySnapshot.docs.length > 0) {
+      querySnapshot.docs.forEach((doc) => {
+        if (!patientHasNotifList.includes(doc.id)) {
+          setPatientHasNotifList((id) => [...id, doc.id]);
+        }
+      });
+    }
+  });
+
+  const unsubscribe5 = onSnapshot(qHealthDiary, (querySnapshot) => {
+    if (querySnapshot.docs.length > 0) {
+      querySnapshot.docs.forEach((doc) => {
+        if (!patientHasNotifList.includes(doc.id)) {
+          setPatientHasNotifList((id) => [...id, doc.id]);
+        }
+      });
+    }
+  });
+
   useEffect(() => {
-    console.log("list123", patientHasNotifList);
     getPatientList();
   }, [patientHasNotifList]);
 
@@ -271,7 +244,15 @@ function SearchPatient() {
             placeholder="Search any value"
             onChange={(e) => setSearchResult(e.target.value)}
           />
-          <BiSearch className="searchIcon" />
+          <BiSearch className="searchIcon" title="Search" />
+          {/* <HiOutlineRefresh
+            className="refreshCircle"
+            title="Refresh patient list"
+            onClick={() => {
+              setPatientHasNotifList([]);
+              getPatientList();
+            }}
+          /> */}
         </div>
         <button onClick={deletePatient}>Delete</button>
       </div>

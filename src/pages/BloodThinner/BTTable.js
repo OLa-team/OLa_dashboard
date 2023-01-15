@@ -102,7 +102,6 @@ function BTTable() {
       ? patientState.bloodThinner.creatinineRecord
       : []
   );
-  console.log("creatinineRecordList", creatinineRecordList);
   const [openCreatinineForm, setOpenCreatinineForm] = useState({
     open: false,
     action: "add",

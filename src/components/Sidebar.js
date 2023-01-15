@@ -10,12 +10,26 @@ import { TbDeviceDesktopAnalytics } from "react-icons/tb";
 import SidebarItem from "./SidebarItem";
 import { useNavigate } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../context";
-import { usePageDispatch } from "../context/PageContext";
+import { usePageDispatch, usePageState } from "../context/PageContext";
 import { fetchAllNotification, logout } from "../service";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { firestore } from "../firebase";
 
 function Sidebar() {
+  // Navigate
+  const navigate = useNavigate();
+
+  // Dispatch
+  const pageDispatch = usePageDispatch();
+  const authDispatch = useAuthDispatch();
+
+  // Global State
+  const currentUserState = useAuthState();
+  const pageState = usePageState();
+
+  const isUserAdmin = currentUserState.userDetails.isAdmin;
+  const isUserHcp = currentUserState.userDetails.isHcp;
+
   // State
   const [ac1, setAc1] = useState(true);
   const [ac2, setAc2] = useState(false);
@@ -24,18 +38,9 @@ function Sidebar() {
   const [ac5, setAc5] = useState(false);
   const [ac6, setAc6] = useState(false);
   const [hasNotification, setHasNotification] = useState(false);
-
-  // Navigate
-  const navigate = useNavigate();
-
-  // Dispatch
-  const pageDispatch = usePageDispatch();
-  const authDispatch = useAuthDispatch();
-
-  const currentUserState = useAuthState();
-
-  const isUserAdmin = currentUserState.userDetails.isAdmin;
-  const isUserHcp = currentUserState.userDetails.isHcp;
+  const [searchTabNotification, setSearchTabNotification] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(false);
 
   function reset() {
     setAc1(false);
@@ -101,7 +106,18 @@ function Sidebar() {
     }
   }, []);
 
+  useEffect(() => {
+    if (pageState.openSidebar) {
+      // console.log("open");
+      setOpenSidebar("open");
+    } else {
+      // console.log("close");
+      setOpenSidebar("");
+    }
+  }, [pageState.openSidebar]);
+
   // get data instantly
+  // Notification
   const q = query(
     collection(firestore, "notification"),
     where("registrationWeb", "==", false)
@@ -114,8 +130,66 @@ function Sidebar() {
     }
   });
 
+  // // Search
+  // const qHealthDiary = query(
+  //   collection(firestore, "notification"),
+  //   where("SM_healthDiary", "==", true)
+  // );
+  // const qBpAndHeartRate = query(
+  //   collection(firestore, "notification"),
+  //   where("SM_bpAndHeartRate", "==", true)
+  // );
+  // const qBodyWeight = query(
+  //   collection(firestore, "notification"),
+  //   where("SM_bodyWeight", "==", true)
+  // );
+  // const qSugarLevel = query(
+  //   collection(firestore, "notification"),
+  //   where("SM_sugarLevel", "==", true)
+  // );
+  // const qBleedingSymptom = query(
+  //   collection(firestore, "notification"),
+  //   where("SM_bleedingSymptom", "==", true)
+  // );
+
+  // const unsubscribeHealthDiary = onSnapshot(
+  //   qHealthDiary,
+  //   async (querySnapshot) => {
+  //     setSearchTabNotification(false);
+  //     if (querySnapshot.docs.length > 0) {
+  //       setSearchTabNotification(true);
+  //     }
+  //   }
+  // );
+  // const unsubscribeBpAndHeartRate = onSnapshot(
+  //   qBpAndHeartRate,
+  //   (querySnapshot) => {
+  //     if (querySnapshot.docs.length > 0) {
+  //       setSearchTabNotification(true);
+  //     }
+  //   }
+  // );
+  // const unsubscribeSugarLevel = onSnapshot(qSugarLevel, (querySnapshot) => {
+  //   if (querySnapshot.docs.length > 0) {
+  //     setSearchTabNotification(true);
+  //   }
+  // });
+  // const unsubscribeBodyWeight = onSnapshot(qBodyWeight, (querySnapshot) => {
+  //   if (querySnapshot.docs.length > 0) {
+  //     setSearchTabNotification(true);
+  //   }
+  // });
+  // const unsubscribeBleedingSymptom = onSnapshot(
+  //   qBleedingSymptom,
+  //   (querySnapshot) => {
+  //     if (querySnapshot.docs.length > 0) {
+  //       setSearchTabNotification(true);
+  //     }
+  //   }
+  // );
+
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${openSidebar}`}>
       {/* <img src={logoWhite} alt="logo-white.png" /> */}
       <img src={logo2} alt="logo-white.png" />
 
@@ -140,7 +214,7 @@ function Sidebar() {
             Icon={<BiSearch />}
             section="Search"
             active={ac1}
-            alert={false}
+            alert={searchTabNotification}
           />
         </div>
 
@@ -266,8 +340,6 @@ function Sidebar() {
           onClick={() => {
             if (window.confirm("Are you sure you want to log out?")) {
               handleLogout();
-            } else {
-              return;
             }
           }}
         >

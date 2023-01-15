@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Table from "../components/Table";
 import { BsArrowLeft } from "react-icons/bs";
 import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
@@ -154,7 +154,6 @@ function Notification() {
     where("registrationWeb", "==", false)
   );
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    let pendingRequestList = [];
     if (querySnapshot.docs.length > 0) {
       returnMapArray(querySnapshot);
     }
@@ -176,20 +175,17 @@ function Notification() {
 
     if (pendingRequestList.length > 0) {
       setPendingNotification(pendingRequestList);
-    }
-
-    if (pendingRequestList.length === 0) {
+    } else {
       setPendingNotification([]);
     }
   }
 
   return (
     <div className="wrapper notification">
-      <div style={{ padding: "1px 30px", height: "100%" }}>
+      <div style={{ padding: "1px 30px", height: "105%" }}>
         {page === "table" && (
           <Table
             style={style}
-            className="medicationTable"
             columns={columns}
             data={data}
             clickRowFunction={() => {}}

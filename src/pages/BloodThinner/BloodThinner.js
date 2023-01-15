@@ -688,6 +688,7 @@ function BloodThinner() {
 
           <div className="tableButton">
             <button
+              type="button"
               onClick={() => {
                 navigate(
                   `/dashboard/patient/${params.patientId}/bloodThinner/hemoglobin`
@@ -697,6 +698,7 @@ function BloodThinner() {
               Hemoglobin
             </button>
             <button
+              type="button"
               onClick={() => {
                 navigate(
                   `/dashboard/patient/${params.patientId}/bloodThinner/table`

@@ -171,8 +171,6 @@ function PatientRegistration() {
     }
   }
 
-  console.log("isAdmin", isAdmin);
-
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
   }

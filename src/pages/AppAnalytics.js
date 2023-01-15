@@ -74,8 +74,6 @@ function AppAnalytics() {
         analyticsData.push(
           querySnapshot.docs.find((doc) => doc.id === startDate)
         );
-
-        console.log("daily", analyticsData);
       } else if (period === "weekly") {
         var startIndex = querySnapshot.docs.findIndex(
           (doc) => doc.id === startDate
@@ -88,8 +86,6 @@ function AppAnalytics() {
             }
           }
         }
-
-        console.log("weekly", analyticsData);
       } else {
         var startIndex = querySnapshot.docs.findIndex(
           (doc) => doc.id === startDate
@@ -102,8 +98,6 @@ function AppAnalytics() {
             }
           }
         }
-
-        console.log("monthly", analyticsData);
       }
 
       let generalInfoPageCount = 0;
@@ -199,8 +193,6 @@ function AppAnalytics() {
   }
 
   useEffect(() => {
-    console.log(period);
-    console.log(startDate);
     if (period !== "" && startDate !== "") {
       let analyticsData = [];
       getPageCount(analyticsData);

@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaClinicMedical,
   FaNotesMedical,
@@ -20,9 +20,10 @@ import {
 } from "../context";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { deletePatientById } from "../service";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, query } from "firebase/firestore";
 import { firestore } from "../firebase";
 import allergyLogo from "../../src/assets/allergy.png";
+import { GoPrimitiveDot } from "react-icons/go";
 
 function Patient() {
   const patientState = usePatientState();
@@ -32,6 +33,10 @@ function Patient() {
   const navigate = useNavigate();
   const params = useParams();
   const patientId = params.patientId;
+  const notification = patientState.notification;
+
+  const [firstLoad, setFirstLoad] = useState(false);
+  const [monitoringNotif, setMonitoringNotif] = useState(false);
 
   async function handleDeletePatient() {
     if (window.confirm("Are you sure you want to delete the patient?")) {
@@ -69,6 +74,20 @@ function Patient() {
       }
     } while (!check);
   }
+
+  useEffect(() => {
+    if (notification.SM_bleedingSymptom) {
+      setMonitoringNotif(true);
+    } else if (notification.SM_sugarLevel) {
+      setMonitoringNotif(true);
+    } else if (notification.SM_healthDiary) {
+      setMonitoringNotif(true);
+    } else if (notification.SM_bodyWeight) {
+      setMonitoringNotif(true);
+    } else if (notification.SM_bpAndHeartRate) {
+      setMonitoringNotif(true);
+    }
+  }, []);
 
   return (
     <div className="patient">
@@ -251,6 +270,11 @@ function Patient() {
                 });
               }}
             >
+              {monitoringNotif && (
+                <div style={{ position: "relative" }}>
+                  <GoPrimitiveDot className="alertDot patientHome" />
+                </div>
+              )}
               <FaStethoscope className="iconModule" />
               <h2>Patient Monitoring</h2>
             </div>

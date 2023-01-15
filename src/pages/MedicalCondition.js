@@ -28,7 +28,6 @@ function MedicalCondition() {
   const map = patientState.medicalCondition
     ? patientState.medicalCondition
     : null;
-  console.log(patientState);
 
   const [hypertension, setHypertension] = useState(
     map.hypertension ? map.hypertension : false

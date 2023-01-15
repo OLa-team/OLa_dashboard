@@ -108,6 +108,7 @@ export function filterUserList(
   filterRole,
   searchResult
 ) {
+  let number = 1;
   let tempUserList = userList
     .filter((user) => {
       if (filterRole === "") {
@@ -125,7 +126,11 @@ export function filterUserList(
       return (
         user.username.toLowerCase().indexOf(searchResult.toLowerCase()) > -1
       );
-    });
+    })
+    .map((user) => ({
+      ...user,
+      id: number++,
+    }));
 
   userDispatch({
     type: "SET_TEMP_USER_LIST",
@@ -169,7 +174,6 @@ export async function setCurrentAdminOrHcp(dispatch, hcpId) {
     let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     let findUserData = data.filter((hcp) => hcp.id === hcpId);
     let userData = findUserData[0];
-    console.log("findUserData", findUserData);
 
     if (findUserData.length === 1) {
       dispatch({

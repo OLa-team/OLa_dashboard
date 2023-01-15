@@ -6,6 +6,11 @@ import {
 } from "./PatientContext";
 import { PageProvider, usePageState, usePageDispatch } from "./PageContext";
 import { UserProvider, useUserState, useUserDispatch } from "./UserContext";
+import {
+  NotifProvider,
+  useNotifState,
+  useNotifDispatch,
+} from "./NotificationContext";
 
 export {
   AuthProvider,
@@ -20,4 +25,7 @@ export {
   UserProvider,
   useUserState,
   useUserDispatch,
+  NotifProvider,
+  useNotifState,
+  useNotifDispatch,
 };

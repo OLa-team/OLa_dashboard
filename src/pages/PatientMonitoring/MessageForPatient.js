@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { MdAdd, MdDelete } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,42 +44,6 @@ function MessageForPatient() {
     ? patientState.messageForPatients.dateTimeUpdated
     : "";
 
-  async function handleAddOrEditMessageForPatients() {
-    let messageData = null;
-    if (openForm.action === "add") {
-      const newMessageId = uuid().slice(0, 5);
-      messageData = {
-        id: newMessageId,
-        date: new Date().getTime(),
-        message: message,
-        hcp: currentUserState.userDetails.username,
-      };
-    } else {
-      messageData = {
-        id: messageId,
-        date: new Date().getTime(),
-        message: message,
-        hcp: currentUserState.userDetails.username,
-      };
-
-      setMessageList((messageList) =>
-        messageList.filter((msg) => msg.id !== messageId)
-      );
-    }
-
-    setMessageList((messageList) => [...messageList, messageData]);
-
-    setOpenForm({
-      open: false,
-      action: "",
-    });
-
-    setDate(0);
-    setMessage("");
-    setHcp("");
-    setMessageId("");
-  }
-
   function selectMessageDetails(row) {
     setDate(row.date);
     setMessage(row.message);
@@ -98,28 +62,61 @@ function MessageForPatient() {
     setSelectedMessage(selectedRowData);
   }
 
-  function handleDeleteMessage() {
+  async function handleDeleteMessage() {
+    let messageList = [...patientState.messageForPatients.messageList];
     for (let i = 0; i < selectedMessage.length; i++) {
-      setMessageList((messageList) =>
-        messageList.filter((msg) => msg.id !== selectedMessage[i].id)
+      messageList = messageList.filter(
+        (msg) => msg.id !== selectedMessage[i].id
       );
+    }
+
+    const messageForPatientsData = {
+      messageList: messageList,
+      read: false,
+    };
+
+    if (window.confirm("Are you sure to send?")) {
+      await updateMessageForPatients(messageForPatientsData, patientId);
+      await setCurrentPatient(patientDispatch, patientId);
+      alert("Update patient's message for patients successfully.");
     }
   }
 
   async function handleSubmitMessageForPatients(e) {
     e.preventDefault();
 
+    const newMessageId = uuid().slice(0, 5);
     const messageData = {
+      id: newMessageId,
+      date: new Date().getTime(),
+      message: message,
+      hcp: currentUserState.userDetails.username,
+    };
+
+    let messageList = [
+      ...patientState.messageForPatients.messageList,
+      messageData,
+    ];
+
+    const messageForPatientsData = {
       messageList: messageList,
       read: false,
     };
 
-    if (window.confirm("Are you sure to proceed?")) {
-      await updateMessageForPatients(messageData, patientId);
+    if (window.confirm("Are you sure to send the message to the patient?")) {
+      await updateMessageForPatients(messageForPatientsData, patientId);
       await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's message for patients successfully.");
-    } else {
-      return;
+
+      setOpenForm({
+        open: false,
+        action: "",
+      });
+
+      setDate(0);
+      setMessage("");
+      setHcp("");
+      setMessageId("");
     }
   }
 
@@ -156,30 +153,12 @@ function MessageForPatient() {
     {
       field: "message",
       headerName: "Message",
-      flex: 1.5,
+      flex: 2,
     },
     {
       field: "hcp",
       headerName: "HCP",
       flex: 0.8,
-    },
-    {
-      field: "button",
-      headerName: "Action",
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <div style={{ width: "100%", textAlign: "center" }}>
-            <button
-              className="action"
-              onClick={() => selectMessageDetails(params.row)}
-            >
-              Edit
-            </button>
-          </div>
-        );
-      },
     },
   ];
 
@@ -190,14 +169,21 @@ function MessageForPatient() {
           <BsArrowLeft
             className="backToMonitoringMainPage"
             onClick={() => {
-              if (
-                window.confirm(
-                  "Are you sure to exit this page? \nPlease ensure you have saved all the changes before leaving this page. "
-                )
-              ) {
+              if (!openForm.open) {
                 navigate(
                   `/dashboard/patient/${params.patientId}/patientMonitoring`
                 );
+              } else {
+                if (
+                  window.confirm(
+                    "Are you sure to exit this page? \nPlease ensure you have saved the message before leaving this page. "
+                  )
+                ) {
+                  setOpenForm({
+                    open: false,
+                    action: "",
+                  });
+                }
               }
             }}
           />
@@ -210,7 +196,7 @@ function MessageForPatient() {
               className="medicationTable"
               style={style}
               columns={columns}
-              data={messageList}
+              data={patientState.messageForPatients.messageList}
               clickRowFunction={() => {}}
               selectFunction={setSelectedMessageList}
               toolbar={false}
@@ -242,12 +228,12 @@ function MessageForPatient() {
             </div>
 
             <div className="saveOrCancelMedBtn">
-              <button
+              {/* <button
                 className="saveMedication"
                 onClick={(e) => handleSubmitMessageForPatients(e)}
               >
                 Save
-              </button>
+              </button> */}
               <button
                 className="medBackBtn"
                 onClick={() => {
@@ -278,8 +264,8 @@ function MessageForPatient() {
             />
 
             <div>
-              <button onClick={() => handleAddOrEditMessageForPatients()}>
-                Save
+              <button onClick={(e) => handleSubmitMessageForPatients(e)}>
+                Send
               </button>
               <button
                 onClick={() =>

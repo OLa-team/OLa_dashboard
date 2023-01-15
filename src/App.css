@@ -700,6 +700,7 @@ input:-webkit-autofill:active {
   padding: 3px 20px;
   border-radius: 15px;
   border: 0.5px solid #000;
+  position: relative;
 }
 
 .searchBar input {
@@ -714,6 +715,18 @@ input:-webkit-autofill:active {
 .searchBar .searchIcon {
   font-size: 22px;
   cursor: pointer;
+}
+
+.refreshCircle {
+  position: absolute;
+  right: -40px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.refreshCircle:hover {
+  color: red;
 }
 
 .filterRoleOption {
@@ -2408,7 +2421,7 @@ input:-webkit-autofill:active {
 }
 
 .patientNotifDetails {
-  width: 60%;
+  width: 50%;
   margin: auto;
 }
 

@@ -79,8 +79,6 @@ function HealthGoal() {
   }
 
   function handledDeleteGoal(e) {
-    console.log(e.target.getAttribute("name"));
-
     let deleteGoal = e.target.getAttribute("name");
 
     setHealthGoalList((healthGoalList) =>
@@ -115,7 +113,6 @@ function HealthGoal() {
       if (obj.agreeToGoal) {
         agreeToGoal = true;
       }
-      console.log("agreeToGoal", agreeToGoal);
     }
   });
 

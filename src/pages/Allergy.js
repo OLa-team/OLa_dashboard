@@ -64,7 +64,10 @@ function Allergy() {
       dateTimeUpdated: new Date().getTime(),
       nameVerified: "",
       allergyStatus: allergyStatus,
-      hasAllergy: food === "" && medicine === "" ? false : true,
+      hasAllergy:
+        (food === "" && medicine === "") || allergyStatus === "unknown"
+          ? false
+          : true,
       food: allergyStatus === "Y" ? food.split(",") : [],
       medicine: allergyStatus === "Y" ? medicine.split(",") : [],
     };

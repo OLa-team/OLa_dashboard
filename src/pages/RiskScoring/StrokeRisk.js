@@ -101,8 +101,6 @@ function StrokeRisk() {
     }
   }, [testResult]);
 
-  console.log(result);
-
   const dateTimeUpdated = patientState.strokeRisk.dateTimeUpdated
     ? patientState.strokeRisk.dateTimeUpdated
     : "";

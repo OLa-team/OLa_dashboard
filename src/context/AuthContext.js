@@ -2,7 +2,6 @@ import React, { useContext, useReducer } from "react";
 import { decryptLocalData } from "../utils";
 
 let user = localStorage.getItem("user") ? decryptLocalData("user") : null;
-console.log("user data: ", user);
 let token = localStorage.getItem("user") ? user.id : "";
 
 // Initial state

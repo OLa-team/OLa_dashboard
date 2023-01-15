@@ -23,6 +23,8 @@ import {
 } from "./PatientService";
 import {
   fetchAllNotification,
+  getHasNotifPatientList,
+  updateSMNotification,
   updatePatientRegistrationNotification,
   changeProfileDataNotification,
 } from "./NotificationService";
@@ -61,6 +63,8 @@ export {
   deleteAllSelectedPatients,
   setCurrentPatient,
   fetchAllNotification,
+  getHasNotifPatientList,
+  updateSMNotification,
   updatePatientRegistrationNotification,
   changeProfileDataNotification,
   registerAdminOrHcp,

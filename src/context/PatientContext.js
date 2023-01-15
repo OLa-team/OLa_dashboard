@@ -34,6 +34,9 @@ let pm = localStorage.getItem("patientMonitoring")
 let hemo = localStorage.getItem("hemoglobin")
   ? JSON.parse(localStorage.getItem("hemoglobin"))
   : null;
+let notif = localStorage.getItem("notification")
+  ? JSON.parse(localStorage.getItem("notification"))
+  : null;
 let dhg = localStorage.getItem("defaultHealthGoal")
   ? JSON.parse(localStorage.getItem("defaultHealthGoal"))
   : null;
@@ -69,17 +72,13 @@ const initialState = {
   bloodThinner: bt || {},
   patientMonitoring: pm || {},
   hemoglobin: hemo || {},
+  notification: notif || {},
   defaultHealthGoal: dhg || {},
   strokeRiskResultMessage: srrm || {},
   bleedingRiskResultMessage: brrm || {},
   warfarinQualityResultMessage: wqrm || {},
   medicationConstantList: mcl || {},
   messageForPatients: mfp || {},
-  bpAndHeartRateNotif: false,
-  sugarLevelNotif: false,
-  bodyWeightNotif: false,
-  bleedingSymptomNotif: false,
-  healthDiaryNotif: false,
   loading: false,
 };
 
@@ -198,6 +197,12 @@ const PatientReducer = (initialState, action) => {
         hemoglobin: action.payload,
       };
 
+    case "SET_NOTIFICATION":
+      return {
+        ...initialState,
+        notification: action.payload,
+      };
+
     case "SET_MESSAGE_FOR_PATIENTS":
       return {
         ...initialState,
@@ -232,66 +237,6 @@ const PatientReducer = (initialState, action) => {
       return {
         ...initialState,
         medicationConstantList: action.payload,
-      };
-
-    case "SET_BP_AND_HEART_RATE_NOTIF_TRUE":
-      return {
-        ...initialState,
-        bpAndHeartRateNotif: true,
-      };
-
-    case "SET_BP_AND_HEART_RAT_NOTIF_FALSE":
-      return {
-        ...initialState,
-        bpAndHeartRateNotif: false,
-      };
-
-    case "SET_SUGAR_LEVEL_NOTIF_TRUE":
-      return {
-        ...initialState,
-        sugarLevelNotif: true,
-      };
-
-    case "SET_SUGAR_LEVEL_NOTIF_FALSE":
-      return {
-        ...initialState,
-        sugarLevelNotif: false,
-      };
-
-    case "SET_BODY_WEIGHT_NOTIF_TRUE":
-      return {
-        ...initialState,
-        bodyWeightNotif: true,
-      };
-
-    case "SET_BODY_WEIGHT_NOTIF_FALSE":
-      return {
-        ...initialState,
-        bodyWeightNotif: false,
-      };
-
-    case "SET_BLEEDING_SYMPTOM_NOTIF_TRUE":
-      return {
-        ...initialState,
-        bleedingSymptomNotif: true,
-      };
-
-    case "SET_BLEEDING_SYMPTOM_NOTIF_FALSE":
-      return {
-        ...initialState,
-        bleedingSymptomNotif: false,
-      };
-
-    case "SET_HEALTH_DIARY_NOTIF_TRUE":
-      return {
-        ...initialState,
-        healthDiaryNotif: true,
-      };
-
-    case "SET_HEALTH_DIARY_NOTIF_FALSE":
-      return {
-        ...initialState,
-        healthDiaryNotif: false,
       };
 
     default:

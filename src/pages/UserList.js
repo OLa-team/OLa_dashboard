@@ -180,7 +180,6 @@ function UserList() {
         isHcp: isHcp,
       };
 
-      console.log(newUserData);
       await updateAdminOrHcpProfile(newUserData, pageDispatch);
 
       setIsAdmin(false);
@@ -259,8 +258,6 @@ function UserList() {
   }, []);
 
   useEffect(() => {
-    console.log("searchResult", searchResult);
-    console.log("filterRole", filterRole);
     if (userState.userList.length > 0) {
       filterUserList(
         userDispatch,
@@ -272,8 +269,6 @@ function UserList() {
   }, [searchResult]);
 
   useEffect(() => {
-    console.log("searchResult", searchResult);
-    console.log("filterRole", filterRole);
     filterUserList(userDispatch, userState.userList, filterRole, searchResult);
   }, [filterRole]);
 
@@ -295,8 +290,9 @@ function UserList() {
                 <select
                   className="filterRoleOption"
                   onChange={(e) => setFilterRole(e.target.value)}
+                  placeholder="Filter by role"
                 >
-                  <option value="">Filter by role</option>
+                  <option value="">All roles</option>
                   <option value="both">Admin & HCP</option>
                   <option value="admin">Admin</option>
                   <option value="hcp">HCP</option>

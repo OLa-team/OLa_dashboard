@@ -3,17 +3,26 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Line } from "react-chartjs-2";
 import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
-import { usePageDispatch, usePatientState } from "../../context";
+import {
+  usePageDispatch,
+  usePatientDispatch,
+  usePatientState,
+} from "../../context";
 import { getCurrentDate } from "../../utils";
 import ExcelExport from "../../components/ExcelExport";
+import { doc, updateDoc } from "firebase/firestore";
+import { firestore } from "../../firebase";
+import { updateSMNotification } from "../../service";
 
 function HealthDiaryRecord() {
   const patientState = usePatientState();
+  const patientDispatch = usePatientDispatch();
   const pageDispatch = usePageDispatch();
 
   const navigate = useNavigate();
   const params = useParams();
   const patientId = params.patientId;
+  const notification = patientState.notification;
 
   const [openView, setOpenView] = useState(false);
 
@@ -106,6 +115,12 @@ function HealthDiaryRecord() {
       data[i].note,
     ]);
   }
+
+  useEffect(() => {
+    if (notification.SM_healthDiary) {
+      updateSMNotification(patientId, "healthDiary", patientDispatch);
+    }
+  }, []);
 
   return (
     <div className="wrapper eachMonitoringPage">
