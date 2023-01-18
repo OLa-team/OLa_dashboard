@@ -107,11 +107,11 @@ function SearchPatient() {
 
   async function selectPatient(row) {
     await setCurrentPatient(patientDispatch, row.row.patientId);
+    navigate(`/dashboard/patient/${row.row.patientId}`);
     pageDispatch({
       type: "SET_CURRENT_PAGE",
       payload: "Patient Details",
     });
-    navigate(`/dashboard/patient/${row.row.patientId}`);
   }
 
   async function deletePatient() {
