@@ -429,10 +429,12 @@
   margin: auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
 .leftDetail {
-  width: 450px;
+  width: fit-content;
   align-items: center;
   display: flex;
 }
