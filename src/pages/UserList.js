@@ -347,6 +347,7 @@ function UserList() {
                 onChange={(e) => setUsername(e.target.value)}
                 name="name"
                 required
+                disabled
               />
             </div>
             <div className="register-inputField">
