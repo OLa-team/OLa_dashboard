@@ -148,6 +148,14 @@ export async function createPatientAccount(newPatientData, dispatch) {
       bodyWeightRecord: [],
       healthDiaryRecord: [],
       sugarLevelRecord: [],
+      lastUpdated: 0,
+      recommendedValues: {
+        diastolicBP: [90, 135, 150],
+        systolicBP: [60, 85, 95],
+        heartRate: [60, 100],
+        sugarLevelBeforeMeal: [4.4, 7],
+        sugarLevelAfterMeal: [4.4, 8.5],
+      },
     });
 
     await setDoc(doc(firestore, "notification", patientId), {
@@ -635,7 +643,7 @@ export async function fetchPatientList(
       patientHasNotifList = patientHasNotifList.filter(
         (value, index, self) => self.indexOf(value) === index
       );
-      console.log("patientHasNotifList", patientHasNotifList);
+      // console.log("patientHasNotifList", patientHasNotifList);
       patientHasNotifList.forEach((patientHasNotifId) => {
         patientListData.forEach((patient) => {
           if (patient.patientId === patientHasNotifId) {
@@ -978,6 +986,19 @@ export async function updateMessageForPatients(messageData, patientId) {
   } catch (error) {
     alert(error.message);
     console.error("Error in update message for patients data", error);
+    return;
+  }
+}
+
+// update lastUpdated time in self_monitor collection
+export async function updateLastUpdatedTimeInSelfMonitoring(patientId) {
+  try {
+    await updateDoc(doc(firestore, "self_monitor", patientId), {
+      lastUpdated: 0,
+    });
+  } catch (error) {
+    alert(error.message);
+    console.error("Error in update self monitor data", error);
     return;
   }
 }
