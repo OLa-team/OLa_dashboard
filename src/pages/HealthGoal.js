@@ -97,8 +97,8 @@ function HealthGoal() {
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
-      await updateHealthGoal(healthGoalData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateHealthGoal(healthGoalData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's health goal successfully.");
     }
   }

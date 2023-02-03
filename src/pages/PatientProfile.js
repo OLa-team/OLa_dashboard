@@ -222,15 +222,14 @@ function PatientProfile() {
     e.preventDefault();
 
     const profileData = {
-      patientId: params.patientId,
       birthDate: new Date(birthDate).getTime(),
       age: age,
       gender: gender,
     };
 
     if (window.confirm("Are you sure to proceed?")) {
-      await updatePatientProfile(profileData);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updatePatientProfile(profileData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Patient profile updated successfully.");
     }
   }

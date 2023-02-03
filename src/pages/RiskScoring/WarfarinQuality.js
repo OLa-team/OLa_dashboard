@@ -122,8 +122,12 @@ function WarfarinQuality() {
         result: result,
         colorMsg: colorMsg,
       };
-      await updateWarfarinQuality(warfarinQualityData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateWarfarinQuality(
+        warfarinQualityData,
+        patientId,
+        patientDispatch
+      );
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's warfarin quality successfully.");
     } else {
       return;

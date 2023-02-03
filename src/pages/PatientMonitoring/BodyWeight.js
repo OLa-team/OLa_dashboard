@@ -10,7 +10,10 @@ import {
 } from "../../context";
 import { getCurrentDate } from "../../utils";
 import ExcelExport from "../../components/ExcelExport";
-import { updateSMNotification } from "../../service";
+import {
+  updateLastUpdatedTimeInSelfMonitoring,
+  updateSMNotification,
+} from "../../service";
 
 function BodyWeight() {
   const patientState = usePatientState();
@@ -170,6 +173,7 @@ function BodyWeight() {
   useEffect(() => {
     if (notification.SM_bodyWeight) {
       updateSMNotification(patientId, "bodyWeight", patientDispatch);
+      updateLastUpdatedTimeInSelfMonitoring(patientId);
     }
   }, []);
 

@@ -187,8 +187,8 @@ function Hemoglobin() {
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
-      await updateHemoglobinRecord(hemoglobinData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateHemoglobinRecord(hemoglobinData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's hemoglobin record successfully.");
     } else {
       return;
@@ -282,12 +282,14 @@ function Hemoglobin() {
             </h1>
             <button
               style={{
-                padding: "7px 17px",
+                marginLeft: "20px",
+                padding: "8px 15px",
                 borderRadius: "15px",
                 outline: "none",
                 border: "1px solid black",
+                color: "white",
+                background: "black",
                 cursor: "pointer",
-                height: "fit-content",
               }}
               onClick={() => {
                 if (changeView === "table") {

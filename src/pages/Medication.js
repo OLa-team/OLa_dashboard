@@ -174,8 +174,8 @@ function Medication() {
         "Please check for medication interactions. Please click ok if you want to save the information."
       )
     ) {
-      await updateMedication(medicationData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateMedication(medicationData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's current medication successfully.");
     } else {
       return;

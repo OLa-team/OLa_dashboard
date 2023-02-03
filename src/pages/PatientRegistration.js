@@ -103,8 +103,8 @@ function PatientRegistration() {
         }
       }
 
-      console.log("valid phone number", validPhoneNo);
-      console.log("valid phone number", validPhoneNo.substring(2, 5));
+      // console.log("valid phone number", validPhoneNo);
+      // console.log("valid phone number", validPhoneNo.substring(2, 5));
 
       if (window.confirm("Are you sure to proceed?")) {
         const patientId = uuid().slice(0, 15);
@@ -158,7 +158,7 @@ function PatientRegistration() {
           isHcp: isHcp,
         };
 
-        console.log(newUserData);
+        // console.log(newUserData);
         await registerAdminOrHcp(newUserData, pageDispatch);
 
         e.target.reset();

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 import { Line } from "react-chartjs-2";
 import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
@@ -10,7 +11,11 @@ import {
 } from "../../context";
 import { getCurrentDate } from "../../utils";
 import ExcelExport from "../../components/ExcelExport";
-import { updateSMNotification } from "../../service";
+import {
+  updateLastUpdatedTimeInSelfMonitoring,
+  updateRecommendedValuesSelfMonitoring,
+  updateSMNotification,
+} from "../../service";
 
 function BloodSugarLevel() {
   const patientState = usePatientState();
@@ -24,12 +29,27 @@ function BloodSugarLevel() {
 
   const [displayMode, setDisplayMode] = useState("table");
   const [openView, setOpenView] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
 
   const [date, setDate] = useState("");
   const [timeTaken, setTimeTaken] = useState("");
   const [bloodSugarLevel, setBloodSugarLevel] = useState(0);
   const [device, setDevice] = useState("");
   const [note, setNote] = useState("");
+
+  const [sugarLevelBeforeMealLow, setSugarLevelBeforeMealLow] = useState(
+    patientState.patientMonitoring.recommendedValues.sugarLevelBeforeMeal[0]
+  );
+  const [sugarLevelBeforeMealHigh, setSugarLevelBeforeMealHigh] = useState(
+    patientState.patientMonitoring.recommendedValues.sugarLevelBeforeMeal[1]
+  );
+
+  const [sugarLevelAfterMealLow, setSugarLevelAfterMealLow] = useState(
+    patientState.patientMonitoring.recommendedValues.sugarLevelAfterMeal[0]
+  );
+  const [sugarLevelAfterMealHigh, setSugarLevelAfterMealHigh] = useState(
+    patientState.patientMonitoring.recommendedValues.sugarLevelAfterMeal[1]
+  );
 
   // Table
   let i = 0;
@@ -113,6 +133,32 @@ function BloodSugarLevel() {
     setNote(row.note);
   }
 
+  async function saveStandardValues(e) {
+    e.preventDefault();
+
+    const data = {
+      diastolicBP: patientState.patientMonitoring.recommendedValues.diastolicBP,
+      systolicBP: patientState.patientMonitoring.recommendedValues.systolicBP,
+      heartRate: patientState.patientMonitoring.recommendedValues.heartRate,
+      sugarLevelAfterMeal: [
+        sugarLevelBeforeMealLow,
+        sugarLevelBeforeMealHigh,
+      ].map((each) => parseFloat(each)),
+      sugarLevelBeforeMeal: [
+        sugarLevelAfterMealLow,
+        sugarLevelAfterMealHigh,
+      ].map((each) => parseFloat(each)),
+    };
+
+    await updateRecommendedValuesSelfMonitoring(
+      data,
+      patientId,
+      patientDispatch
+    );
+    alert("Update the standard values of Blood Sugar successfully.");
+    setOpenForm(false);
+  }
+
   // Graph
   const labels = patientState.patientMonitoring.sugarLevelRecord
     ? patientState.patientMonitoring.sugarLevelRecord.map((record) =>
@@ -188,6 +234,7 @@ function BloodSugarLevel() {
   useEffect(() => {
     if (notification.SM_sugarLevel) {
       updateSMNotification(patientId, "sugarLevel", patientDispatch);
+      updateLastUpdatedTimeInSelfMonitoring(patientId);
     }
   }, []);
 
@@ -213,6 +260,12 @@ function BloodSugarLevel() {
                   }
                 />
                 Blood Sugar Level
+                <button
+                  className="editStandardValuesButton"
+                  onClick={() => setOpenForm(true)}
+                >
+                  Standard Values
+                </button>
               </h2>
               <div className="displayMode">
                 <div>
@@ -323,6 +376,83 @@ function BloodSugarLevel() {
             </div>
           </>
         )}
+
+        <div className={openForm ? "btBg" : ""}></div>
+        <div className={`patientMonitoringForm ${openForm ? "popup" : ""}`}>
+          <form
+            className="editPatientMonitoringForm"
+            onSubmit={(e) => saveStandardValues(e)}
+          >
+            <IoClose
+              className="closeForm"
+              onClick={() => {
+                setOpenForm(false);
+              }}
+            />
+            <h1 style={{ display: "block" }}>Blood Glucose</h1>
+            <div className="standardValuesForm">
+              <div>
+                <p>
+                  Fasting / Pre-meal (Lower Limit):{" "}
+                  <input
+                    type="number"
+                    min={0}
+                    max={sugarLevelBeforeMealHigh}
+                    value={sugarLevelBeforeMealLow}
+                    onChange={(e) => {
+                      setSugarLevelBeforeMealLow(e.target.value);
+                    }}
+                    step="0.1"
+                  />
+                </p>
+                <p>
+                  2 hrs after meal (Lower Limit) :{" "}
+                  <input
+                    type="number"
+                    min={0}
+                    max={sugarLevelAfterMealHigh}
+                    value={sugarLevelAfterMealLow}
+                    onChange={(e) => {
+                      setSugarLevelAfterMealLow(e.target.value);
+                    }}
+                    step="0.1"
+                  />
+                </p>
+              </div>
+
+              <div>
+                <p>
+                  Fasting / Pre-meal (Upper Limit) :{" "}
+                  <input
+                    type="number"
+                    min={sugarLevelBeforeMealLow}
+                    max={20}
+                    value={sugarLevelBeforeMealHigh}
+                    onChange={(e) => {
+                      setSugarLevelBeforeMealHigh(e.target.value);
+                    }}
+                    step="0.1"
+                  />
+                </p>
+                <p>
+                  2 hrs after meal (Upper Limit) :{" "}
+                  <input
+                    type="number"
+                    min={sugarLevelAfterMealLow}
+                    max={20}
+                    value={sugarLevelAfterMealHigh}
+                    onChange={(e) => {
+                      setSugarLevelAfterMealHigh(e.target.value);
+                    }}
+                    step="0.1"
+                  />
+                </p>
+              </div>
+            </div>
+
+            <button type="submit">Save</button>
+          </form>
+        </div>
       </div>
     </div>
   );

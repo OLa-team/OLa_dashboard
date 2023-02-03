@@ -9,7 +9,10 @@ import {
   usePatientState,
 } from "../../context";
 import { getCurrentDate } from "../../utils";
-import { updateSMNotification } from "../../service";
+import {
+  updateLastUpdatedTimeInSelfMonitoring,
+  updateSMNotification,
+} from "../../service";
 import ExcelExport from "../../components/ExcelExport";
 
 function BleedingSymptom() {
@@ -111,6 +114,8 @@ function BleedingSymptom() {
   useEffect(() => {
     if (notification.SM_bleedingSymptom) {
       updateSMNotification(patientId, "bleedingSymptom", patientDispatch);
+
+      updateLastUpdatedTimeInSelfMonitoring(patientId);
     }
   }, []);
 

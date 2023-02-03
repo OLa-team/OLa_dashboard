@@ -127,8 +127,8 @@ function BleedingRisk() {
         result: result,
         colorMsg: colorMsg,
       };
-      await updateBleedingRisk(bleedingRiskData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateBleedingRisk(bleedingRiskData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's bleeding risk successfully.");
     }
   }

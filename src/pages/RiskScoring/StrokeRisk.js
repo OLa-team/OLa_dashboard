@@ -126,8 +126,8 @@ function StrokeRisk() {
         colorMsg: colorMsg,
       };
 
-      await updateStrokeRisk(strokeRiskData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateStrokeRisk(strokeRiskData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's stroke risk successfully.");
     }
   }

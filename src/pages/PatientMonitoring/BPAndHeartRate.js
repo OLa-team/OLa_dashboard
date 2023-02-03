@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 import { Line } from "react-chartjs-2";
 import { useNavigate, useParams } from "react-router-dom";
 import Table from "../../components/Table";
@@ -10,7 +11,13 @@ import {
 } from "../../context";
 import { getCurrentDate } from "../../utils";
 import ExcelExport from "../../components/ExcelExport";
-import { updateSMNotification } from "../../service";
+import {
+  setCurrentPatient,
+  updateLastUpdatedTimeInSelfMonitoring,
+  updateRecommendedValuesSelfMonitoring,
+  updateSMNotification,
+} from "../../service";
+import ReactSlider from "react-slider";
 
 function BPAndHeartRate() {
   const patientState = usePatientState();
@@ -24,6 +31,7 @@ function BPAndHeartRate() {
 
   const [displayMode, setDisplayMode] = useState("table");
   const [openView, setOpenView] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
 
   const [date, setDate] = useState("");
   const [bpSystolic, setBpSystolic] = useState(0);
@@ -31,6 +39,34 @@ function BPAndHeartRate() {
   const [heartRate, setHeartRate] = useState(0);
   const [device, setDevice] = useState("");
   const [note, setNote] = useState("");
+
+  const [diastolicBPNormal, setDiastolicBPNormal] = useState(
+    patientState.patientMonitoring.recommendedValues.diastolicBP[0]
+  );
+  const [systolicBPNormal, setSystolicBPNormal] = useState(
+    patientState.patientMonitoring.recommendedValues.systolicBP[0]
+  );
+
+  const [diastolicBPS1, setDiastolicBPS1] = useState(
+    patientState.patientMonitoring.recommendedValues.diastolicBP[1]
+  );
+  const [systolicBPS1, setSystolicBPS1] = useState(
+    patientState.patientMonitoring.recommendedValues.systolicBP[1]
+  );
+
+  const [diastolicBPS2, setDiastolicBPS2] = useState(
+    patientState.patientMonitoring.recommendedValues.diastolicBP[2]
+  );
+  const [systolicBPS2, setSystolicBPS2] = useState(
+    patientState.patientMonitoring.recommendedValues.systolicBP[1]
+  );
+
+  const [heartRateLow, setHeartRateLow] = useState(
+    patientState.patientMonitoring.recommendedValues.heartRate[0]
+  );
+  const [heartRateHigh, setHeartRateHigh] = useState(
+    patientState.patientMonitoring.recommendedValues.heartRate[1]
+  );
 
   // Table
   let i = 0;
@@ -116,6 +152,32 @@ function BPAndHeartRate() {
     setHeartRate(row.heartRate);
     setDevice(row.device);
     setNote(row.note);
+  }
+
+  async function saveStandardValues(e) {
+    e.preventDefault();
+
+    const data = {
+      diastolicBP: [diastolicBPNormal, diastolicBPS1, diastolicBPS2].map(
+        (each) => parseFloat(each)
+      ),
+      systolicBP: [systolicBPNormal, systolicBPS1, systolicBPS2].map((each) =>
+        parseFloat(each)
+      ),
+      heartRate: [heartRateLow, heartRateHigh].map((each) => parseFloat(each)),
+      sugarLevelAfterMeal:
+        patientState.patientMonitoring.recommendedValues.sugarLevelAfterMeal,
+      sugarLevelBeforeMeal:
+        patientState.patientMonitoring.recommendedValues.sugarLevelBeforeMeal,
+    };
+
+    await updateRecommendedValuesSelfMonitoring(
+      data,
+      patientId,
+      patientDispatch
+    );
+    alert("Update the standard values of BP & Heart Rate successfully.");
+    setOpenForm(false);
   }
 
   // Graph
@@ -228,6 +290,7 @@ function BPAndHeartRate() {
   useEffect(() => {
     if (notification.SM_bpAndHeartRate) {
       updateSMNotification(patientId, "bpAndHeartRate", patientDispatch);
+      updateLastUpdatedTimeInSelfMonitoring(patientId);
     }
   }, []);
 
@@ -253,6 +316,12 @@ function BPAndHeartRate() {
                   }}
                 />
                 Blood Pressure & Heart Rate
+                <button
+                  className="editStandardValuesButton"
+                  onClick={() => setOpenForm(true)}
+                >
+                  Standard Values
+                </button>
               </h2>
               <div className="displayMode">
                 <div>
@@ -370,6 +439,131 @@ function BPAndHeartRate() {
             </div>
           </>
         )}
+
+        <div className={openForm ? "btBg" : ""}></div>
+        <div className={`patientMonitoringForm ${openForm ? "popup" : ""}`}>
+          <form
+            className="editPatientMonitoringForm"
+            onSubmit={(e) => saveStandardValues(e)}
+          >
+            <IoClose
+              className="closeForm"
+              onClick={() => {
+                setOpenForm(false);
+              }}
+            />
+            <h1 style={{ display: "block" }}>Blood Pressure Range</h1>
+            <div className="standardValuesForm">
+              <div>
+                <p>
+                  Diastolic Normal BP Lower Limit:{" "}
+                  <input
+                    type="number"
+                    min={0}
+                    max={diastolicBPS1}
+                    value={diastolicBPNormal}
+                    onChange={(e) => {
+                      setDiastolicBPNormal(e.target.value);
+                    }}
+                  />
+                </p>
+                <p>
+                  Diastolic Stage 1 Lower Limit :{" "}
+                  <input
+                    type="number"
+                    min={diastolicBPNormal}
+                    max={diastolicBPS2}
+                    value={diastolicBPS1}
+                    onChange={(e) => {
+                      setDiastolicBPS1(e.target.value);
+                    }}
+                  />
+                </p>
+                <p>
+                  Diastolic Stage 2 Lower Limit :{" "}
+                  <input
+                    type="number"
+                    min={diastolicBPS1}
+                    max={250}
+                    value={diastolicBPS2}
+                    onChange={(e) => {
+                      setDiastolicBPS2(e.target.value);
+                    }}
+                  />
+                </p>
+              </div>
+
+              <div>
+                <p>
+                  Systolic Normal BP Lower Limit :{" "}
+                  <input
+                    type="number"
+                    min={0}
+                    max={systolicBPS1}
+                    value={systolicBPNormal}
+                    onChange={(e) => {
+                      setSystolicBPNormal(e.target.value);
+                    }}
+                  />
+                </p>
+                <p>
+                  Systolic Stage 1 Lower Limit :{" "}
+                  <input
+                    type="number"
+                    min={systolicBPNormal}
+                    max={systolicBPS2}
+                    value={systolicBPS1}
+                    onChange={(e) => {
+                      setSystolicBPS1(e.target.value);
+                    }}
+                  />
+                </p>
+                <p>
+                  Systolic Stage 2 Lower Limit :{" "}
+                  <input
+                    type="number"
+                    min={systolicBPS1}
+                    max={250}
+                    value={systolicBPS2}
+                    onChange={(e) => {
+                      setSystolicBPS2(e.target.value);
+                    }}
+                  />
+                </p>
+              </div>
+            </div>
+
+            <h1 style={{ display: "block" }}>Heart Rate Range</h1>
+            <div className="standardValuesForm">
+              <p>
+                Lower Limit :{" "}
+                <input
+                  type="number"
+                  min={0}
+                  max={heartRateHigh}
+                  value={heartRateLow}
+                  onChange={(e) => {
+                    setHeartRateLow(e.target.value);
+                  }}
+                />
+              </p>
+              <p>
+                Upper Limit :{" "}
+                <input
+                  type="number"
+                  min={heartRateLow}
+                  max={250}
+                  value={heartRateHigh}
+                  onChange={(e) => {
+                    setHeartRateHigh(e.target.value);
+                  }}
+                />
+              </p>
+            </div>
+
+            <button type="submit">Save</button>
+          </form>
+        </div>
       </div>
     </div>
   );

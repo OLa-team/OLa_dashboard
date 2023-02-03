@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CgMenu } from "react-icons/cg";
 import { IoPersonCircle } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 import {
   useAuthState,
   usePageDispatch,
@@ -9,6 +10,8 @@ import {
 } from "../context";
 
 function Header() {
+  const navigate = useNavigate();
+
   const currentUserState = useAuthState();
   const pageState = usePageState();
   const pageDispatch = usePageDispatch();
@@ -33,6 +36,7 @@ function Header() {
 
   function checkCurrentPage() {
     return (
+      pageState.currentPage === "OLa Dashboard" ||
       pageState.currentPage === "Patient List" ||
       pageState.currentPage === "Patient Details" ||
       pageState.currentPage === "Patient Profile" ||
@@ -55,12 +59,29 @@ function Header() {
         <h2
           style={{
             fontWeight: "normal",
+            // position: "absolute",
+            // right: " 620px",
+            // top: "25px",
+            // textAlign: "left",
           }}
         >
           {checkCurrentPage() ? "" : `${patientState.currentPatient.name}`}
         </h2>
 
-        <div className="rightDetail">
+        <div
+          className="rightDetail"
+          onClick={() => {
+            localStorage.setItem(
+              "currentSection",
+              JSON.stringify("Profile Section")
+            );
+            pageDispatch({
+              type: "SET_CURRENT_PAGE",
+              payload: "Profile",
+            });
+            navigate("/profile");
+          }}
+        >
           <IoPersonCircle className="profile-icon" />
           <div className="userDetail">
             <h4>{currentUserState.userDetails.username}</h4>

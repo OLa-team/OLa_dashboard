@@ -12,7 +12,10 @@ import { getCurrentDate } from "../../utils";
 import ExcelExport from "../../components/ExcelExport";
 import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../firebase";
-import { updateSMNotification } from "../../service";
+import {
+  updateLastUpdatedTimeInSelfMonitoring,
+  updateSMNotification,
+} from "../../service";
 
 function HealthDiaryRecord() {
   const patientState = usePatientState();
@@ -119,6 +122,7 @@ function HealthDiaryRecord() {
   useEffect(() => {
     if (notification.SM_healthDiary) {
       updateSMNotification(patientId, "healthDiary", patientDispatch);
+      updateLastUpdatedTimeInSelfMonitoring(patientId);
     }
   }, []);
 

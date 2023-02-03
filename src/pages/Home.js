@@ -32,6 +32,7 @@ import UserList from "./UserList";
 import AppAnalytics from "./AppAnalytics";
 import { setCurrentPatient } from "../service";
 import MessageForPatient from "./PatientMonitoring/MessageForPatient";
+import Dashboard from "./Dashboard";
 
 function Home() {
   const patientLoading = usePatientState().loading;
@@ -70,7 +71,8 @@ function Home() {
         {/* Section */}
         <div className={`section ${openSidebar}`}>
           <Routes>
-            <Route path="/" element={<SearchPatient />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/searchPatient" element={<SearchPatient />} />
             <Route path="/registration" element={<PatientRegistration />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/profile" element={<Profile />} />

@@ -473,8 +473,8 @@ function BTTable() {
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
-      await updateInrRecord(inrRecordData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateInrRecord(inrRecordData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's blood thinner record table successfully.");
     } else {
       return;
@@ -652,8 +652,12 @@ function BTTable() {
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
-      await updateCreatinineRecord(creatinineRecordData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateCreatinineRecord(
+        creatinineRecordData,
+        patientId,
+        patientDispatch
+      );
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's blood thinner record table successfully.");
     } else {
       return;

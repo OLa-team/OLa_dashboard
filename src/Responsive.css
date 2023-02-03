@@ -18,6 +18,22 @@
     text-align: center;
   }
 
+  /* dashboard */
+  .dashboardSection .iconModule {
+    font-size: 65px;
+    margin-left: 10px !important;
+  }
+
+  .dashboardSection h1 {
+    font-size: 50px;
+  }
+
+  .dashboardSection p {
+    font-size: 17px;
+    width: 170px;
+    word-wrap: break-word;
+  }
+
   /* home */
   .searchPatient {
     height: 80%;

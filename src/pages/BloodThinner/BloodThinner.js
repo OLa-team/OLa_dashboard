@@ -105,6 +105,7 @@ function BloodThinner() {
         ...bloodThinnerData,
         creatinineRecord: [],
         inrRecord: [],
+        ttrResult: {},
       };
     }
 
@@ -112,9 +113,10 @@ function BloodThinner() {
       await updateBloodThinner(
         bloodThinnerData,
         patientId,
+        patientDispatch,
         isChangeAnticoagulant
       );
-      await setCurrentPatient(patientDispatch, patientId);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Oral anticoagulant updated successfully.");
       setIsChangeAnticoagulant(false);
     } else {

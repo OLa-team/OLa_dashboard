@@ -710,18 +710,31 @@ export function filterPatientList(dispatch, patientList, searchResult) {
 }
 
 // update patient profile data
-export async function updatePatientProfile(newData) {
+export async function updatePatientProfile(profileData, patientId, dispatch) {
   try {
-    await updateDoc(doc(firestore, "patient", newData.patientId), {
+    await updateDoc(doc(firestore, "patient", patientId), {
       // name: newData.name,
       // phoneNo: "+6" + newData.phoneNo,
       // icNo: newData.icNo,
-      birthDate: newData.birthDate,
-      age: newData.age,
-      gender: newData.gender,
+      birthDate: profileData.birthDate,
+      age: profileData.age,
+      gender: profileData.gender,
       // nextOfKin: newData.nextOfKin,
       // nextOfKinContact: newData.nextOfKinContact,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "patient", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_CURRENT_PATIENT",
+        payload: response,
+      });
+
+      encryptLocalData(response, "currentPatient");
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update patient data", error);
@@ -730,7 +743,11 @@ export async function updatePatientProfile(newData) {
 }
 
 // update patient medical condition data
-export async function updateMedicalCondition(medicalConditionData, patientId) {
+export async function updateMedicalCondition(
+  medicalConditionData,
+  patientId,
+  dispatch
+) {
   try {
     await updateDoc(doc(firestore, "medical_condition", patientId), {
       nameUpdated: medicalConditionData.nameUpdated,
@@ -749,6 +766,19 @@ export async function updateMedicalCondition(medicalConditionData, patientId) {
       liver: medicalConditionData.liver,
       otherMedicalCondition: medicalConditionData.otherMedicalCondition,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "medical_condition", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_MEDICAL_CONDITION",
+        payload: response,
+      });
+
+      localStorage.setItem("medicalCondition", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update medical_condition data", error);
@@ -757,7 +787,7 @@ export async function updateMedicalCondition(medicalConditionData, patientId) {
 }
 
 // update patient allergy data
-export async function updateAllergy(allergyData, patientId) {
+export async function updateAllergy(allergyData, patientId, dispatch) {
   try {
     await updateDoc(doc(firestore, "allergy", patientId), {
       nameUpdated: allergyData.nameUpdated,
@@ -768,6 +798,19 @@ export async function updateAllergy(allergyData, patientId) {
       food: allergyData.food,
       medicine: allergyData.medicine,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "allergy", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_ALLERGY",
+        payload: response,
+      });
+
+      localStorage.setItem("allergy", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update allergy data", error);
@@ -776,7 +819,7 @@ export async function updateAllergy(allergyData, patientId) {
 }
 
 // update patient stroke risk data
-export async function updateStrokeRisk(strokeRiskData, patientId) {
+export async function updateStrokeRisk(strokeRiskData, patientId, dispatch) {
   try {
     await updateDoc(doc(firestore, "stroke_risk", patientId), {
       nameUpdated: strokeRiskData.nameUpdated,
@@ -794,6 +837,19 @@ export async function updateStrokeRisk(strokeRiskData, patientId) {
       result: strokeRiskData.result,
       colorMsg: strokeRiskData.colorMsg,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "stroke_risk", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_STROKE_RISK",
+        payload: response,
+      });
+
+      localStorage.setItem("strokeRisk", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update stroke risk data", error);
@@ -802,7 +858,11 @@ export async function updateStrokeRisk(strokeRiskData, patientId) {
 }
 
 // update patient bleeding risk data
-export async function updateBleedingRisk(bleedingRiskData, patientId) {
+export async function updateBleedingRisk(
+  bleedingRiskData,
+  patientId,
+  dispatch
+) {
   try {
     await updateDoc(doc(firestore, "bleeding_risk", patientId), {
       nameUpdated: bleedingRiskData.nameUpdated,
@@ -821,6 +881,19 @@ export async function updateBleedingRisk(bleedingRiskData, patientId) {
       result: bleedingRiskData.result,
       colorMsg: bleedingRiskData.colorMsg,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "bleeding_risk", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_BLEEDING_RISK",
+        payload: response,
+      });
+
+      localStorage.setItem("bleedingRisk", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update bleeding risk data", error);
@@ -829,7 +902,11 @@ export async function updateBleedingRisk(bleedingRiskData, patientId) {
 }
 
 // update patient warfarin quality data
-export async function updateWarfarinQuality(warfarinQualityData, patientId) {
+export async function updateWarfarinQuality(
+  warfarinQualityData,
+  patientId,
+  dispatch
+) {
   try {
     await updateDoc(doc(firestore, "warfarin_quality", patientId), {
       nameUpdated: warfarinQualityData.nameUpdated,
@@ -845,6 +922,19 @@ export async function updateWarfarinQuality(warfarinQualityData, patientId) {
       result: warfarinQualityData.result,
       colorMsg: warfarinQualityData.colorMsg,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "warfarin_quality", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_WARFARIN_QUALITY",
+        payload: response,
+      });
+
+      localStorage.setItem("warfarinQuality", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update warfarin quality data", error);
@@ -853,7 +943,7 @@ export async function updateWarfarinQuality(warfarinQualityData, patientId) {
 }
 
 // update patient health goal data
-export async function updateHealthGoal(healthGoalData, patientId) {
+export async function updateHealthGoal(healthGoalData, patientId, dispatch) {
   try {
     await updateDoc(doc(firestore, "health_goal", patientId), {
       nameUpdated: healthGoalData.nameUpdated,
@@ -861,6 +951,19 @@ export async function updateHealthGoal(healthGoalData, patientId) {
       healthGoalList: healthGoalData.healthGoalList,
       agreeToGoal: healthGoalData.agreeToGoal,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "health_goal", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_HEALTH_GOAL",
+        payload: response,
+      });
+
+      localStorage.setItem("healthGoal", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update health goal data", error);
@@ -869,7 +972,7 @@ export async function updateHealthGoal(healthGoalData, patientId) {
 }
 
 // update patient medication data
-export async function updateMedication(medicationData, patientId) {
+export async function updateMedication(medicationData, patientId, dispatch) {
   try {
     await updateDoc(doc(firestore, "medication", patientId), {
       nameUpdated: medicationData.nameUpdated,
@@ -877,6 +980,19 @@ export async function updateMedication(medicationData, patientId) {
       nameVerified: medicationData.nameVerified,
       medicine: medicationData.medicineList,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "medication", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_MEDICATION",
+        payload: response,
+      });
+
+      localStorage.setItem("medication", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update medication data", error);
@@ -888,6 +1004,7 @@ export async function updateMedication(medicationData, patientId) {
 export async function updateBloodThinner(
   bloodThinnerData,
   patientId,
+  dispatch,
   isChangeAnticoagulant
 ) {
   try {
@@ -907,6 +1024,7 @@ export async function updateBloodThinner(
         dose: bloodThinnerData.dose,
         creatinineRecord: bloodThinnerData.creatinineRecord,
         inrRecord: bloodThinnerData.inrRecord,
+        ttrResult: bloodThinnerData.ttrResult,
       });
     } else {
       await updateDoc(doc(firestore, "blood_thinner", patientId), {
@@ -923,6 +1041,19 @@ export async function updateBloodThinner(
         inrRange: bloodThinnerData.inrRange,
       });
     }
+
+    let response = await (
+      await getDoc(doc(firestore, "blood_thinner", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_BLOOD_THINNER",
+        payload: response,
+      });
+
+      localStorage.setItem("bloodThinner", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update blood thinner data", error);
@@ -931,7 +1062,7 @@ export async function updateBloodThinner(
 }
 
 // update patient inr record data
-export async function updateInrRecord(inrRecordData, patientId) {
+export async function updateInrRecord(inrRecordData, patientId, dispatch) {
   try {
     await updateDoc(doc(firestore, "blood_thinner", patientId), {
       nameUpdated: inrRecordData.nameUpdated,
@@ -939,6 +1070,19 @@ export async function updateInrRecord(inrRecordData, patientId) {
       inrRecord: inrRecordData.inrRecord,
       ttrResult: inrRecordData.ttrResult,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "blood_thinner", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_BLOOD_THINNER",
+        payload: response,
+      });
+
+      localStorage.setItem("bloodThinner", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update inr record data", error);
@@ -947,13 +1091,30 @@ export async function updateInrRecord(inrRecordData, patientId) {
 }
 
 // update patient creatinine record data
-export async function updateCreatinineRecord(creatinineRecordData, patientId) {
+export async function updateCreatinineRecord(
+  creatinineRecordData,
+  patientId,
+  dispatch
+) {
   try {
     await updateDoc(doc(firestore, "blood_thinner", patientId), {
       nameUpdated: creatinineRecordData.nameUpdated,
       dateTimeUpdated: creatinineRecordData.dateTimeUpdated,
       creatinineRecord: creatinineRecordData.creatinineRecord,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "blood_thinner", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_BLOOD_THINNER",
+        payload: response,
+      });
+
+      localStorage.setItem("bloodThinner", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update creatinine record data", error);
@@ -962,13 +1123,30 @@ export async function updateCreatinineRecord(creatinineRecordData, patientId) {
 }
 
 // update patient hemoglobin record data
-export async function updateHemoglobinRecord(hemoglobinData, patientId) {
+export async function updateHemoglobinRecord(
+  hemoglobinData,
+  patientId,
+  dispatch
+) {
   try {
     await updateDoc(doc(firestore, "hemoglobin", patientId), {
       nameUpdated: hemoglobinData.nameUpdated,
       dateTimeUpdated: hemoglobinData.dateTimeUpdated,
       hemoglobinRecord: hemoglobinData.hemoglobinList,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "hemoglobin", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_HEMOGLOBIN",
+        payload: response,
+      });
+
+      localStorage.setItem("hemoglobin", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update hemoglobin record data", error);
@@ -998,7 +1176,43 @@ export async function updateLastUpdatedTimeInSelfMonitoring(patientId) {
     });
   } catch (error) {
     alert(error.message);
-    console.error("Error in update self monitor data", error);
+    console.error(
+      "Error in update last updated time self monitor collection",
+      error
+    );
+    return;
+  }
+}
+
+// update recommended values in self_monitor collection
+export async function updateRecommendedValuesSelfMonitoring(
+  data,
+  patientId,
+  dispatch
+) {
+  try {
+    await updateDoc(doc(firestore, "self_monitor", patientId), {
+      recommendedValues: data,
+    });
+
+    let response = await (
+      await getDoc(doc(firestore, "self_monitor", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_PATIENT_MONITORING",
+        payload: response,
+      });
+
+      localStorage.setItem("patientMonitoring", JSON.stringify(response));
+    }
+  } catch (error) {
+    alert(error.message);
+    console.error(
+      "Error in update recommended values in self monitor collection",
+      error
+    );
     return;
   }
 }

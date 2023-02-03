@@ -73,8 +73,8 @@ function Allergy() {
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
-      await updateAllergy(allergyData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateAllergy(allergyData, patientId, patientDispatch);
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's allergy successfully.");
     } else {
       return;

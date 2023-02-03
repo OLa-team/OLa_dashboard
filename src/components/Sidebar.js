@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo2 from "../../src/assets/logo_2.png";
 import { BsPencilSquare, BsPersonFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
+import { FiMonitor } from "react-icons/fi";
 import { IoMdNotifications } from "react-icons/io";
 import { ImExit } from "react-icons/im";
 import { HiUsers } from "react-icons/hi";
@@ -29,9 +30,11 @@ function Sidebar() {
 
   const isUserAdmin = currentUserState.userDetails.isAdmin;
   const isUserHcp = currentUserState.userDetails.isHcp;
+  const currentSection = localStorage.getItem("currentSection");
 
   // State
-  const [ac1, setAc1] = useState(true);
+  const [ac0, setAc0] = useState(true);
+  const [ac1, setAc1] = useState(false);
   const [ac2, setAc2] = useState(false);
   const [ac3, setAc3] = useState(false);
   const [ac4, setAc4] = useState(false);
@@ -43,6 +46,7 @@ function Sidebar() {
   const [firstLoad, setFirstLoad] = useState(false);
 
   function reset() {
+    setAc0(false);
     setAc1(false);
     setAc2(false);
     setAc3(false);
@@ -58,22 +62,33 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem("currentSection")) {
-      switch (JSON.parse(localStorage.getItem("currentSection"))) {
-        case "Search Section":
+    if (currentSection) {
+      switch (JSON.parse(currentSection)) {
+        case "Dashboard Section":
           reset();
-          setAc1((prev) => !prev);
+          setAc0((prev) => !prev);
           if (
-            JSON.parse(localStorage.getItem("currentPage")) === "Patient List"
+            JSON.parse(localStorage.getItem("currentPage")) === "OLa Dashboard"
           ) {
             navigate("/dashboard");
           }
           return;
 
+        case "Search Section":
+          reset();
+          setAc1((prev) => !prev);
+          navigate("/searchPatient");
+          // if (
+          //   JSON.parse(localStorage.getItem("currentPage")) === "Patient List"
+          // ) {
+          //   navigate("/dashboard");
+          // }
+          return;
+
         case "Registration Section":
           reset();
           setAc2((prev) => !prev);
-          navigate("/dashboard/patientRegistration");
+          navigate("/dashboard/registration");
           return;
 
         case "Notification Section":
@@ -104,7 +119,7 @@ function Sidebar() {
           break;
       }
     }
-  }, []);
+  }, [currentSection]);
 
   useEffect(() => {
     if (pageState.openSidebar) {
@@ -130,70 +145,50 @@ function Sidebar() {
     }
   });
 
-  // // Search
-  // const qHealthDiary = query(
-  //   collection(firestore, "notification"),
-  //   where("SM_healthDiary", "==", true)
-  // );
-  // const qBpAndHeartRate = query(
-  //   collection(firestore, "notification"),
-  //   where("SM_bpAndHeartRate", "==", true)
-  // );
-  // const qBodyWeight = query(
-  //   collection(firestore, "notification"),
-  //   where("SM_bodyWeight", "==", true)
-  // );
-  // const qSugarLevel = query(
-  //   collection(firestore, "notification"),
-  //   where("SM_sugarLevel", "==", true)
-  // );
-  // const qBleedingSymptom = query(
-  //   collection(firestore, "notification"),
-  //   where("SM_bleedingSymptom", "==", true)
-  // );
-
-  // const unsubscribeHealthDiary = onSnapshot(
-  //   qHealthDiary,
-  //   async (querySnapshot) => {
-  //     setSearchTabNotification(false);
-  //     if (querySnapshot.docs.length > 0) {
-  //       setSearchTabNotification(true);
-  //     }
-  //   }
-  // );
-  // const unsubscribeBpAndHeartRate = onSnapshot(
-  //   qBpAndHeartRate,
-  //   (querySnapshot) => {
-  //     if (querySnapshot.docs.length > 0) {
-  //       setSearchTabNotification(true);
-  //     }
-  //   }
-  // );
-  // const unsubscribeSugarLevel = onSnapshot(qSugarLevel, (querySnapshot) => {
-  //   if (querySnapshot.docs.length > 0) {
-  //     setSearchTabNotification(true);
-  //   }
-  // });
-  // const unsubscribeBodyWeight = onSnapshot(qBodyWeight, (querySnapshot) => {
-  //   if (querySnapshot.docs.length > 0) {
-  //     setSearchTabNotification(true);
-  //   }
-  // });
-  // const unsubscribeBleedingSymptom = onSnapshot(
-  //   qBleedingSymptom,
-  //   (querySnapshot) => {
-  //     if (querySnapshot.docs.length > 0) {
-  //       setSearchTabNotification(true);
-  //     }
-  //   }
-  // );
-
   return (
     <div className={`sidebar ${openSidebar}`}>
       {/* <img src={logoWhite} alt="logo-white.png" /> */}
-      <img src={logo2} alt="logo-white.png" />
+      <img
+        style={{ cursor: "pointer" }}
+        src={logo2}
+        alt="logo-white.png"
+        onClick={() => {
+          localStorage.setItem(
+            "currentSection",
+            JSON.stringify("Dashboard Section")
+          );
+          pageDispatch({
+            type: "SET_CURRENT_PAGE",
+            payload: "OLa Dashboard",
+          });
+          navigate("/");
+        }}
+      />
 
       <div className="listItems">
+        <div
+          onClick={() => {
+            reset();
+            setAc0((prev) => !prev);
+            localStorage.setItem(
+              "currentSection",
+              JSON.stringify("Dashboard Section")
+            );
+            pageDispatch({
+              type: "SET_CURRENT_PAGE",
+              payload: "OLa Dashboard",
+            });
+            navigate("/dashboard");
+          }}
+          className="item-wrapper"
+        >
+          <SidebarItem
+            Icon={<FiMonitor />}
+            section="OLa Dashboard"
+            active={ac0}
+            alert={false}
+          />
+        </div>
         <div
           onClick={() => {
             reset();
@@ -206,13 +201,13 @@ function Sidebar() {
               type: "SET_CURRENT_PAGE",
               payload: "Patient List",
             });
-            navigate("/dashboard");
+            navigate("/searchPatient");
           }}
           className="item-wrapper"
         >
           <SidebarItem
             Icon={<BiSearch />}
-            section="Search"
+            section="Patient Registry"
             active={ac1}
             alert={searchTabNotification}
           />
@@ -235,7 +230,7 @@ function Sidebar() {
         >
           <SidebarItem
             Icon={<BsPencilSquare />}
-            section={isUserAdmin ? "User Registration" : "Patient Registration"}
+            section="Registration"
             active={ac2}
             alert={false}
           />

@@ -124,6 +124,48 @@
 
 /* ---------------------------------------------------- */
 /* Login page */
+.dashboard {
+  width: 95%;
+  height: 85%;
+  margin: auto;
+}
+
+.dashboardUpper {
+  margin-top: 20px;
+  width: 100%;
+  height: 30%;
+}
+
+.dashboardLower {
+  margin-top: 35px;
+  width: 100%;
+  height: 65%;
+}
+
+.dashboardSection {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-evenly !important;
+  cursor: unset !important;
+}
+
+.dashboardSection .iconModule {
+  font-size: 55px;
+  margin-left: 25px;
+}
+
+.dashboardSection h1 {
+  font-size: 40px;
+}
+
+.dashboardSection p {
+  font-size: 15px;
+  width: 170px;
+  word-wrap: break-word;
+}
+
+/* ---------------------------------------------------- */
+/* Login page */
 .bg {
   background: url("../src/assets/bg.png");
   background-position: center;
@@ -365,7 +407,7 @@
 
 .sidebar {
   /* width: 15%; */
-  width: 335px;
+  width: 310px;
   height: 100vh;
   background-color: #ec2029;
   /* border-top-right-radius: 20px; */
@@ -378,8 +420,9 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  width: 125px;
-  height: 95px;
+  width: 105px;
+  height: 80px;
+  cursor: pointer;
 }
 
 .listItems {
@@ -389,12 +432,12 @@
 }
 
 .item {
-  padding: 15px 0px 15px 30px;
+  padding: 12px 0px 12px 30px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   color: white;
-  font-size: 20px;
+  font-size: 17px;
   cursor: pointer;
   text-align: left;
   /* background-color: white; */
@@ -419,13 +462,13 @@
 /* Header */
 .header {
   width: 100%;
-  height: 100px;
+  height: 85px;
   background-color: white;
 }
 
 .headerDetails {
   width: 95%;
-  height: 100px;
+  height: 85px;
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -453,6 +496,7 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .profile-icon {
@@ -669,7 +713,7 @@ input:-webkit-autofill:active {
 /* ---------------------------------------------------- */
 /* Search Patient */
 .searchPatient {
-  height: 75%;
+  height: 78%;
   background-color: white;
   padding: 20px 0px;
   margin: 0px 25px;
@@ -765,7 +809,7 @@ input:-webkit-autofill:active {
 /* Patient */
 .patient {
   width: 95%;
-  height: 80%;
+  height: 83%;
   margin: auto;
   border-radius: 20px;
 }
@@ -869,7 +913,8 @@ input:-webkit-autofill:active {
 
 .patientModule,
 .monitoringModule,
-.registrationModule {
+.registrationModule,
+.dashboardSection {
   background-color: white;
   height: 100%;
   text-align: center;
@@ -905,7 +950,7 @@ input:-webkit-autofill:active {
 /* Patient Profile */
 .wrapper {
   width: 95%;
-  height: 80%;
+  height: 83%;
   margin: auto;
   opacity: 0.85;
   border-radius: 20px;
@@ -1691,7 +1736,8 @@ input:-webkit-autofill:active {
 }
 
 .medicationForm,
-.hemoglobinForm {
+.hemoglobinForm,
+.patientMonitoringForm {
   position: fixed;
   top: 0;
   left: 0;
@@ -1703,12 +1749,14 @@ input:-webkit-autofill:active {
 }
 
 .medicationForm.popup,
-.hemoglobinForm.popup {
+.hemoglobinForm.popup,
+.patientMonitoringForm.popup {
   transform: scale(1);
 }
 
 .addOrEditMedicationForm,
-.addOrEditHemoglobinForm {
+.addOrEditHemoglobinForm,
+.editPatientMonitoringForm {
   width: fit-content;
   height: fit-content;
   overflow-y: scroll;
@@ -1746,26 +1794,30 @@ input:-webkit-autofill:active {
 }
 
 .addOrEditMedicationForm h1,
-.addOrEditHemoglobinForm h1 {
+.addOrEditHemoglobinForm h1,
+.editPatientMonitoringForm h1 {
   padding: 5px 15px;
   text-align: center;
 }
 
 .addOrEditMedicationForm div,
-.addOrEditHemoglobinForm div {
+.addOrEditHemoglobinForm div,
+.editPatientMonitoringForm div {
   padding: 13px 0px;
   display: flex;
   flex-direction: column;
 }
 
 .addOrEditMedicationForm div label,
-.addOrEditHemoglobinForm div label {
+.addOrEditHemoglobinForm div label,
+.editPatientMonitoringForm div label {
   font-size: 20px;
   padding-bottom: 10px;
 }
 
 .addOrEditMedicationForm div input,
-.addOrEditHemoglobinForm div input {
+.addOrEditHemoglobinForm div input,
+.editPatientMonitoringForm div input {
   border: none;
   outline: none;
   width: 450px;
@@ -1788,8 +1840,9 @@ input:-webkit-autofill:active {
 }
 
 .addOrEditMedicationForm button,
-.addOrEditHemoglobinForm button {
-  margin-top: 25px;
+.addOrEditHemoglobinForm button,
+.editPatientMonitoringForm button {
+  margin-top: 10px;
   width: 100%;
   padding: 6px 0px;
   border-radius: 15px;
@@ -1803,7 +1856,8 @@ input:-webkit-autofill:active {
 }
 
 .addOrEditMedicationForm button:hover,
-.addOrEditHemoglobinForm button:hover {
+.addOrEditHemoglobinForm button:hover,
+.editPatientMonitoringForm button:hover {
   background-color: white;
   color: red;
 }
@@ -2323,6 +2377,25 @@ input:-webkit-autofill:active {
   color: red;
 }
 
+.editStandardValuesButton {
+  margin-left: 20px;
+  padding: 7px 15px;
+  border-radius: 12px;
+  background-color: #ec2029;
+  color: white;
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.editStandardValuesButton:hover {
+  background-color: white;
+  color: #ec2029;
+  border: 0.1px solid black;
+}
+
 .displayMode {
   display: flex;
   justify-content: space-around;
@@ -2385,6 +2458,25 @@ input:-webkit-autofill:active {
 .patientMonitoringDetails div p {
   width: 70%;
   font-size: 22px;
+}
+
+.standardValuesForm {
+  width: 550px;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between;
+}
+
+.standardValuesForm p {
+  align-items: center;
+  width: 250px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.standardValuesForm input {
+  width: 50px !important;
 }
 
 /* Table style */

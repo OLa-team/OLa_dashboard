@@ -75,8 +75,12 @@ function MedicalCondition() {
     };
 
     if (window.confirm("Are you sure you want to continue?")) {
-      await updateMedicalCondition(medicalConditionData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateMedicalCondition(
+        medicalConditionData,
+        patientId,
+        patientDispatch
+      );
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's medical condition successfully.");
     }
   }
