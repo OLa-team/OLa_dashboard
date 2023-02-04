@@ -170,13 +170,13 @@ function BPAndHeartRate() {
         patientState.patientMonitoring.recommendedValues.sugarLevelBeforeMeal,
     };
 
+    setOpenForm(false);
     await updateRecommendedValuesSelfMonitoring(
       data,
       patientId,
       patientDispatch
     );
-    alert("Update the standard values of BP & Heart Rate successfully.");
-    setOpenForm(false);
+    // alert("Update the standard values of BP & Heart Rate successfully.");
   }
 
   // Graph

@@ -140,23 +140,23 @@ function BloodSugarLevel() {
       diastolicBP: patientState.patientMonitoring.recommendedValues.diastolicBP,
       systolicBP: patientState.patientMonitoring.recommendedValues.systolicBP,
       heartRate: patientState.patientMonitoring.recommendedValues.heartRate,
-      sugarLevelAfterMeal: [
+      sugarLevelBeforeMeal: [
         sugarLevelBeforeMealLow,
         sugarLevelBeforeMealHigh,
       ].map((each) => parseFloat(each)),
-      sugarLevelBeforeMeal: [
+      sugarLevelAfterMeal: [
         sugarLevelAfterMealLow,
         sugarLevelAfterMealHigh,
       ].map((each) => parseFloat(each)),
     };
 
+    setOpenForm(false);
     await updateRecommendedValuesSelfMonitoring(
       data,
       patientId,
       patientDispatch
     );
-    alert("Update the standard values of Blood Sugar successfully.");
-    setOpenForm(false);
+    // alert("Update the standard values of Blood Sugar successfully.");
   }
 
   // Graph
