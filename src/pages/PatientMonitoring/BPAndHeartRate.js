@@ -17,7 +17,6 @@ import {
   updateRecommendedValuesSelfMonitoring,
   updateSMNotification,
 } from "../../service";
-import ReactSlider from "react-slider";
 
 function BPAndHeartRate() {
   const patientState = usePatientState();

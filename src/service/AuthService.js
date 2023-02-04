@@ -61,6 +61,8 @@ export async function logout(dispatch) {
   localStorage.removeItem("bloodThinner");
   localStorage.removeItem("patientMonitoring");
   localStorage.removeItem("hemoglobin");
+  localStorage.removeItem("messageForPatients");
+  localStorage.removeItem("notification");
 
   localStorage.removeItem("warfarinQualityResultMessage");
   localStorage.removeItem("bleedingRiskResultMessage");
