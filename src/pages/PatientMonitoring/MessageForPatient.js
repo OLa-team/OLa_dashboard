@@ -75,10 +75,14 @@ function MessageForPatient() {
       read: false,
     };
 
-    if (window.confirm("Are you sure to send?")) {
-      await updateMessageForPatients(messageForPatientsData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
-      alert("Update patient's message for patients successfully.");
+    if (window.confirm("Are you sure to delete the message(s)?")) {
+      await updateMessageForPatients(
+        messageForPatientsData,
+        patientId,
+        patientDispatch
+      );
+      // await setCurrentPatient(patientDispatch, patientId);
+      alert("Delete the message(s) successfully.");
     }
   }
 
@@ -104,8 +108,12 @@ function MessageForPatient() {
     };
 
     if (window.confirm("Are you sure to send the message to the patient?")) {
-      await updateMessageForPatients(messageForPatientsData, patientId);
-      await setCurrentPatient(patientDispatch, patientId);
+      await updateMessageForPatients(
+        messageForPatientsData,
+        patientId,
+        patientDispatch
+      );
+      // await setCurrentPatient(patientDispatch, patientId);
       alert("Update patient's message for patients successfully.");
 
       setOpenForm({

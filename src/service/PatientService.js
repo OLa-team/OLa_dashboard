@@ -1155,12 +1155,29 @@ export async function updateHemoglobinRecord(
 }
 
 // update patient message for patients data
-export async function updateMessageForPatients(messageData, patientId) {
+export async function updateMessageForPatients(
+  messageData,
+  patientId,
+  dispatch
+) {
   try {
     await updateDoc(doc(firestore, "message_for_patients", patientId), {
       messageList: messageData.messageList,
       read: messageData.read,
     });
+
+    let response = await (
+      await getDoc(doc(firestore, "message_for_patients", patientId))
+    ).data();
+
+    if (response) {
+      dispatch({
+        type: "SET_MESSAGE_FOR_PATIENTS",
+        payload: response,
+      });
+
+      localStorage.setItem("messageForPatients", JSON.stringify(response));
+    }
   } catch (error) {
     alert(error.message);
     console.error("Error in update message for patients data", error);
