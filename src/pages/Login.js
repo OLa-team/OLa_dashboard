@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import small from "../../src/assets/small.png";
 import logo2 from "../../src/assets/logo_2.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../context";
 import { loginUser } from "../service";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -18,6 +18,8 @@ function Login() {
   const dispatch = useAuthDispatch();
   const { loading } = useAuthState();
 
+  const navigate = useNavigate();
+
   async function handleLoginAndSendEmail(e) {
     e.preventDefault();
 
@@ -26,7 +28,8 @@ function Login() {
       let response = await loginUser(dispatch, email);
       if (response.length === 0 || response.length > 1) return;
 
-      sendEmail(e);
+      // sendEmail(e);
+      navigate("/dashboard");
       e.target.reset();
       setColor("rgb(46, 183, 46)");
       setMessage("Kindly check your email for the login link");
@@ -34,6 +37,7 @@ function Login() {
         "(*Please check your spam or junk mail folder if you did not receive any verification email.)"
       );
     } catch (error) {
+      e.target.reset();
       setColor("red");
       setMessage("Please enter a valid email");
       console.log("No such hcp email, login error: ", error);
