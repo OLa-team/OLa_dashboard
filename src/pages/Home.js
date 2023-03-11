@@ -72,7 +72,7 @@ function Home() {
         <div className={`section ${openSidebar}`}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/searchPatient" element={<SearchPatient />} />
+            <Route path="/patients" element={<SearchPatient />} />
             <Route path="/registration" element={<PatientRegistration />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/profile" element={<Profile />} />

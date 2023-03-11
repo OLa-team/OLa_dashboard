@@ -77,7 +77,7 @@ function Sidebar() {
         case "Search Section":
           reset();
           setAc1((prev) => !prev);
-          navigate("/searchPatient");
+          navigate("/dashboard/patients");
           // if (
           //   JSON.parse(localStorage.getItem("currentPage")) === "Patient List"
           // ) {
@@ -201,7 +201,7 @@ function Sidebar() {
               type: "SET_CURRENT_PAGE",
               payload: "Patient List",
             });
-            navigate("/searchPatient");
+            navigate("/dashboard/patients");
           }}
           className="item-wrapper"
         >

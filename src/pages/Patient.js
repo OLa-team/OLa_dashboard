@@ -121,7 +121,7 @@ function Patient() {
           <div
             className="backToPatientList"
             onClick={() => {
-              navigate("/searchPatient");
+              navigate("/dashboard/patients");
               pageDispatch({
                 type: "SET_CURRENT_PAGE",
                 payload: "Patient List",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import small from "../../src/assets/small.png";
 import logo2 from "../../src/assets/logo_2.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -65,6 +65,12 @@ function Login() {
   const override: CSSProperties = {
     marginLeft: "10px",
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   return (
     <div className="bg">
