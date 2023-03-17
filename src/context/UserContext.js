@@ -41,7 +41,7 @@ const UserReducer = (initialState, action) => {
     case "PENDING_PROGRESS":
       return {
         ...initialState,
-        progress: initialState.progress + 15,
+        progress: initialState.progress + 10,
       };
 
     case "COMPLETE_PROGRESS":

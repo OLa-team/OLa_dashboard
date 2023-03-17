@@ -2,7 +2,7 @@ import React, { useContext, useReducer } from "react";
 
 const page = localStorage.getItem("currentPage")
   ? JSON.parse(localStorage.getItem("currentPage"))
-  : "Patient List";
+  : "OLa Dashboard";
 
 // Initial state
 const initialState = {

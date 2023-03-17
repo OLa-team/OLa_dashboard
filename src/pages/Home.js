@@ -64,7 +64,6 @@ function Home() {
   }
 
   useEffect(() => {
-    console.log(params["*"].startsWith("patient/"));
     if (params["*"].startsWith("patient/")) {
       resetCurrentPatient();
     }
