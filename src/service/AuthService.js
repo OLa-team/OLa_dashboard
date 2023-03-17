@@ -49,23 +49,26 @@ export async function logout(dispatch) {
   localStorage.removeItem("currentPatient");
   localStorage.removeItem("currentPage");
   localStorage.removeItem("currentPageNumber");
-  localStorage.removeItem("medicalCondition");
-  localStorage.removeItem("allergy");
-  localStorage.removeItem("strokeRisk");
-  localStorage.removeItem("bleedingRisk");
-  localStorage.removeItem("warfarinQuality");
-  localStorage.removeItem("healthGoal");
-  localStorage.removeItem("defaultHealthGoal");
-  localStorage.removeItem("medication");
-  localStorage.removeItem("medicineList");
-  localStorage.removeItem("bloodThinner");
-  localStorage.removeItem("patientMonitoring");
-  localStorage.removeItem("hemoglobin");
-  localStorage.removeItem("messageForPatients");
-  localStorage.removeItem("notification");
 
-  localStorage.removeItem("warfarinQualityResultMessage");
-  localStorage.removeItem("bleedingRiskResultMessage");
-  localStorage.removeItem("strokeRiskResultMessage");
-  localStorage.removeItem("medicationConstantList");
+  localStorage.removeItem("data");
+  localStorage.removeItem("notification");
+  // localStorage.removeItem("medicalCondition");
+  // localStorage.removeItem("allergy");
+  // localStorage.removeItem("strokeRisk");
+  // localStorage.removeItem("bleedingRisk");
+  // localStorage.removeItem("warfarinQuality");
+  // localStorage.removeItem("healthGoal");
+  // localStorage.removeItem("defaultHealthGoal");
+  // localStorage.removeItem("medication");
+  // localStorage.removeItem("medicineList");
+  // localStorage.removeItem("bloodThinner");
+  // localStorage.removeItem("patientMonitoring");
+  // localStorage.removeItem("hemoglobin");
+  // localStorage.removeItem("messageForPatients");
+  // localStorage.removeItem("notification");
+
+  // localStorage.removeItem("warfarinQualityResultMessage");
+  // localStorage.removeItem("bleedingRiskResultMessage");
+  // localStorage.removeItem("strokeRiskResultMessage");
+  // localStorage.removeItem("medicationConstantList");
 }

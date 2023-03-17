@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase";
-import { encryptLocalData } from "../utils";
+import { decryptLocalData, encryptLocalData } from "../utils";
 
 const patientCollectionRef = collection(firestore, "patient");
 
@@ -196,6 +196,105 @@ export async function createPatientAccount(newPatientData, dispatch) {
   });
 }
 
+// test to fetch all data then set data for selected patient to increase the speed
+export async function fetchAllData(userDipatch) {
+  if (!localStorage.getItem("data")) {
+    let allData = {};
+
+    try {
+      userDipatch({
+        type: "PENDING_PROGRESS",
+      });
+
+      allData.patient = await (
+        await getDocs(collection(firestore, "patient"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.allergy = await (
+        await getDocs(collection(firestore, "allergy"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.bleeding_risk = await (
+        await getDocs(collection(firestore, "bleeding_risk"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      userDipatch({
+        type: "PENDING_PROGRESS",
+      });
+
+      allData.blood_thinner = await (
+        await getDocs(collection(firestore, "blood_thinner"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.constant = await (
+        await getDocs(collection(firestore, "constant"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.health_goal = await (
+        await getDocs(collection(firestore, "health_goal"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      userDipatch({
+        type: "PENDING_PROGRESS",
+      });
+
+      allData.hemoglobin = await (
+        await getDocs(collection(firestore, "hemoglobin"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.medical_condition = await (
+        await getDocs(collection(firestore, "medical_condition"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.medication = await (
+        await getDocs(collection(firestore, "medication"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      userDipatch({
+        type: "PENDING_PROGRESS",
+      });
+
+      allData.message_for_patients = await (
+        await getDocs(collection(firestore, "message_for_patients"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.notification = await (
+        await getDocs(collection(firestore, "notification"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.self_monitor = await (
+        await getDocs(collection(firestore, "self_monitor"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      userDipatch({
+        type: "PENDING_PROGRESS",
+      });
+
+      allData.stroke_risk = await (
+        await getDocs(collection(firestore, "stroke_risk"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      allData.warfarin_quality = await (
+        await getDocs(collection(firestore, "warfarin_quality"))
+      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+      // localStorage.setItem("data", JSON.stringify(allData));
+
+      encryptLocalData(allData, "data");
+    } catch (err) {
+      alert("Error in fetching all data");
+    }
+
+    console.log("all data", allData);
+
+    userDipatch({
+      type: "COMPLETE_PROGRESS",
+    });
+
+    return allData;
+  }
+}
+
 // set current patient using patientId
 export async function setCurrentPatient(dispatch, patientId) {
   if (localStorage.getItem("currentPatient")) {
@@ -203,414 +302,510 @@ export async function setCurrentPatient(dispatch, patientId) {
   }
 
   try {
-    dispatch({
-      type: "SET_LOADING_TRUE",
-    });
+    // let responsePatient = await (
+    //   await getDoc(doc(firestore, "patient", patientId))
+    // ).data();
 
-    let responsePatient = await (
-      await getDoc(doc(firestore, "patient", patientId))
-    ).data();
+    // let responseMedicalCondition = await (
+    //   await getDoc(doc(firestore, "medical_condition", patientId))
+    // ).data();
 
-    let responseMedicalCondition = await (
-      await getDoc(doc(firestore, "medical_condition", patientId))
-    ).data();
+    // let responseAllergy = await (
+    //   await getDoc(doc(firestore, "allergy", patientId))
+    // ).data();
 
-    let responseAllergy = await (
-      await getDoc(doc(firestore, "allergy", patientId))
-    ).data();
+    // let responseStrokeRisk = await (
+    //   await getDoc(doc(firestore, "stroke_risk", patientId))
+    // ).data();
 
-    let responseStrokeRisk = await (
-      await getDoc(doc(firestore, "stroke_risk", patientId))
-    ).data();
+    // let responseBleedingRisk = await (
+    //   await getDoc(doc(firestore, "bleeding_risk", patientId))
+    // ).data();
 
-    let responseBleedingRisk = await (
-      await getDoc(doc(firestore, "bleeding_risk", patientId))
-    ).data();
+    // let responseWarfarinQuality = await (
+    //   await getDoc(doc(firestore, "warfarin_quality", patientId))
+    // ).data();
 
-    let responseWarfarinQuality = await (
-      await getDoc(doc(firestore, "warfarin_quality", patientId))
-    ).data();
+    // let responseHealthGoal = await (
+    //   await getDoc(doc(firestore, "health_goal", patientId))
+    // ).data();
 
-    let responseHealthGoal = await (
-      await getDoc(doc(firestore, "health_goal", patientId))
-    ).data();
+    // let responseMedication = await (
+    //   await getDoc(doc(firestore, "medication", patientId))
+    // ).data();
 
-    let responseMedication = await (
-      await getDoc(doc(firestore, "medication", patientId))
-    ).data();
+    // let responseBloodThinner = await (
+    //   await getDoc(doc(firestore, "blood_thinner", patientId))
+    // ).data();
 
-    let responseBloodThinner = await (
-      await getDoc(doc(firestore, "blood_thinner", patientId))
-    ).data();
+    // let responsePatientMonitoring = await (
+    //   await getDoc(doc(firestore, "self_monitor", patientId))
+    // ).data();
 
-    let responsePatientMonitoring = await (
-      await getDoc(doc(firestore, "self_monitor", patientId))
-    ).data();
+    // let responseHemoglobin = await (
+    //   await getDoc(doc(firestore, "hemoglobin", patientId))
+    // ).data();
 
-    let responseHemoglobin = await (
-      await getDoc(doc(firestore, "hemoglobin", patientId))
-    ).data();
+    // let responseNotification = await (
+    //   await getDoc(doc(firestore, "notification", patientId))
+    // ).data();
 
-    let responseNotification = await (
-      await getDoc(doc(firestore, "notification", patientId))
-    ).data();
+    // let responseMessageForPatients = await (
+    //   await getDoc(doc(firestore, "message_for_patients", patientId))
+    // ).data();
 
-    let responseMessageForPatients = await (
-      await getDoc(doc(firestore, "message_for_patients", patientId))
-    ).data();
+    // let responseDefaultHealthGoal = await (
+    //   await getDoc(doc(firestore, "constant", "health_goal"))
+    // ).data();
 
-    let responseDefaultHealthGoal = await (
-      await getDoc(doc(firestore, "constant", "health_goal"))
-    ).data();
+    // let responseStrokeRiskResultMessage = await (
+    //   await getDoc(doc(firestore, "constant", "stroke_risk"))
+    // ).data();
 
-    let responseStrokeRiskResultMessage = await (
-      await getDoc(doc(firestore, "constant", "stroke_risk"))
-    ).data();
+    // let responseBleedingRiskResultMessage = await (
+    //   await getDoc(doc(firestore, "constant", "bleeding_risk"))
+    // ).data();
 
-    let responseBleedingRiskResultMessage = await (
-      await getDoc(doc(firestore, "constant", "bleeding_risk"))
-    ).data();
+    // let responseWarfarinQualityResultMessage = await (
+    //   await getDoc(doc(firestore, "constant", "warfarin_quality"))
+    // ).data();
 
-    let responseWarfarinQualityResultMessage = await (
-      await getDoc(doc(firestore, "constant", "warfarin_quality"))
-    ).data();
+    // let responseMedicationConstantList = await (
+    //   await getDoc(doc(firestore, "constant", "medication"))
+    // ).data();
 
-    let responseMedicationConstantList = await (
-      await getDoc(doc(firestore, "constant", "medication"))
-    ).data();
+    // const allData = await fetchAllData();
+    const allData = localStorage.getItem("data")
+      ? decryptLocalData("data")
+      : null;
 
-    // patient profile
-    if (responsePatient) {
+    if (allData) {
+      const resPatient = allData.patient[patientId];
+      const resMedCon = allData.medical_condition[patientId];
+      const resAllergy = allData.allergy[patientId];
+      const resBleedingRisk = allData.bleeding_risk[patientId];
+      const resBloodThinner = allData.blood_thinner[patientId];
+      const resHealthGoal = allData.health_goal[patientId];
+      const resHemoglobin = allData.hemoglobin[patientId];
+      const resMedication = allData.medication[patientId];
+      const resMsgForPatients = allData.message_for_patients[patientId];
+      const resNotification = allData.notification[patientId];
+      const resSelfMonitor = allData.self_monitor[patientId];
+      const resStrokeRisk = allData.stroke_risk[patientId];
+      const resWarfarinQuality = allData.warfarin_quality[patientId];
+      const resDefaultHealthGoal = allData.constant.health_goal;
+      const resStrokeRiskResultMessage = allData.constant.stroke_risk;
+      const resBleedingRiskResultMessage = allData.constant.bleeding_risk;
+      const resWarfarinQualityResultMessage = allData.constant.warfarin_quality;
+      const resMedicationConstantList = allData.constant.medication;
+
+      // set state in context api
       dispatch({
         type: "SET_CURRENT_PATIENT",
-        payload: responsePatient,
+        payload: resPatient,
       });
-
-      encryptLocalData(responsePatient, "currentPatient");
-    } else {
-      dispatch({
-        type: "SET_CURRENT_PATIENT",
-        payload: {},
-      });
-
-      localStorage.setItem("currentPatient", JSON.stringify({}));
-
-      alert("Error in fetching currentPatient data");
-    }
-
-    // medical condition
-    if (responseMedicalCondition) {
       dispatch({
         type: "SET_MEDICAL_CONDITION",
-        payload: responseMedicalCondition,
+        payload: resMedCon,
       });
-
-      localStorage.setItem(
-        "medicalCondition",
-        JSON.stringify(responseMedicalCondition)
-      );
-    } else {
-      dispatch({
-        type: "SET_MEDICAL_CONDITION",
-        payload: {},
-      });
-
-      localStorage.setItem("medicalCondition", JSON.stringify({}));
-
-      alert("Error in fetching medicalCondition data");
-    }
-
-    // allergy
-    if (responseAllergy) {
       dispatch({
         type: "SET_ALLERGY",
-        payload: responseAllergy,
+        payload: resAllergy,
       });
-
-      localStorage.setItem("allergy", JSON.stringify(responseAllergy));
-    } else {
-      dispatch({
-        type: "SET_ALLERGY",
-        payload: {},
-      });
-
-      localStorage.setItem("allergy", JSON.stringify({}));
-
-      alert("Error in fetching allergy data");
-    }
-
-    // stroke risk
-    if (responseStrokeRisk) {
       dispatch({
         type: "SET_STROKE_RISK",
-        payload: responseStrokeRisk,
+        payload: resStrokeRisk,
       });
-
-      localStorage.setItem("strokeRisk", JSON.stringify(responseStrokeRisk));
-    } else {
-      dispatch({
-        type: "SET_STROKE_RISK",
-        payload: {},
-      });
-
-      localStorage.setItem("strokeRisk", JSON.stringify({}));
-
-      alert("Error in fetching strokeRisk data");
-    }
-
-    // bleeding risk
-    if (responseBleedingRisk) {
       dispatch({
         type: "SET_BLEEDING_RISK",
-        payload: responseBleedingRisk,
+        payload: resBleedingRisk,
       });
-
-      localStorage.setItem(
-        "bleedingRisk",
-        JSON.stringify(responseBleedingRisk)
-      );
-    } else {
-      dispatch({
-        type: "SET_BLEEDING_RISK",
-        payload: {},
-      });
-
-      localStorage.setItem("bleedingRisk", JSON.stringify({}));
-
-      alert("Error in fetching bleedingRisk data");
-    }
-
-    // warfarin quality
-    if (responseWarfarinQuality) {
       dispatch({
         type: "SET_WARFARIN_QUALITY",
-        payload: responseWarfarinQuality,
+        payload: resWarfarinQuality,
       });
-
-      localStorage.setItem(
-        "warfarinQuality",
-        JSON.stringify(responseWarfarinQuality)
-      );
-    } else {
-      dispatch({
-        type: "SET_WARFARIN_QUALITY",
-        payload: {},
-      });
-
-      localStorage.setItem("warfarinQuality", JSON.stringify({}));
-
-      alert("Error in fetching warfarinQuality data");
-    }
-
-    // health goal
-    if (responseHealthGoal) {
       dispatch({
         type: "SET_HEALTH_GOAL",
-        payload: responseHealthGoal,
+        payload: resHealthGoal,
       });
-
-      localStorage.setItem("healthGoal", JSON.stringify(responseHealthGoal));
-    } else {
-      dispatch({
-        type: "SET_HEALTH_GOAL",
-        payload: {},
-      });
-
-      localStorage.setItem("healthGoal", JSON.stringify({}));
-
-      alert("Error in fetching healthGoal data");
-    }
-
-    // medication
-    if (responseMedication) {
       dispatch({
         type: "SET_MEDICATION",
-        payload: responseMedication,
+        payload: resMedication,
       });
-
-      localStorage.setItem("medication", JSON.stringify(responseMedication));
-    } else {
-      dispatch({
-        type: "SET_MEDICATION",
-        payload: {},
-      });
-
-      localStorage.setItem("medication", JSON.stringify({}));
-
-      alert("Error in fetching medication data");
-    }
-
-    // blood thinner
-    if (responseBloodThinner) {
       dispatch({
         type: "SET_BLOOD_THINNER",
-        payload: responseBloodThinner,
+        payload: resBloodThinner,
       });
-
-      localStorage.setItem(
-        "bloodThinner",
-        JSON.stringify(responseBloodThinner)
-      );
-    } else {
-      dispatch({
-        type: "SET_BLOOD_THINNER",
-        payload: {},
-      });
-
-      localStorage.setItem("bloodThinner", JSON.stringify({}));
-
-      alert("Error in fetching bloodThinner data");
-    }
-
-    // patient monitoring
-    if (responsePatientMonitoring) {
       dispatch({
         type: "SET_PATIENT_MONITORING",
-        payload: responsePatientMonitoring,
+        payload: resSelfMonitor,
       });
-
-      localStorage.setItem(
-        "patientMonitoring",
-        JSON.stringify(responsePatientMonitoring)
-      );
-    } else {
-      dispatch({
-        type: "SET_PATIENT_MONITORING",
-        payload: {},
-      });
-
-      localStorage.setItem("patientMonitoring", JSON.stringify({}));
-
-      alert("Error in fetching patientMonitoring data");
-    }
-
-    // hemoglobin
-    if (responseHemoglobin) {
       dispatch({
         type: "SET_HEMOGLOBIN",
-        payload: responseHemoglobin,
+        payload: resHemoglobin,
       });
-
-      localStorage.setItem("hemoglobin", JSON.stringify(responseHemoglobin));
-    } else {
-      dispatch({
-        type: "SET_HEMOGLOBIN",
-        payload: {},
-      });
-
-      localStorage.setItem("hemoglobin", JSON.stringify({}));
-      //
-      alert("Error in fetching hemoglobin data");
-    }
-
-    // notification
-    if (responseNotification) {
       dispatch({
         type: "SET_NOTIFICATION",
-        payload: responseNotification,
+        payload: resNotification,
       });
-
-      localStorage.setItem(
-        "notification",
-        JSON.stringify(responseNotification)
-      );
-    } else {
-      dispatch({
-        type: "SET_NOTIFICATION",
-        payload: {},
-      });
-
-      localStorage.setItem("notification", JSON.stringify({}));
-      //
-      alert("Error in fetching notification data");
-    }
-
-    // message for patients
-    if (responseMessageForPatients) {
       dispatch({
         type: "SET_MESSAGE_FOR_PATIENTS",
-        payload: responseMessageForPatients,
+        payload: resMsgForPatients,
       });
-
-      localStorage.setItem(
-        "messageForPatients",
-        JSON.stringify(responseMessageForPatients)
-      );
-    } else {
-      dispatch({
-        type: "SET_MESSAGE_FOR_PATIENTS",
-        payload: {},
-      });
-
-      localStorage.setItem("messageForPatients", JSON.stringify({}));
-      //
-      alert("Error in fetching messageForPatients data");
-    }
-
-    // CONSTANT from db
-    if (responseDefaultHealthGoal) {
       dispatch({
         type: "SET_DEFAULT_HEALTH_GOAL",
-        payload: responseDefaultHealthGoal,
+        payload: resDefaultHealthGoal,
       });
-
-      localStorage.setItem(
-        "defaultHealthGoal",
-        JSON.stringify(responseDefaultHealthGoal)
-      );
-    }
-
-    if (responseStrokeRiskResultMessage) {
       dispatch({
         type: "SET_STROKE_RISK_RESULT_MESSAGE",
-        payload: responseStrokeRiskResultMessage,
+        payload: resStrokeRiskResultMessage,
       });
-
-      localStorage.setItem(
-        "strokeRiskResultMessage",
-        JSON.stringify(responseStrokeRiskResultMessage)
-      );
-    }
-
-    if (responseBleedingRiskResultMessage) {
       dispatch({
         type: "SET_BLEEDING_RISK_RESULT_MESSAGE",
-        payload: responseBleedingRiskResultMessage,
+        payload: resBleedingRiskResultMessage,
       });
-
-      localStorage.setItem(
-        "bleedingRiskResultMessage",
-        JSON.stringify(responseBleedingRiskResultMessage)
-      );
-    }
-
-    if (responseWarfarinQualityResultMessage) {
       dispatch({
         type: "SET_WARFARIN_QUALITY_RESULT_MESSAGE",
-        payload: responseWarfarinQualityResultMessage,
+        payload: resWarfarinQualityResultMessage,
       });
-
-      localStorage.setItem(
-        "warfarinQualityResultMessage",
-        JSON.stringify(responseWarfarinQualityResultMessage)
-      );
-    }
-
-    if (responseMedicationConstantList) {
       dispatch({
         type: "SET_MEDICATION_CONSTANT_LIST",
-        payload: responseMedicationConstantList,
+        payload: resMedicationConstantList,
       });
 
-      localStorage.setItem(
-        "medicationConstantList",
-        JSON.stringify(responseMedicationConstantList)
-      );
+      // set item in local storage
+      encryptLocalData(resPatient, "currentPatient");
+      // localStorage.setItem("medicalCondition", JSON.stringify(resMedCon));
     }
 
-    dispatch({
-      type: "SET_LOADING_FALSE",
-    });
+    // // patient profile
+    // if (responsePatient) {
+    //   dispatch({
+    //     type: "SET_CURRENT_PATIENT",
+    //     payload: responsePatient,
+    //   });
+
+    //   encryptLocalData(responsePatient, "currentPatient");
+    // } else {
+    //   dispatch({
+    //     type: "SET_CURRENT_PATIENT",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("currentPatient", JSON.stringify({}));
+
+    //   alert("Error in fetching currentPatient data");
+    // }
+
+    // // medical condition
+    // if (responseMedicalCondition) {
+    //   dispatch({
+    //     type: "SET_MEDICAL_CONDITION",
+    //     payload: responseMedicalCondition,
+    //   });
+
+    //   localStorage.setItem(
+    //     "medicalCondition",
+    //     JSON.stringify(responseMedicalCondition)
+    //   );
+    // } else {
+    //   dispatch({
+    //     type: "SET_MEDICAL_CONDITION",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("medicalCondition", JSON.stringify({}));
+
+    //   alert("Error in fetching medicalCondition data");
+    // }
+
+    // // allergy
+    // if (responseAllergy) {
+    //   dispatch({
+    //     type: "SET_ALLERGY",
+    //     payload: responseAllergy,
+    //   });
+
+    //   localStorage.setItem("allergy", JSON.stringify(responseAllergy));
+    // } else {
+    //   dispatch({
+    //     type: "SET_ALLERGY",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("allergy", JSON.stringify({}));
+
+    //   alert("Error in fetching allergy data");
+    // }
+
+    // // stroke risk
+    // if (responseStrokeRisk) {
+    //   dispatch({
+    //     type: "SET_STROKE_RISK",
+    //     payload: responseStrokeRisk,
+    //   });
+
+    //   localStorage.setItem("strokeRisk", JSON.stringify(responseStrokeRisk));
+    // } else {
+    //   dispatch({
+    //     type: "SET_STROKE_RISK",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("strokeRisk", JSON.stringify({}));
+
+    //   alert("Error in fetching strokeRisk data");
+    // }
+
+    // // bleeding risk
+    // if (responseBleedingRisk) {
+    //   dispatch({
+    //     type: "SET_BLEEDING_RISK",
+    //     payload: responseBleedingRisk,
+    //   });
+
+    //   localStorage.setItem(
+    //     "bleedingRisk",
+    //     JSON.stringify(responseBleedingRisk)
+    //   );
+    // } else {
+    //   dispatch({
+    //     type: "SET_BLEEDING_RISK",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("bleedingRisk", JSON.stringify({}));
+
+    //   alert("Error in fetching bleedingRisk data");
+    // }
+
+    // // warfarin quality
+    // if (responseWarfarinQuality) {
+    //   dispatch({
+    //     type: "SET_WARFARIN_QUALITY",
+    //     payload: responseWarfarinQuality,
+    //   });
+
+    //   localStorage.setItem(
+    //     "warfarinQuality",
+    //     JSON.stringify(responseWarfarinQuality)
+    //   );
+    // } else {
+    //   dispatch({
+    //     type: "SET_WARFARIN_QUALITY",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("warfarinQuality", JSON.stringify({}));
+
+    //   alert("Error in fetching warfarinQuality data");
+    // }
+
+    // // health goal
+    // if (responseHealthGoal) {
+    //   dispatch({
+    //     type: "SET_HEALTH_GOAL",
+    //     payload: responseHealthGoal,
+    //   });
+
+    //   localStorage.setItem("healthGoal", JSON.stringify(responseHealthGoal));
+    // } else {
+    //   dispatch({
+    //     type: "SET_HEALTH_GOAL",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("healthGoal", JSON.stringify({}));
+
+    //   alert("Error in fetching healthGoal data");
+    // }
+
+    // // medication
+    // if (responseMedication) {
+    //   dispatch({
+    //     type: "SET_MEDICATION",
+    //     payload: responseMedication,
+    //   });
+
+    //   localStorage.setItem("medication", JSON.stringify(responseMedication));
+    // } else {
+    //   dispatch({
+    //     type: "SET_MEDICATION",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("medication", JSON.stringify({}));
+
+    //   alert("Error in fetching medication data");
+    // }
+
+    // // blood thinner
+    // if (responseBloodThinner) {
+    //   dispatch({
+    //     type: "SET_BLOOD_THINNER",
+    //     payload: responseBloodThinner,
+    //   });
+
+    //   localStorage.setItem(
+    //     "bloodThinner",
+    //     JSON.stringify(responseBloodThinner)
+    //   );
+    // } else {
+    //   dispatch({
+    //     type: "SET_BLOOD_THINNER",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("bloodThinner", JSON.stringify({}));
+
+    //   alert("Error in fetching bloodThinner data");
+    // }
+
+    // // patient monitoring
+    // if (responsePatientMonitoring) {
+    //   dispatch({
+    //     type: "SET_PATIENT_MONITORING",
+    //     payload: responsePatientMonitoring,
+    //   });
+
+    //   localStorage.setItem(
+    //     "patientMonitoring",
+    //     JSON.stringify(responsePatientMonitoring)
+    //   );
+    // } else {
+    //   dispatch({
+    //     type: "SET_PATIENT_MONITORING",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("patientMonitoring", JSON.stringify({}));
+
+    //   alert("Error in fetching patientMonitoring data");
+    // }
+
+    // // hemoglobin
+    // if (responseHemoglobin) {
+    //   dispatch({
+    //     type: "SET_HEMOGLOBIN",
+    //     payload: responseHemoglobin,
+    //   });
+
+    //   localStorage.setItem("hemoglobin", JSON.stringify(responseHemoglobin));
+    // } else {
+    //   dispatch({
+    //     type: "SET_HEMOGLOBIN",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("hemoglobin", JSON.stringify({}));
+    //   //
+    //   alert("Error in fetching hemoglobin data");
+    // }
+
+    // // notification
+    // if (responseNotification) {
+    //   dispatch({
+    //     type: "SET_NOTIFICATION",
+    //     payload: responseNotification,
+    //   });
+
+    //   localStorage.setItem(
+    //     "notification",
+    //     JSON.stringify(responseNotification)
+    //   );
+    // } else {
+    //   dispatch({
+    //     type: "SET_NOTIFICATION",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("notification", JSON.stringify({}));
+    //   //
+    //   alert("Error in fetching notification data");
+    // }
+
+    // // message for patients
+    // if (responseMessageForPatients) {
+    //   dispatch({
+    //     type: "SET_MESSAGE_FOR_PATIENTS",
+    //     payload: responseMessageForPatients,
+    //   });
+
+    //   localStorage.setItem(
+    //     "messageForPatients",
+    //     JSON.stringify(responseMessageForPatients)
+    //   );
+    // } else {
+    //   dispatch({
+    //     type: "SET_MESSAGE_FOR_PATIENTS",
+    //     payload: {},
+    //   });
+
+    //   localStorage.setItem("messageForPatients", JSON.stringify({}));
+    //   //
+    //   alert("Error in fetching messageForPatients data");
+    // }
+
+    // // CONSTANT from db
+    // if (responseDefaultHealthGoal) {
+    //   dispatch({
+    //     type: "SET_DEFAULT_HEALTH_GOAL",
+    //     payload: responseDefaultHealthGoal,
+    //   });
+
+    //   localStorage.setItem(
+    //     "defaultHealthGoal",
+    //     JSON.stringify(responseDefaultHealthGoal)
+    //   );
+    // }
+
+    // if (responseStrokeRiskResultMessage) {
+    //   dispatch({
+    //     type: "SET_STROKE_RISK_RESULT_MESSAGE",
+    //     payload: responseStrokeRiskResultMessage,
+    //   });
+
+    //   localStorage.setItem(
+    //     "strokeRiskResultMessage",
+    //     JSON.stringify(responseStrokeRiskResultMessage)
+    //   );
+    // }
+
+    // if (responseBleedingRiskResultMessage) {
+    //   dispatch({
+    //     type: "SET_BLEEDING_RISK_RESULT_MESSAGE",
+    //     payload: responseBleedingRiskResultMessage,
+    //   });
+
+    //   localStorage.setItem(
+    //     "bleedingRiskResultMessage",
+    //     JSON.stringify(responseBleedingRiskResultMessage)
+    //   );
+    // }
+
+    // if (responseWarfarinQualityResultMessage) {
+    //   dispatch({
+    //     type: "SET_WARFARIN_QUALITY_RESULT_MESSAGE",
+    //     payload: responseWarfarinQualityResultMessage,
+    //   });
+
+    //   localStorage.setItem(
+    //     "warfarinQualityResultMessage",
+    //     JSON.stringify(responseWarfarinQualityResultMessage)
+    //   );
+    // }
+
+    // if (responseMedicationConstantList) {
+    //   dispatch({
+    //     type: "SET_MEDICATION_CONSTANT_LIST",
+    //     payload: responseMedicationConstantList,
+    //   });
+
+    //   localStorage.setItem(
+    //     "medicationConstantList",
+    //     JSON.stringify(responseMedicationConstantList)
+    //   );
+    // }
   } catch (error) {
     throw new Error(`Error in set current patient: `, error);
   }
@@ -622,15 +817,23 @@ export async function fetchPatientList(
   pageDispatch,
   patientHasNotifList
 ) {
-  pageDispatch({
-    type: "SET_LOADING_TRUE",
-  });
+  // pageDispatch({
+  //   type: "SET_LOADING_TRUE",
+  // });
 
   try {
-    let response = await getDocs(patientCollectionRef);
-    let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    // let response = await getDocs(patientCollectionRef);
+    // let data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    let data = localStorage.getItem("data") ? decryptLocalData("data") : [];
+    let patients = Object.values(data.patient).map((patient) => ({
+      id: patient.patientId,
+      ...patient,
+    }));
+    console.log("patients", patients);
+
     // let number = 1;
-    let patientListData = data.map((patient) => ({
+    let patientListData = patients.map((patient) => ({
       // id: number++,
       patientId: patient.id,
       name: patient.name,
@@ -669,9 +872,9 @@ export async function fetchPatientList(
       });
     }
 
-    pageDispatch({
-      type: "SET_LOADING_FALSE",
-    });
+    // pageDispatch({
+    //   type: "SET_LOADING_FALSE",
+    // });
   } catch (error) {
     throw new Error(`Error in set patient list: `, error.message);
   }
@@ -733,6 +936,13 @@ export async function updatePatientProfile(profileData, patientId, dispatch) {
         payload: response,
       });
 
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.patient[patientId] = response;
+      encryptLocalData(allData, "data");
+
       encryptLocalData(response, "currentPatient");
     }
   } catch (error) {
@@ -777,7 +987,13 @@ export async function updateMedicalCondition(
         payload: response,
       });
 
-      localStorage.setItem("medicalCondition", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.medical_condition[patientId] = response;
+      encryptLocalData(allData, "data");
+      // localStorage.setItem("medicalCondition", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -809,7 +1025,14 @@ export async function updateAllergy(allergyData, patientId, dispatch) {
         payload: response,
       });
 
-      localStorage.setItem("allergy", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.allergy[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("allergy", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -848,7 +1071,14 @@ export async function updateStrokeRisk(strokeRiskData, patientId, dispatch) {
         payload: response,
       });
 
-      localStorage.setItem("strokeRisk", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.stroke_risk[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("strokeRisk", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -892,7 +1122,14 @@ export async function updateBleedingRisk(
         payload: response,
       });
 
-      localStorage.setItem("bleedingRisk", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.bleeding_risk[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("bleedingRisk", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -933,7 +1170,14 @@ export async function updateWarfarinQuality(
         payload: response,
       });
 
-      localStorage.setItem("warfarinQuality", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.warfarin_quality[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("warfarinQuality", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -962,7 +1206,14 @@ export async function updateHealthGoal(healthGoalData, patientId, dispatch) {
         payload: response,
       });
 
-      localStorage.setItem("healthGoal", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.health_goal[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("healthGoal", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -991,7 +1242,14 @@ export async function updateMedication(medicationData, patientId, dispatch) {
         payload: response,
       });
 
-      localStorage.setItem("medication", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.medication[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("medication", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -1052,7 +1310,14 @@ export async function updateBloodThinner(
         payload: response,
       });
 
-      localStorage.setItem("bloodThinner", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.blood_thinner[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("bloodThinner", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -1081,7 +1346,14 @@ export async function updateInrRecord(inrRecordData, patientId, dispatch) {
         payload: response,
       });
 
-      localStorage.setItem("bloodThinner", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.blood_thinner[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("bloodThinner", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -1113,7 +1385,14 @@ export async function updateCreatinineRecord(
         payload: response,
       });
 
-      localStorage.setItem("bloodThinner", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.blood_thinner[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("bloodThinner", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -1145,7 +1424,14 @@ export async function updateHemoglobinRecord(
         payload: response,
       });
 
-      localStorage.setItem("hemoglobin", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.hemoglobin[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("hemoglobin", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -1176,7 +1462,14 @@ export async function updateMessageForPatients(
         payload: response,
       });
 
-      localStorage.setItem("messageForPatients", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.message_for_patients[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("messageForPatients", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);
@@ -1222,7 +1515,14 @@ export async function updateRecommendedValuesSelfMonitoring(
         payload: response,
       });
 
-      localStorage.setItem("patientMonitoring", JSON.stringify(response));
+      const allData = localStorage.getItem("data")
+        ? decryptLocalData("data")
+        : null;
+
+      allData.self_monitor[patientId] = response;
+      encryptLocalData(allData, "data");
+
+      // localStorage.setItem("patientMonitoring", JSON.stringify(response));
     }
   } catch (error) {
     alert(error.message);

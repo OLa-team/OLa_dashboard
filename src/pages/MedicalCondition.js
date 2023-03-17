@@ -250,7 +250,7 @@ function MedicalCondition() {
           />
 
           {otherMedConList.map((medCon) => (
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center" }} key={medCon}>
               <Checkbox name={medCon} checkedYes={true} checkedNo={false} />
               <IoClose
                 className="deleteMedConIcon"

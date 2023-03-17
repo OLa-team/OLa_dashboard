@@ -5,6 +5,7 @@ const initialState = {
   userList: [],
   tempUserList: [],
   selectedUserList: [],
+  progress: 0,
 };
 
 // User reducer
@@ -35,6 +36,24 @@ const UserReducer = (initialState, action) => {
         userList: initialState.userList.filter((user) => {
           return !selectedUsers.has(user);
         }),
+      };
+
+    case "PENDING_PROGRESS":
+      return {
+        ...initialState,
+        progress: initialState.progress + 15,
+      };
+
+    case "COMPLETE_PROGRESS":
+      return {
+        ...initialState,
+        progress: 100,
+      };
+
+    case "RESET_PROGRESS":
+      return {
+        ...initialState,
+        progress: 0,
       };
 
     default:

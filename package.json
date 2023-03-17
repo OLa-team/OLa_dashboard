@@ -32,6 +32,7 @@
     "react-select": "^5.4.0",
     "react-slider": "^2.0.4",
     "react-spinners": "^0.13.3",
+    "react-top-loading-bar": "^2.3.1",
     "sheetjs-style": "^0.15.8",
     "styled-components": "^5.3.5",
     "uuidv4": "^6.2.13",

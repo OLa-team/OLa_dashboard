@@ -3,7 +3,13 @@ import Sidebar from "../components/Sidebar";
 import PatientRegistration from "./PatientRegistration";
 import SearchPatient from "./SearchPatient";
 import { Routes, Route, useParams, useNavigate } from "react-router-dom";
-import { usePageState, usePatientDispatch, usePatientState } from "../context";
+import {
+  usePageState,
+  usePatientDispatch,
+  usePatientState,
+  useUserDispatch,
+  useUserState,
+} from "../context";
 import Patient from "./Patient";
 import PatientProfile from "./PatientProfile";
 import MedicalCondition from "./MedicalCondition";
@@ -33,6 +39,8 @@ import AppAnalytics from "./AppAnalytics";
 import { setCurrentPatient } from "../service";
 import MessageForPatient from "./PatientMonitoring/MessageForPatient";
 import Dashboard from "./Dashboard";
+import { fetchAllData } from "../service/PatientService";
+import LoadingBar from "react-top-loading-bar";
 
 function Home() {
   const patientLoading = usePatientState().loading;
@@ -42,25 +50,42 @@ function Home() {
   const navigate = useNavigate();
   const patientState = usePatientState();
   const pageState = usePageState();
+  const userState = useUserState();
+
   const patientDispatch = usePatientDispatch();
+  const userDispatch = useUserDispatch();
 
   const [openSidebar, setOpenSidebar] = useState("");
 
   async function resetCurrentPatient() {
     const patientId = params["*"].split("/")[1];
     await setCurrentPatient(patientDispatch, patientId);
+    navigate(-1);
   }
 
   useEffect(() => {
-    if (params["*"].startsWith("patient")) {
+    console.log(params["*"].startsWith("patient/"));
+    if (params["*"].startsWith("patient/")) {
       resetCurrentPatient();
-    } else {
-      return;
     }
+
+    fetchAllData(userDispatch);
   }, []);
 
   return (
     <div className="bgHome">
+      {userState.progress > 0 && userState.progress < 100 ? (
+        <div className="bgPending"></div>
+      ) : null}
+      <LoadingBar
+        color="red"
+        progress={userState.progress}
+        onLoaderFinished={() => {
+          userDispatch({
+            type: "RESET_PROGRESS",
+          });
+        }}
+      />
       {/* Sidebar */}
       <Sidebar />
 

@@ -405,6 +405,15 @@
   display: flex;
 }
 
+.bgPending {
+  background-color: #bdbdbd;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  z-index: 999;
+  opacity: 0.5;
+}
+
 .sidebar {
   /* width: 15%; */
   width: 310px;
