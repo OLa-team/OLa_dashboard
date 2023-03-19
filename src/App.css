@@ -865,6 +865,7 @@ input:-webkit-autofill:active {
 }
 
 .backToPatientList {
+  width: 100px;
   padding: 12px;
   border-radius: 20px;
   display: flex;

@@ -17,6 +17,7 @@ import {
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
+  useUserDispatch,
 } from "../context";
 import { firestore } from "../firebase";
 import {
@@ -27,6 +28,7 @@ import {
   setCurrentPatient,
 } from "../service";
 import { GoPrimitiveDot } from "react-icons/go";
+import { fetchAllData } from "../service/PatientService";
 
 function SearchPatient() {
   // Global state
@@ -37,6 +39,7 @@ function SearchPatient() {
   const patientDispatch = usePatientDispatch();
   const notifDispatch = useNotifDispatch();
   const pageDispatch = usePageDispatch();
+  const userDipatch = useUserDispatch();
   const navigate = useNavigate();
 
   // State
@@ -125,6 +128,7 @@ function SearchPatient() {
         patientState.selectedPatientList
       );
       await checkDeletedPatientIsExisted();
+      await fetchAllData(userDipatch);
       getPatientList();
       alert("Deleted the patient(s) successfully");
       patientDispatch({
@@ -228,6 +232,10 @@ function SearchPatient() {
   useEffect(() => {
     getPatientList();
   }, [patientHasNotifList]);
+
+  useEffect(() => {
+    getPatientList();
+  }, []);
 
   useEffect(() => {
     if (patientState.patientList.length > 0 && searchResult !== "") {

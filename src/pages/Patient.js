@@ -17,6 +17,7 @@ import {
   usePageDispatch,
   usePatientDispatch,
   usePatientState,
+  useUserDispatch,
 } from "../context";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { deletePatientById } from "../service";
@@ -24,11 +25,13 @@ import { collection, doc, getDoc, query } from "firebase/firestore";
 import { firestore } from "../firebase";
 import allergyLogo from "../../src/assets/allergy.png";
 import { GoPrimitiveDot } from "react-icons/go";
+import { fetchAllData } from "../service/PatientService";
 
 function Patient() {
   const patientState = usePatientState();
   const patientDispatch = usePatientDispatch();
   const pageDispatch = usePageDispatch();
+  const userDispatch = useUserDispatch();
 
   const navigate = useNavigate();
   const params = useParams();
@@ -52,7 +55,7 @@ function Patient() {
         payload: "Patient List",
       });
 
-      navigate("/dashboard");
+      navigate("/dashboard/patients");
       alert("Delete patient successfully");
     }
 
@@ -133,13 +136,13 @@ function Patient() {
             <h4>Back</h4>
           </div>
 
-          <div
+          {/* <div
             className="deletePatientButton"
             onClick={() => handleDeletePatient()}
           >
             <FaTrash />
             <h4>Delete Patient</h4>
-          </div>
+          </div> */}
         </div>
       </div>
 

@@ -13,7 +13,11 @@ import { decryptLocalData, encryptLocalData } from "../utils";
 const patientCollectionRef = collection(firestore, "patient");
 
 // register new patient
-export async function createPatientAccount(newPatientData, dispatch) {
+export async function createPatientAccount(
+  newPatientData,
+  dispatch,
+  userDispatch
+) {
   dispatch({
     type: "SET_LOADING_TRUE",
   });
@@ -187,6 +191,8 @@ export async function createPatientAccount(newPatientData, dispatch) {
     await setDoc(doc(firestore, "reminder", patientId), {
       tasks: [],
     });
+
+    await fetchAllData(userDispatch);
   } catch (error) {
     throw new Error(`Error in register new patient: `, error);
   }
@@ -198,101 +204,99 @@ export async function createPatientAccount(newPatientData, dispatch) {
 
 // test to fetch all data then set data for selected patient to increase the speed
 export async function fetchAllData(userDipatch) {
-  if (!localStorage.getItem("data")) {
-    let allData = {};
+  let allData = {};
 
-    try {
-      userDipatch({
-        type: "PENDING_PROGRESS",
-      });
-
-      allData.patient = await (
-        await getDocs(collection(firestore, "patient"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.allergy = await (
-        await getDocs(collection(firestore, "allergy"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.bleeding_risk = await (
-        await getDocs(collection(firestore, "bleeding_risk"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      userDipatch({
-        type: "PENDING_PROGRESS",
-      });
-
-      allData.blood_thinner = await (
-        await getDocs(collection(firestore, "blood_thinner"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.constant = await (
-        await getDocs(collection(firestore, "constant"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.health_goal = await (
-        await getDocs(collection(firestore, "health_goal"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      userDipatch({
-        type: "PENDING_PROGRESS",
-      });
-
-      allData.hemoglobin = await (
-        await getDocs(collection(firestore, "hemoglobin"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.medical_condition = await (
-        await getDocs(collection(firestore, "medical_condition"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.medication = await (
-        await getDocs(collection(firestore, "medication"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      userDipatch({
-        type: "PENDING_PROGRESS",
-      });
-
-      allData.message_for_patients = await (
-        await getDocs(collection(firestore, "message_for_patients"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.notification = await (
-        await getDocs(collection(firestore, "notification"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.self_monitor = await (
-        await getDocs(collection(firestore, "self_monitor"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      userDipatch({
-        type: "PENDING_PROGRESS",
-      });
-
-      allData.stroke_risk = await (
-        await getDocs(collection(firestore, "stroke_risk"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      allData.warfarin_quality = await (
-        await getDocs(collection(firestore, "warfarin_quality"))
-      ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
-
-      // localStorage.setItem("data", JSON.stringify(allData));
-
-      encryptLocalData(allData, "data");
-    } catch (err) {
-      alert("Error in fetching all data");
-    }
-
-    console.log("all data", allData);
-
+  try {
     userDipatch({
-      type: "COMPLETE_PROGRESS",
+      type: "PENDING_PROGRESS",
     });
 
-    return allData;
+    allData.patient = await (
+      await getDocs(collection(firestore, "patient"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.allergy = await (
+      await getDocs(collection(firestore, "allergy"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.bleeding_risk = await (
+      await getDocs(collection(firestore, "bleeding_risk"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    userDipatch({
+      type: "PENDING_PROGRESS",
+    });
+
+    allData.blood_thinner = await (
+      await getDocs(collection(firestore, "blood_thinner"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.constant = await (
+      await getDocs(collection(firestore, "constant"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.health_goal = await (
+      await getDocs(collection(firestore, "health_goal"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    userDipatch({
+      type: "PENDING_PROGRESS",
+    });
+
+    allData.hemoglobin = await (
+      await getDocs(collection(firestore, "hemoglobin"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.medical_condition = await (
+      await getDocs(collection(firestore, "medical_condition"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.medication = await (
+      await getDocs(collection(firestore, "medication"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    userDipatch({
+      type: "PENDING_PROGRESS",
+    });
+
+    allData.message_for_patients = await (
+      await getDocs(collection(firestore, "message_for_patients"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.notification = await (
+      await getDocs(collection(firestore, "notification"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.self_monitor = await (
+      await getDocs(collection(firestore, "self_monitor"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    userDipatch({
+      type: "PENDING_PROGRESS",
+    });
+
+    allData.stroke_risk = await (
+      await getDocs(collection(firestore, "stroke_risk"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    allData.warfarin_quality = await (
+      await getDocs(collection(firestore, "warfarin_quality"))
+    ).docs.reduce((arr, doc) => ({ ...arr, [doc.id]: doc.data() }), {});
+
+    // localStorage.setItem("data", JSON.stringify(allData));
+
+    encryptLocalData(allData, "data");
+  } catch (err) {
+    alert("Error in fetching all data");
   }
+
+  console.log("all data", allData);
+
+  userDipatch({
+    type: "COMPLETE_PROGRESS",
+  });
+
+  return allData;
 }
 
 // set current patient using patientId

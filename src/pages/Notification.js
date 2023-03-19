@@ -10,11 +10,16 @@ import {
 } from "../service";
 import { getCurrentDate, getCurrentTime } from "../utils";
 import { useNavigate } from "react-router-dom";
-import { usePageDispatch, usePatientDispatch } from "../context";
+import {
+  usePageDispatch,
+  usePatientDispatch,
+  useUserDispatch,
+} from "../context";
 
 function Notification() {
   const navigate = useNavigate();
   const patientDispatch = usePatientDispatch();
+  const userDipatch = useUserDispatch();
 
   const [page, setPage] = useState("table");
   const [pendingNotification, setPendingNotification] = useState([]);
@@ -119,7 +124,7 @@ function Notification() {
         patientDispatch,
         "approve"
       );
-      createPatientAccount(newPatientData, patientDispatch);
+      await createPatientAccount(newPatientData, patientDispatch, userDipatch);
 
       setPage("table");
       alert("Patient register successfully!");
