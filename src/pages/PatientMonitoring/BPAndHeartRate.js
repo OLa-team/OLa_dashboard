@@ -71,7 +71,7 @@ function BPAndHeartRate() {
   let i = 0;
   const tableData = patientState.patientMonitoring.bloodPressureHeartRateRecord
     ? patientState.patientMonitoring.bloodPressureHeartRateRecord.map(
-        (record) => ({ ...record, date: getCurrentDate(record.date), id: i++ })
+        (record) => ({ ...record, id: i++ })
       )
     : [];
 
@@ -95,6 +95,9 @@ function BPAndHeartRate() {
       field: "date",
       headerName: "Date",
       flex: 1,
+      renderCell: (params) => {
+        return <div>{getCurrentDate(params.row.date)}</div>;
+      },
     },
     {
       field: "bpSystolic",

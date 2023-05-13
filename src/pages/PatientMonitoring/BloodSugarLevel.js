@@ -56,7 +56,6 @@ function BloodSugarLevel() {
   const tableData = patientState.patientMonitoring.sugarLevelRecord
     ? patientState.patientMonitoring.sugarLevelRecord.map((record) => ({
         ...record,
-        date: getCurrentDate(record.date),
         id: i++,
       }))
     : [];
@@ -81,6 +80,9 @@ function BloodSugarLevel() {
       field: "date",
       headerName: "Date",
       flex: 1,
+      renderCell: (params) => {
+        return <div>{getCurrentDate(params.row.date)}</div>;
+      },
     },
     {
       field: "timeTaken",

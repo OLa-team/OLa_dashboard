@@ -37,7 +37,6 @@ function BodyWeight() {
   const tableData = patientState.patientMonitoring.bodyWeightRecord
     ? patientState.patientMonitoring.bodyWeightRecord.map((record) => ({
         ...record,
-        date: getCurrentDate(record.date),
         id: i++,
       }))
     : [];
@@ -62,6 +61,9 @@ function BodyWeight() {
       field: "date",
       headerName: "Date",
       flex: 1,
+      renderCell: (params) => {
+        return <div>{getCurrentDate(params.row.date)}</div>;
+      },
     },
     {
       field: "bodyWeight",

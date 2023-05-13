@@ -36,7 +36,6 @@ function BleedingSymptom() {
   const tableData = patientState.patientMonitoring.bleedingSymptomRecord
     ? patientState.patientMonitoring.bleedingSymptomRecord.map((record) => ({
         ...record,
-        date: getCurrentDate(record.date),
         id: i++,
       }))
     : [];
@@ -61,6 +60,9 @@ function BleedingSymptom() {
       field: "date",
       headerName: "Date",
       flex: 1,
+      renderCell: (params) => {
+        return <div>{getCurrentDate(params.row.date)}</div>;
+      },
     },
     {
       field: "bleeding",

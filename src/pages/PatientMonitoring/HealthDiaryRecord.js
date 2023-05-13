@@ -38,7 +38,6 @@ function HealthDiaryRecord() {
   const tableData = patientState.patientMonitoring.healthDiaryRecord
     ? patientState.patientMonitoring.healthDiaryRecord.map((record) => ({
         ...record,
-        date: getCurrentDate(record.date),
         id: i++,
       }))
     : [];
@@ -63,6 +62,9 @@ function HealthDiaryRecord() {
       field: "date",
       headerName: "Date",
       flex: 1,
+      renderCell: (params) => {
+        return <div>{getCurrentDate(params.row.date)}</div>;
+      },
     },
     {
       field: "hospital",
