@@ -9,7 +9,7 @@ import {
   usePatientDispatch,
   usePatientState,
 } from "../../context";
-import { getCurrentDate } from "../../utils";
+import { convertDateObjToDateInput, getCurrentDate } from "../../utils";
 import ExcelExport from "../../components/ExcelExport";
 import {
   updateLastUpdatedTimeInSelfMonitoring,
@@ -345,7 +345,7 @@ function BloodSugarLevel() {
                 <h3>
                   Date <span>:</span>
                 </h3>
-                <p>{date}</p>
+                <p>{convertDateObjToDateInput(date)}</p>
               </div>
 
               <div>
